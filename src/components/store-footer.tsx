@@ -117,6 +117,10 @@ export default function StoreFooter({ theme }: { theme?: any }) {
                   src={theme?.logoUrl || "/avro-logo.png"}
                   alt={brandName}
                   className="h-8 max-w-[140px] w-auto object-contain"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src =
+                      "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/avro-logo.png";
+                  }}
                 />
               </div>
               <span

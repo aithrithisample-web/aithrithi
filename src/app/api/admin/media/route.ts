@@ -6,11 +6,69 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 
-const UPLOAD_DIR = path.join(process.cwd(), "public/uploads/products");
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://aydgnokektxslpaukbou.supabase.co";
+const SUPABASE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5ZGdub2tla3R4c2xwYXVrYm91Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5NTM1NjQ3NiwiZXhwIjoyMTEwOTMyNDc2fQ.0TMWONf-N9RKy0M3NiTexTSGApgPAgnQKuzd_BKjfa0";
 
-// Ensure directory exists
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+/**
+ * Uploads a file buffer to Supabase Storage (cloud CDN) or falls back to Base64 / local disk.
+ * 100% serverless compatible — eliminates EROFS read-only errors on Vercel.
+ */
+async function uploadMediaFile(
+  buffer: Buffer,
+  originalName: string,
+  mimeType: string
+): Promise<{ fileUrl: string; savedFileName: string }> {
+  const ext = path.extname(originalName).toLowerCase() || (mimeType.includes("png") ? ".png" : ".jpg");
+  const uniqueSuffix = `${Date.now()}_${crypto.randomBytes(4).toString("hex")}`;
+  const safeBase = path.basename(originalName, ext).replace(/[^a-zA-Z0-9_-]/g, "_").substring(0, 32);
+  const savedFileName = `${safeBase}_${uniqueSuffix}${ext}`;
+
+  // 1. Primary: Upload to Supabase Storage ('store-assets' public bucket)
+  if (SUPABASE_URL && SUPABASE_KEY) {
+    try {
+      const uploadUrl = `${SUPABASE_URL}/storage/v1/object/store-assets/${encodeURIComponent(savedFileName)}`;
+      const res = await fetch(uploadUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          apikey: SUPABASE_KEY,
+          "Content-Type": mimeType,
+          "x-upsert": "true",
+        },
+        body: new Uint8Array(buffer),
+      });
+
+      if (res.ok) {
+        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/store-assets/${encodeURIComponent(savedFileName)}`;
+        return { fileUrl: publicUrl, savedFileName };
+      } else {
+        const errText = await res.text();
+        console.warn("[Media Upload] Supabase storage returned non-200:", errText);
+      }
+    } catch (err: any) {
+      console.warn("[Media Upload] Supabase upload failed:", err?.message);
+    }
+  }
+
+  // 2. Secondary: If running locally where disk is writable, save to public/uploads/products
+  try {
+    const uploadDir = path.join(process.cwd(), "public/uploads/products");
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    const localFilePath = path.join(uploadDir, savedFileName);
+    fs.writeFileSync(localFilePath, buffer);
+    return { fileUrl: `/uploads/products/${savedFileName}`, savedFileName };
+  } catch (fsErr: any) {
+    console.warn("[Media Upload] Local disk write skipped (read-only/serverless environment):", fsErr?.message);
+  }
+
+  // 3. Failsafe for images on Vercel: Return Base64 Data URL
+  const dataUrl = `data:${mimeType};base64,${buffer.toString("base64")}`;
+  return { fileUrl: dataUrl, savedFileName };
 }
 
 // GET: List all media assets
@@ -57,25 +115,19 @@ export async function POST(req: NextRequest) {
         // Determine type: video or image
         const isVideo = [".mp4", ".webm", ".mov", ".ogg", ".m4v"].includes(ext) || file.type.startsWith("video/");
         const fileType = isVideo ? "video" : "image";
+        const mimeType = file.type || (isVideo ? "video/mp4" : "image/jpeg");
 
-        const uniqueSuffix = `${Date.now()}_${crypto.randomBytes(4).toString("hex")}`;
-        const safeBase = path.basename(originalName, ext).replace(/[^a-zA-Z0-9_-]/g, "_").substring(0, 40);
-        const savedFileName = `${safeBase}_${uniqueSuffix}${ext}`;
-        const filePath = path.join(UPLOAD_DIR, savedFileName);
+        const { fileUrl, savedFileName } = await uploadMediaFile(buffer, originalName, mimeType);
 
-        fs.writeFileSync(filePath, buffer);
-
-        const fileUrl = `/uploads/products/${savedFileName}`;
-
-        // Create MediaAsset record
+        // Create MediaAsset record in DB
         const asset = await prisma.mediaAsset.create({
           data: {
             fileName: originalName,
             fileUrl,
             fileType,
-            mimeType: file.type || (isVideo ? "video/mp4" : "image/jpeg"),
+            mimeType,
             fileSize: buffer.length,
-            altText: safeBase.replace(/_/g, " "),
+            altText: path.basename(originalName, ext).replace(/[^a-zA-Z0-9]/g, " "),
           },
         });
 
@@ -88,9 +140,9 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        message: `${uploadedAssets.length} file(s) uploaded successfully from system.`,
+        message: `${uploadedAssets.length} file(s) uploaded successfully.`,
         assets: uploadedAssets,
-        url: uploadedAssets[0].fileUrl, // For single file convenience
+        url: uploadedAssets[0].fileUrl, // For single file convenience (logo, favicon, product thumbnail)
       });
     }
 
@@ -114,16 +166,11 @@ export async function POST(req: NextRequest) {
       const isVideo = mimeType.startsWith("video/");
       const ext = mimeType.includes("png") ? ".png" : mimeType.includes("webp") ? ".webp" : isVideo ? ".mp4" : ".jpg";
 
-      const uniqueSuffix = `${Date.now()}_${crypto.randomBytes(4).toString("hex")}`;
-      const savedFileName = `upload_${uniqueSuffix}${ext}`;
-      const filePath = path.join(UPLOAD_DIR, savedFileName);
-
-      fs.writeFileSync(filePath, buffer);
-      const fileUrl = `/uploads/products/${savedFileName}`;
+      const { fileUrl } = await uploadMediaFile(buffer, fileName || `upload${ext}`, mimeType);
 
       const asset = await prisma.mediaAsset.create({
         data: {
-          fileName,
+          fileName: fileName || `upload${ext}`,
           fileUrl,
           fileType: isVideo ? "video" : fileType,
           mimeType,
@@ -134,13 +181,13 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        message: "File uploaded successfully from system.",
+        message: "File uploaded successfully.",
         asset,
         url: asset.fileUrl,
       });
     }
 
-    // Direct URL reference
+    // Direct external URL reference
     const asset = await prisma.mediaAsset.create({
       data: {
         fileName,
@@ -167,16 +214,37 @@ export async function DELETE(req: NextRequest) {
 
     const asset = await prisma.mediaAsset.findUnique({ where: { id } });
     if (asset) {
-      if (asset.fileUrl.startsWith("/uploads/products/")) {
-        const filePath = path.join(process.cwd(), "public", asset.fileUrl);
-        if (fs.existsSync(filePath)) {
+      // 1. Delete from Supabase Storage if applicable
+      if (asset.fileUrl.includes("/storage/v1/object/public/store-assets/")) {
+        const parts = asset.fileUrl.split("/store-assets/");
+        if (parts[1]) {
+          const rawName = decodeURIComponent(parts[1]);
           try {
-            fs.unlinkSync(filePath);
+            await fetch(`${SUPABASE_URL}/storage/v1/object/store-assets/${encodeURIComponent(rawName)}`, {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${SUPABASE_KEY}`,
+                apikey: SUPABASE_KEY,
+              },
+            });
           } catch (e) {
-            console.warn("Could not remove file on disk:", e);
+            console.warn("Could not delete from Supabase storage:", e);
           }
         }
       }
+
+      // 2. Delete local file if applicable
+      if (asset.fileUrl.startsWith("/uploads/products/")) {
+        const filePath = path.join(process.cwd(), "public", asset.fileUrl);
+        try {
+          if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+          }
+        } catch (e) {
+          console.warn("Could not remove file on disk:", e);
+        }
+      }
+
       await prisma.mediaAsset.delete({ where: { id } });
     }
 

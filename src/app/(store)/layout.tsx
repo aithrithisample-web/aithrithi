@@ -135,12 +135,22 @@ export default async function StoreLayout({
   return (
     <CartProvider>
       <WishlistProvider>
-        {theme?.faviconUrl && (
-          <head>
-            <link rel="icon" href={theme.faviconUrl} />
-            <link rel="apple-touch-icon" href={theme.faviconUrl} />
-          </head>
-        )}
+        <head>
+          <link
+            rel="icon"
+            href={
+              theme?.faviconUrl ||
+              "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/favicon.svg"
+            }
+          />
+          <link
+            rel="apple-touch-icon"
+            href={
+              theme?.faviconUrl ||
+              "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/favicon.svg"
+            }
+          />
+        </head>
         <div
           className="min-h-screen flex flex-col transition-colors duration-300"
           style={{

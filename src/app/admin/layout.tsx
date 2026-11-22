@@ -494,6 +494,10 @@ export default function StoreAdminLayout({
                 src="/avro-logo.png"
                 alt="AVRO"
                 className="h-6 w-auto object-contain"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src =
+                    "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/avro-logo.png";
+                }}
               />
             </Link>
 

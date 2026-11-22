@@ -221,11 +221,12 @@ export default function StoreAdminLoginPage() {
           <div className="flex items-center gap-2">
             <div className="bg-white px-2 py-0.5 rounded-md shadow-xs">
               <img
-                src={storeBrand.logoUrl || "/avro-logo.png"}
+                src={storeBrand.logoUrl || "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/avro-logo.png"}
                 alt={storeBrand.name}
                 className="h-5 w-auto object-contain max-w-[120px]"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = "/avro-logo.png";
+                  (e.target as HTMLImageElement).src =
+                    "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/avro-logo.png";
                 }}
               />
             </div>
@@ -271,11 +272,12 @@ export default function StoreAdminLoginPage() {
                 <div className="flex justify-center">
                   <div className="p-3 bg-white rounded-2xl shadow-md border border-slate-200 inline-flex items-center justify-center max-w-[200px] h-14">
                     <img
-                      src={storeBrand.logoUrl || "/avro-logo.png"}
+                      src={storeBrand.logoUrl || "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/avro-logo.png"}
                       alt={storeBrand.name}
                       className="max-h-9 w-auto object-contain"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/avro-logo.png";
+                        (e.target as HTMLImageElement).src =
+                          "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/avro-logo.png";
                       }}
                     />
                   </div>
