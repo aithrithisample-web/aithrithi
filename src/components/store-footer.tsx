@@ -39,7 +39,7 @@ export default function StoreFooter({ theme }: { theme?: any }) {
   const previewParam = searchParams?.get("theme") || searchParams?.get("previewTheme");
   const matchingThemeDef = resolveStoreTheme(previewParam || theme?.activeTheme, theme);
 
-  const brandName = theme?.brandName || `${matchingThemeDef.name} Store`;
+  const brandName = theme?.brandName || "Aithrithi";
   const currentYear = new Date().getFullYear();
 
   const isDarkFooter =
@@ -55,7 +55,10 @@ export default function StoreFooter({ theme }: { theme?: any }) {
     matchingThemeDef.palette.footerBg === "#0C4A6E" ||
     matchingThemeDef.palette.footerBg === "#291305" ||
     matchingThemeDef.palette.footerBg === "#451A03" ||
-    matchingThemeDef.palette.footerBg === "#14532D";
+    matchingThemeDef.palette.footerBg === "#14532D" ||
+    matchingThemeDef.palette.footerBg === "#36080F" ||
+    matchingThemeDef.palette.footerBg === "#58111A" ||
+    matchingThemeDef.palette.footerBg === "#1C1917";
 
   const companyAddress = theme?.companyAddress || "Commercial Avenue, Sector 62";
   const companyCity = theme?.companyCity || "Noida";

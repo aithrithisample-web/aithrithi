@@ -44,7 +44,7 @@ import { LockedFeatureBanner } from "@/components/admin/LockedFeatureBanner";
 import { UpgradePlanModal } from "@/components/admin/UpgradePlanModal";
 import { PlanTier } from "@/lib/license-core";
 
-const BASIC_ALLOWED_THEMES = ["AVRO_SIGNATURE", "FASHION_NOIR", "TALIM_DEFAULT"];
+const BASIC_ALLOWED_THEMES = ["AITHRITHI_MAROON", "COUTURE_NOVA_LOFT", "AVRO_SIGNATURE", "FASHION_NOIR", "TALIM_DEFAULT"];
 
 export default function ThemesAdminPage() {
   const [permissions, setPermissions] = useState<{

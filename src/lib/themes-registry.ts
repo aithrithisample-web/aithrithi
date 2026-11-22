@@ -68,7 +68,145 @@ export interface AvroThemeDefinition {
 }
 
 export const AVRO_THEMES: AvroThemeDefinition[] = [
-  // 0. NOVA LOFT — Conscious Street Couture & Artisanal Cotton (Inspired by novaloft.in)
+  // 0. AITHRITHI ROYALE MAROON — Haute Couture & Minimal Luxury (aithirithi.in)
+  {
+    id: "aithrithi-maroon",
+    code: "AITHRITHI_MAROON",
+    name: "Aithrithi Royale",
+    industry: "Luxury Couture & Artisanal Living",
+    referenceUrl: "https://aithirithi.in",
+    referenceDisplay: "aithirithi.in",
+    tagline: "Regal Maroon Couture · Understated Minimal Luxury",
+    description: "Designed exclusively for aithirithi.in. A refined harmony of deep imperial bordeaux maroon, warm champagne gold filigree, pure alabaster canvas, crisp editorial serif typography, and ultra-fluid mobile ergonomics.",
+    isIncludedInFree: true,
+    palette: {
+      primary: "#58111A",        // Imperial Velvet Maroon
+      accent: "#C5A880",         // Warm Champagne Gold
+      background: "#FAF7F5",     // Pure Warm Alabaster Canvas
+      cardBg: "#FFFFFF",         // Crisp Pristine White
+      text: "#1C1314",           // Deep Crimson-Espresso Typography
+      textMuted: "#7B6E70",      // Muted Warm Stone
+      border: "#EFE7E4",         // Delicate Whisper Border
+      badgeBg: "#F6ECEE",        // Soft Rose-Maroon Wash
+      badgeText: "#58111A",      // Imperial Maroon
+      headerBg: "#FAF7F5",       // Consistent with canvas
+      footerBg: "#36080F",       // Midnight Imperial Bordeaux
+      accentGlow: "rgba(88, 17, 26, 0.08)",
+    },
+    typography: {
+      fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      headingClass: "font-serif tracking-tight font-normal",
+      bodyClass: "font-sans",
+      buttonRadius: "rounded-full",
+      badgeRadius: "rounded-full",
+    },
+    hero: {
+      badge: "AITHIRITHI.IN · HAUTE COUTURE & ARTISANAL LUXURY",
+      headline: "The Art of Modern Grandeur in",
+      headlineHighlight: "Imperial Maroon",
+      subheadline: "Handcrafted with devotion. Luxurious handloom mulmul, pure tussar silks, and timeless contemporary silhouettes tailored for the discerning modern connoisseur.",
+      ctaPrimary: "Explore Collection",
+      ctaSecondary: "View Lookbook",
+      imageUrl: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=85",
+      style: "editorial-split",
+    },
+    announcementBar: {
+      text: "✦ Aithrithi Festive Royale Live · Complimentary Express Shipping Worldwide · 100% Authentic Handcrafted Heritage ✦",
+      bg: "#58111A",
+      textColor: "#FAF7F5",
+    },
+    trustBadges: [
+      {
+        title: "Artisanal Heritage",
+        subtitle: "Handcrafted by generational master artisans",
+        icon: "award",
+      },
+      {
+        title: "Pure Handloom Luxury",
+        subtitle: "Ethically spun mulmul, tussar silks & organic dyes",
+        icon: "heart",
+      },
+      {
+        title: "Complimentary Express Delivery",
+        subtitle: "Fast doorstep delivery with luxury gift unboxing",
+        icon: "truck",
+      },
+      {
+        title: "Effortless 7-Day Exchange",
+        subtitle: "Doorstep pickup supported by our style concierge",
+        icon: "refresh",
+      },
+    ],
+    sampleCategories: [
+      {
+        name: "Imperial Co-Ords",
+        slug: "co-ords",
+        itemCount: "28 styles",
+        imageUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80",
+      },
+      {
+        name: "Handcrafted Kurtas",
+        slug: "kurtas",
+        itemCount: "34 styles",
+        imageUrl: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=80",
+      },
+      {
+        name: "Heritage Sarees",
+        slug: "sarees",
+        itemCount: "22 styles",
+        imageUrl: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80",
+      },
+      {
+        name: "Bespoke Outerwear",
+        slug: "outerwear",
+        itemCount: "16 styles",
+        imageUrl: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=600&q=80",
+      },
+    ],
+    sampleProducts: [
+      {
+        title: "Bordeaux Velvet Tiered Co-Ord Set",
+        slug: "bordeaux-velvet-tiered-coord",
+        price: 3890,
+        compareAtPrice: 4990,
+        badge: "Bestseller",
+        category: "Co-Ords",
+        rating: 4.9,
+        imageUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=85",
+      },
+      {
+        title: "Imperial Maroon Handblock Silk Anarkali",
+        slug: "imperial-maroon-handblock-anarkali",
+        price: 4450,
+        compareAtPrice: 5600,
+        badge: "Exclusive",
+        category: "Kurtas",
+        rating: 5.0,
+        imageUrl: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=85",
+      },
+      {
+        title: "Champagne Gilded Tussar Kurta Set",
+        slug: "champagne-gilded-tussar-kurta",
+        price: 3250,
+        badge: "New Arrival",
+        category: "Kurtas",
+        rating: 4.8,
+        imageUrl: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=85",
+      },
+      {
+        title: "Midnight Bordeaux Structured Linen Trench",
+        slug: "midnight-bordeaux-structured-trench",
+        price: 5190,
+        compareAtPrice: 6800,
+        badge: "Limited Edition",
+        category: "Outerwear",
+        rating: 4.9,
+        imageUrl: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=800&q=85",
+      },
+    ],
+  },
+
+  // 1. NOVA LOFT — Conscious Street Couture & Artisanal Cotton (Inspired by novaloft.in)
   {
     id: "couture-nova-loft",
     code: "COUTURE_NOVA_LOFT",
@@ -1125,7 +1263,7 @@ export function resolveStoreTheme(
       (target.toUpperCase() === "TALIM_DEFAULT" && t.code === "AVRO_SIGNATURE")
   );
 
-  return found || AVRO_THEMES[12]; // Fallback to AVRO Signature
+  return found || AVRO_THEMES[0]; // Fallback to Aithrithi Royale Maroon
 }
 
 export function createDefaultCustomTheme(

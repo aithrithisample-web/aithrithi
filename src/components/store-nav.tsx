@@ -54,6 +54,8 @@ export function StoreNav({ theme }: { theme?: any }) {
     matchingThemeDef.palette.headerBg === "#090D16" ||
     matchingThemeDef.palette.headerBg === "#09090B" ||
     matchingThemeDef.palette.headerBg === "#0A0A0A" ||
+    matchingThemeDef.palette.headerBg === "#36080F" ||
+    matchingThemeDef.palette.headerBg === "#58111A" ||
     matchingThemeDef.palette.headerBg === "#1C1917";
 
   // Check customer login status
