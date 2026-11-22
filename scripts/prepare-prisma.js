@@ -157,13 +157,21 @@ if (
   schema = schema.replace(/provider\s*=\s*"sqlite"/g, 'provider = "postgresql"');
 
   if (dbUrl && !dbUrl.includes("schema=")) {
-    dbUrl += (dbUrl.includes("?") ? "&" : "?") + "schema=store";
+    dbUrl += (dbUrl.includes("?") ? "&" : "?") + "schema=public";
+    process.env[urlEnvVar] = dbUrl;
+    process.env.DATABASE_URL = dbUrl;
+  } else if (dbUrl && dbUrl.includes("schema=store")) {
+    dbUrl = dbUrl.replace("schema=store", "schema=public");
     process.env[urlEnvVar] = dbUrl;
     process.env.DATABASE_URL = dbUrl;
   }
 
   if (directUrl && !directUrl.includes("schema=")) {
-    directUrl += (directUrl.includes("?") ? "&" : "?") + "schema=store";
+    directUrl += (directUrl.includes("?") ? "&" : "?") + "schema=public";
+    process.env[directEnvVar] = directUrl;
+    process.env.DIRECT_URL = directUrl;
+  } else if (directUrl && directUrl.includes("schema=store")) {
+    directUrl = directUrl.replace("schema=store", "schema=public");
     process.env[directEnvVar] = directUrl;
     process.env.DIRECT_URL = directUrl;
   }
@@ -186,7 +194,7 @@ if (
 
   // Ensure DATABASE_URL is present in process.env so prisma generate doesn't throw
   if (!process.env[urlEnvVar] && !process.env.DATABASE_URL) {
-    const dummyDbUrl = "postgresql://postgres:postgres@localhost:5432/store?schema=store";
+    const dummyDbUrl = "postgres://postgres.aydgnokektxslpaukbou:5ORmfa7GDe1wQJ8t@aws-1-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require&pgbouncer=true";
     process.env[urlEnvVar] = dummyDbUrl;
     process.env.DATABASE_URL = dummyDbUrl;
   }
