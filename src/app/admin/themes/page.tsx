@@ -217,7 +217,7 @@ export default function ThemesAdminPage() {
     const newConfig = {
       ...themeConfig,
       activeTheme: preset.code,
-      brandName: `${preset.name} Store`,
+      brandName: themeConfig?.brandName || preset.name,
       primaryColor: preset.palette.primary,
       accentColor: preset.palette.accent,
       fontFamily: preset.typography.fontFamily,

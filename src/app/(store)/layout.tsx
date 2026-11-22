@@ -152,7 +152,7 @@ export default async function StoreLayout({
           />
         </head>
         <div
-          className="min-h-screen flex flex-col transition-colors duration-300"
+          className="min-h-screen flex flex-col transition-colors duration-300 pb-16 md:pb-0"
           style={{
             fontFamily: theme?.fontFamily || "Inter, -apple-system, sans-serif",
           }}

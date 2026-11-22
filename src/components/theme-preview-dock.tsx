@@ -42,7 +42,7 @@ export function ThemePreviewDock({ initialThemeCode }: { initialThemeCode?: stri
     try {
       const payload = {
         activeTheme: theme.code,
-        brandName: `${theme.name} Store`,
+        // Preserve existing store brandName
         primaryColor: theme.palette.primary,
         accentColor: theme.palette.accent,
         fontFamily: theme.typography.fontFamily,

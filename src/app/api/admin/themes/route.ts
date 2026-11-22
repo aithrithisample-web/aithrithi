@@ -150,7 +150,7 @@ export async function PUT(req: NextRequest) {
       where: { id: themeSetting ? themeSetting.id : "cuid_placeholder" },
       update: {
         activeTheme,
-        brandName,
+        brandName: (brandName !== undefined && brandName.trim().length > 0) ? brandName : themeSetting?.brandName,
         logoUrl,
         faviconUrl,
         primaryColor,
