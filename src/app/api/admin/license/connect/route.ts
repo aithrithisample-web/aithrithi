@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
     const targetCentralUrl =
       centralApiUrl?.trim() ||
       process.env.CENTRAL_API_URL ||
-      "http://localhost:3000/api/v1";
+      "https://avrocentral.vercel.app/api/v1";
 
     const result = await updateStoreLicenseKey({
       licenseKey: licenseKey.trim(),

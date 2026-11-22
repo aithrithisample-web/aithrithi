@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { cleanCentralUrl } from "@/lib/license-client";
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,11 +13,11 @@ export async function POST(req: NextRequest) {
       const cache = await prisma.licenseCache.findFirst({
         orderBy: { updatedAt: "desc" },
       });
-      centralUrl = cache?.centralApiUrl || process.env.CENTRAL_API_URL || "http://localhost:3000/api/v1";
+      centralUrl = cache?.centralApiUrl || process.env.CENTRAL_API_URL || "https://avrocentral.vercel.app/api/v1";
     }
 
-    // Clean URL
-    centralUrl = centralUrl.replace(/\/+$/, "");
+    // Clean and sanitize URL
+    centralUrl = cleanCentralUrl(centralUrl);
 
     // Ping Central health or validate endpoint
     const pingEndpoint = `${centralUrl}/license/validate`;

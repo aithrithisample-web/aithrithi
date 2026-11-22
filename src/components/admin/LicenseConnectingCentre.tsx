@@ -59,7 +59,7 @@ export default function LicenseConnectingCentre() {
   // Writing / Input State
   const [keyInput, setKeyInput] = useState("");
   const [storeDomain, setStoreDomain] = useState("");
-  const [centralUrl, setCentralUrl] = useState("http://localhost:3000/api/v1");
+  const [centralUrl, setCentralUrl] = useState("https://avrocentral.vercel.app/api/v1");
   const [isWriting, setIsWriting] = useState(false);
   const [writeSuccess, setWriteSuccess] = useState<string | null>(null);
   const [writeError, setWriteError] = useState<string | null>(null);

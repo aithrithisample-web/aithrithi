@@ -24,6 +24,17 @@ let cachedLicenseStatus: LicenseStatusResult | null = null;
 let cachedLicenseStatusTimestamp = 0;
 const LICENSE_STATUS_CACHE_TTL_MS = 15000;
 
+export function cleanCentralUrl(url?: string | null): string {
+  const raw = (url && typeof url === "string" && url.trim().length > 0)
+    ? url
+    : (process.env.CENTRAL_API_URL || "https://avrocentral.vercel.app/api/v1");
+  return raw
+    .trim()
+    .replace(/^["'\\]+|["'\\]+$/g, "")
+    .trim()
+    .replace(/\/+$/, "");
+}
+
 export function invalidateLicenseStatusCache() {
   cachedLicenseStatus = null;
   cachedLicenseStatusTimestamp = 0;
@@ -127,7 +138,8 @@ export async function syncLicenseWithCentral(): Promise<{
   }
 
   try {
-    const res = await fetch(`${cache.centralApiUrl}/license/validate`, {
+    const targetCentralUrl = cleanCentralUrl(cache.centralApiUrl);
+    const res = await fetch(`${targetCentralUrl}/license/validate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -214,11 +226,11 @@ export async function updateStoreLicenseKey({
     orderBy: { updatedAt: "desc" },
   });
 
-  const targetCentralUrl =
-    centralApiUrl?.trim() ||
+  const targetCentralUrl = cleanCentralUrl(
+    centralApiUrl ||
     existingCache?.centralApiUrl ||
-    process.env.CENTRAL_API_URL ||
-    "http://localhost:3000/api/v1";
+    process.env.CENTRAL_API_URL
+  );
 
   const targetDomain =
     domain?.trim() ||
@@ -305,7 +317,7 @@ export async function getStoreBroadcasts(plan?: string): Promise<any[]> {
     const cache = await prisma.licenseCache.findFirst({
       orderBy: { updatedAt: "desc" },
     });
-    const centralUrl = cache?.centralApiUrl || "http://localhost:3000/api/v1";
+    const centralUrl = cleanCentralUrl(cache?.centralApiUrl);
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 2000);
 
