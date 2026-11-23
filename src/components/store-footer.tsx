@@ -114,32 +114,40 @@ export default function StoreFooter({ theme }: { theme?: any }) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10 text-xs">
           {/* Column 1: Company Profile & Registered Office (5 cols) */}
           <div className="lg:col-span-5 space-y-4">
-            <Link href="/" className="inline-flex items-center gap-2.5 sm:gap-3.5 group flex-wrap sm:flex-nowrap">
-              {theme?.logoUrl ? (
-                <div className="bg-white p-1.5 sm:p-2 rounded-xl border border-slate-200/80 shadow-sm flex-shrink-0 flex items-center justify-center">
-                  <img
-                    src={theme.logoUrl}
-                    alt={brandName}
-                    className="h-8 sm:h-12 max-w-[110px] sm:max-w-[180px] w-auto object-contain"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                    }}
-                  />
-                </div>
-              ) : null}
-              <div className="flex flex-col min-w-0">
-                <span
-                  className="text-xl sm:text-3xl font-serif font-extrabold tracking-tight block leading-none truncate"
-                  style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
-                >
-                  {brandName}
-                </span>
-                {matchingThemeDef.code === "AITHRITHI_MAROON" && (
-                  <span className="text-[9px] sm:text-[10px] font-sans tracking-[0.18em] sm:tracking-[0.24em] uppercase text-stone-400 font-semibold mt-1 truncate block">
-                    By Devika · Sarees & Kurti
-                  </span>
-                )}
-              </div>
+            <Link href="/" className="inline-flex items-center gap-2.5 sm:gap-3.5 group flex-wrap sm:flex-nowrap" title={brandName}>
+              {matchingThemeDef.code === "AITHRITHI_MAROON" ? (
+                <img
+                  src="/aithrithi-nav-logo.png"
+                  alt="Aithrithi.in By Devika"
+                  className="h-10 sm:h-12 md:h-13 w-auto max-w-[180px] sm:max-w-[220px] object-contain transition-transform group-hover:scale-105"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "/aithrithi-nav-logo.png";
+                  }}
+                />
+              ) : (
+                <>
+                  {theme?.logoUrl ? (
+                    <div className="bg-white p-1.5 sm:p-2 rounded-xl border border-slate-200/80 shadow-sm flex-shrink-0 flex items-center justify-center">
+                      <img
+                        src={theme.logoUrl}
+                        alt={brandName}
+                        className="h-8 sm:h-12 max-w-[110px] sm:max-w-[180px] w-auto object-contain"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = "none";
+                        }}
+                      />
+                    </div>
+                  ) : null}
+                  <div className="flex flex-col min-w-0">
+                    <span
+                      className="text-xl sm:text-3xl font-serif font-extrabold tracking-tight block leading-none truncate"
+                      style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
+                    >
+                      {brandName}
+                    </span>
+                  </div>
+                </>
+              )}
             </Link>
 
             <p

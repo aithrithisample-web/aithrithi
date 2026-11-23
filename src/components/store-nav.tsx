@@ -146,37 +146,42 @@ export function StoreNav({ theme }: { theme?: any }) {
           </div>
         )}
 
-        {/* Sleek Minimal Navbar with Snug Logo Fit */}
+        {/* Sleek Minimal Navbar with Snug Typography Logo Fit */}
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4 overflow-hidden">
-          {/* Brand Logo & Name — Scaled to fit navbar height cleanly */}
-          <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group min-w-0 max-w-[220px] xs:max-w-[260px] sm:max-w-none flex-shrink py-0.5">
-            {theme?.logoUrl ? (
+          {/* Brand Typography Logo — Luxury Scale & Pixel-Perfect Navbar Fit */}
+          <Link href="/" className="flex items-center group min-w-0 max-w-[170px] sm:max-w-[240px] flex-shrink py-0.5" title={brandName}>
+            {matchingThemeDef.code === "AITHRITHI_MAROON" ? (
               <img
-                src={theme.logoUrl}
-                alt={brandName}
-                className="h-10 sm:h-12 md:h-13 max-w-[110px] sm:max-w-[240px] w-auto object-contain transition-transform group-hover:scale-105 drop-shadow-xs flex-shrink-0"
+                src={isDarkNav ? "/aithrithi-nav-logo.png" : "/aithrithi-nav-logo-maroon.png"}
+                alt="Aithrithi.in By Devika"
+                className="h-9 sm:h-11 md:h-12 w-auto max-w-[160px] sm:max-w-[220px] object-contain transition-transform group-hover:scale-105 drop-shadow-xs"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = "none";
+                  (e.target as HTMLImageElement).src = "/aithrithi-nav-logo-maroon.png";
                 }}
               />
-            ) : null}
-            <div className="flex flex-col min-w-0">
-              <span
-                className={`font-serif font-extrabold text-xl sm:text-2xl md:text-3xl tracking-tight leading-none truncate transition-transform group-hover:scale-[1.01] ${
-                  isDarkNav ? "text-white" : "text-slate-900"
-                }`}
-                style={{
-                  color: matchingThemeDef.code === "AITHRITHI_MAROON" ? matchingThemeDef.palette.primary : undefined,
-                }}
-              >
-                {brandName}
-              </span>
-              {matchingThemeDef.code === "AITHRITHI_MAROON" && (
-                <span className="text-[8px] sm:text-[9.5px] font-sans tracking-[0.16em] sm:tracking-[0.22em] uppercase text-stone-500 font-semibold mt-0.5 truncate block">
-                  By Devika · Sarees & Kurti
-                </span>
-              )}
-            </div>
+            ) : (
+              <>
+                {theme?.logoUrl ? (
+                  <img
+                    src={theme.logoUrl}
+                    alt={brandName}
+                    className="h-9 sm:h-11 md:h-12 max-w-[100px] sm:max-w-[200px] w-auto object-contain transition-transform group-hover:scale-105 drop-shadow-xs flex-shrink-0"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = "none";
+                    }}
+                  />
+                ) : null}
+                <div className="flex flex-col min-w-0 ml-2">
+                  <span
+                    className={`font-serif font-extrabold text-xl sm:text-2xl md:text-3xl tracking-tight leading-none truncate transition-transform group-hover:scale-[1.01] ${
+                      isDarkNav ? "text-white" : "text-slate-900"
+                    }`}
+                  >
+                    {brandName}
+                  </span>
+                </div>
+              </>
+            )}
           </Link>
 
           {/* Desktop Minimal Navigation Links */}
