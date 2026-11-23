@@ -151,8 +151,8 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           style={{ backgroundColor: backgroundColor }}
         >
           <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
-            {/* Full-width Cinematic Hero Banner */}
-            <div className="relative group overflow-hidden rounded-xl sm:rounded-3xl shadow-2xl border border-black/5 bg-[#58111A]">
+            {/* Full-width Cinematic Hero Banner with 3D Depth Frame */}
+            <div className="relative group overflow-hidden rounded-xl sm:rounded-3xl shadow-[0_20px_50px_-12px_rgba(88,17,26,0.22)] border border-[#C5A880]/30 ring-1 ring-[#C5A880]/20 bg-[#58111A] avro-3d-hero-frame">
               <HeroBannerSlider
                 slides={heroSlides}
                 fallbackImage={heroImage || "/aithrithi-hero.jpg"}
@@ -166,21 +166,21 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
               />
             </div>
 
-            {/* Quick Category Chips — Horizontal Touch Carousel on Mobile / Centered on Desktop */}
-            <div className="mt-3 sm:mt-6 flex items-center sm:justify-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar py-1 px-0.5 touch-pan-x">
+            {/* Quick Category Chips — Refined Editorial 3D Strip */}
+            <div className="mt-3.5 sm:mt-6 flex items-center sm:justify-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar py-1 px-0.5 touch-pan-x">
               {[
-                { label: "All Sarees", query: "Saree" },
+                { label: "Handloom Sarees", query: "Saree" },
                 { label: "Designer Kurtis", query: "Kurti" },
-                { label: "Silk Heritage", query: "Silk" },
+                { label: "Pure Tussar Silks", query: "Silk" },
                 { label: "Festive Royale", query: "Festive" },
                 { label: "New Arrivals", query: "New" },
               ].map((item) => (
                 <Link
                   key={item.label}
                   href={`/shop?q=${encodeURIComponent(item.query)}`}
-                  className="px-3 py-1.5 sm:px-5 sm:py-2 rounded-full text-[11px] sm:text-sm font-semibold border shadow-xs transition-all duration-200 hover:scale-105 hover:shadow-md flex-shrink-0 whitespace-nowrap active:scale-95"
+                  className="px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-full text-[11px] sm:text-xs font-serif font-bold tracking-wider uppercase border shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md flex-shrink-0 whitespace-nowrap active:scale-95 hover:border-[#58111A] hover:bg-[#58111A] hover:text-white"
                   style={{
-                    borderColor: themeDef.palette.border,
+                    borderColor: "rgba(88, 17, 26, 0.15)",
                     backgroundColor: cardBgColor,
                     color: textColor,
                   }}
@@ -395,7 +395,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
             <Link
               key={category.slug}
               href={`/shop?category=${category.slug}`}
-              className="avro-card avro-slide-up group overflow-hidden border shadow-xs relative flex flex-col justify-end aspect-square"
+              className="avro-3d-card avro-slide-up group overflow-hidden border shadow-xs relative flex flex-col justify-end aspect-square"
               style={{
                 borderColor: themeDef.palette.border,
                 borderRadius: cardBorderRadius,
@@ -460,7 +460,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
             return (
               <div
                 key={p.slug}
-                className="avro-card avro-slide-up group overflow-hidden shadow-sm flex flex-col border"
+                className="avro-3d-card avro-slide-up group overflow-hidden shadow-xs flex flex-col border"
                 style={{
                   backgroundColor: themeDef.palette.cardBg,
                   borderColor: themeDef.palette.border,

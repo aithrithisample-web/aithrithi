@@ -169,15 +169,29 @@ export function HeroBannerSlider({
 
         {/* Subtle Luxury Corner Accent for Aithrithi */}
         {isAithrithiTheme && (
-          <div className="absolute bottom-3 right-3 sm:bottom-5 sm:right-6 z-10">
-            <Link
-              href="/shop"
-              className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-1.5 sm:px-6 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold bg-[#58111A]/95 hover:bg-[#58111A] text-white shadow-xl backdrop-blur-md border border-white/20 transition-all hover:scale-105 active:scale-95"
-            >
-              <span>Explore Collection</span>
-              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </Link>
-          </div>
+          <>
+            {/* 3D Floating Haute Couture Badge */}
+            <div className="absolute top-2.5 left-2.5 sm:top-5 sm:left-6 z-10 avro-3d-float">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full text-[9px] sm:text-[10.5px] font-serif font-bold uppercase tracking-[0.2em] bg-black/55 text-[#FAF7F5] backdrop-blur-md border border-white/25 shadow-xl">
+                <span className="text-[#C5A880]">✦</span>
+                <span>Haute Couture · Festive 2026</span>
+              </span>
+            </div>
+
+            {/* Luxury 3D Glassmorphism Action Pill */}
+            <div className="absolute bottom-2.5 right-2.5 sm:bottom-5 sm:right-6 z-10">
+              <Link
+                href="/shop"
+                className="avro-3d-btn inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-6 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-serif font-bold uppercase tracking-wider bg-white/95 hover:bg-white text-[#58111A] shadow-2xl backdrop-blur-md border border-[#C5A880]/50 transition-all active:scale-95 group/btn"
+              >
+                <span>Explore Collection</span>
+                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+              </Link>
+            </div>
+
+            {/* Luxury Inner Champagne Rim */}
+            <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-[#C5A880]/25 rounded-xl sm:rounded-3xl" />
+          </>
         )}
       </div>
     );

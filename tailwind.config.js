@@ -19,6 +19,12 @@ module.exports = {
           "Arial",
           "sans-serif",
         ],
+        serif: [
+          '"Cormorant Garamond"',
+          '"Playfair Display"',
+          "Georgia",
+          "serif",
+        ],
         mono: [
           '"JetBrains Mono"',
           "ui-monospace",
