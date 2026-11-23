@@ -94,8 +94,8 @@ export const AVRO_THEMES: AvroThemeDefinition[] = [
       accentGlow: "rgba(88, 17, 26, 0.08)",
     },
     typography: {
-      fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-      headingClass: "font-serif tracking-tight font-normal",
+      fontFamily: "'Plus Jakarta Sans', 'Cormorant Garamond', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      headingClass: "font-serif tracking-tight font-medium",
       bodyClass: "font-sans",
       buttonRadius: "rounded-full",
       badgeRadius: "rounded-full",
@@ -232,8 +232,8 @@ export const AVRO_THEMES: AvroThemeDefinition[] = [
       accentGlow: "rgba(154, 52, 18, 0.08)",
     },
     typography: {
-      fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-      headingClass: "font-serif tracking-tight font-normal",
+      fontFamily: "'Plus Jakarta Sans', 'Cormorant Garamond', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      headingClass: "font-serif tracking-tight font-medium",
       bodyClass: "font-sans",
       buttonRadius: "rounded-full",
       badgeRadius: "rounded-full",

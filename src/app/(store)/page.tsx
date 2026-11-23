@@ -185,7 +185,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                 <Link
                   key={item.label}
                   href={`/shop?q=${encodeURIComponent(item.query)}`}
-                  className="px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-full text-[11px] sm:text-xs font-serif font-bold tracking-wider uppercase border shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md flex-shrink-0 whitespace-nowrap active:scale-95 hover:border-[#58111A] hover:bg-[#58111A] hover:text-white"
+                  className="px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-full text-[11px] sm:text-xs font-serif font-medium tracking-[0.14em] uppercase border shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md flex-shrink-0 whitespace-nowrap active:scale-95 hover:border-[#58111A] hover:bg-[#58111A] hover:text-white"
                   style={{
                     borderColor: "rgba(88, 17, 26, 0.15)",
                     backgroundColor: cardBgColor,
@@ -386,13 +386,13 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
         <div className="avro-slide-up flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-3">
           <div>
             <span
-              className="text-[11px] sm:text-xs font-bold uppercase tracking-wider block mb-1"
+              className="text-[10px] sm:text-[11px] font-serif font-medium tracking-[0.18em] uppercase block mb-1"
               style={{ color: themeDef.palette.accent }}
             >
               Curated Collections
             </span>
             <h2
-              className={`text-xl sm:text-3xl font-extrabold tracking-tight ${themeDef.typography.headingClass}`}
+              className={`text-2xl sm:text-3xl font-serif font-medium tracking-tight ${themeDef.typography.headingClass}`}
               style={{ color: themeDef.palette.text }}
             >
               Shop by Category
@@ -400,7 +400,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           </div>
           <Link
             href="/shop"
-            className="avro-link-underline text-xs font-bold flex items-center gap-1 self-start sm:self-auto"
+            className="avro-link-underline text-xs font-serif font-medium tracking-[0.12em] uppercase flex items-center gap-1 self-start sm:self-auto"
             style={{ color: themeDef.palette.accent }}
           >
             Browse All Categories <ArrowRight className="w-3.5 h-3.5" />
@@ -430,7 +430,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                 <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-slate-300 block">
                   {category.itemCount}
                 </span>
-                <h3 className="font-extrabold text-xs sm:text-base tracking-tight leading-snug group-hover:text-white transition-colors truncate">
+                <h3 className="font-serif font-medium text-sm sm:text-base tracking-wide leading-snug group-hover:text-white transition-colors truncate">
                   {category.name}
                 </h3>
               </div>
@@ -446,13 +446,13 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
         <div className="avro-slide-up flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-3">
           <div>
             <span
-              className="text-[11px] sm:text-xs font-serif font-bold tracking-widest uppercase block mb-1"
+              className="text-[10px] sm:text-[11px] font-serif font-medium tracking-[0.18em] uppercase block mb-1"
               style={{ color: themeDef.palette.accent }}
             >
               Signature Collection · Handcrafted
             </span>
             <h2
-              className={`text-xl sm:text-3xl font-extrabold tracking-tight ${themeDef.typography.headingClass}`}
+              className={`text-2xl sm:text-3xl font-serif font-medium tracking-tight ${themeDef.typography.headingClass}`}
               style={{ color: themeDef.palette.text }}
             >
               Curated Bestsellers
@@ -460,7 +460,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           </div>
           <Link
             href="/shop"
-            className="avro-link-underline text-xs font-bold flex items-center gap-1"
+            className="avro-link-underline text-xs font-serif font-medium tracking-[0.12em] uppercase flex items-center gap-1"
             style={{ color: themeDef.palette.accent }}
           >
             View Complete Catalog <ArrowRight className="w-3.5 h-3.5" />
@@ -496,7 +496,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                   <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
                     {p.badge && (
                       <span
-                        className="px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-white shadow-sm"
+                        className="px-2 py-0.5 text-[9.5px] font-serif font-medium tracking-[0.14em] uppercase text-white shadow-sm"
                         style={{
                           backgroundColor: themeDef.palette.primary,
                           borderRadius: themeDef.typography.badgeRadius === "rounded-none" ? "0px" : "6px",
@@ -506,7 +506,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                       </span>
                     )}
                     {hasDiscount && (
-                      <span className="px-2 py-0.5 text-[10px] font-bold bg-rose-600 text-white shadow-sm"
+                      <span className="px-2 py-0.5 text-[9.5px] font-serif font-medium tracking-[0.14em] uppercase bg-[#58111A] text-white shadow-sm"
                         style={{ borderRadius: "6px" }}>
                         {discountPct}% OFF
                       </span>
@@ -526,13 +526,13 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                 <div className="p-3 sm:p-4 space-y-1.5 sm:space-y-2 flex-grow flex flex-col justify-between">
                   <div>
                     <span
-                      className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider block mb-0.5 sm:mb-1"
+                      className="text-[9.5px] sm:text-[10px] font-serif font-medium tracking-[0.16em] uppercase block mb-0.5 sm:mb-1"
                       style={{ color: themeDef.palette.textMuted }}
                     >
                       {p.category}
                     </span>
                     <h3
-                      className="font-bold text-xs line-clamp-2"
+                      className="font-serif font-medium text-xs sm:text-sm line-clamp-2 leading-snug"
                       style={{ color: themeDef.palette.text }}
                     >
                       {p.title}
@@ -546,20 +546,20 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                           className={`w-2.5 h-2.5 ${i < Math.floor(p.rating) ? "fill-amber-400 text-amber-400" : "text-slate-300"}`}
                         />
                       ))}
-                      <span className="text-[10px] ml-0.5" style={{ color: textMutedColor }}>{p.rating}</span>
+                      <span className="text-[10px] ml-0.5 font-sans" style={{ color: textMutedColor }}>{p.rating}</span>
                     </div>
                   </div>
 
                   <div className="pt-2 flex items-center justify-between">
                     <div>
                       <span
-                        className="text-xs sm:text-sm font-extrabold"
+                        className="text-xs sm:text-sm font-semibold font-sans tracking-tight"
                         style={{ color: themeDef.palette.text }}
                       >
                         ₹{p.price.toLocaleString("en-IN")}
                       </span>
                       {hasDiscount && (
-                        <span className="text-[10px] sm:text-[11px] text-slate-400 line-through ml-1.5">
+                        <span className="text-[10px] sm:text-[11px] text-slate-400 line-through ml-1.5 font-sans">
                           ₹{p.compareAtPrice?.toLocaleString("en-IN")}
                         </span>
                       )}
@@ -591,14 +591,14 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
         <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-4 sm:space-y-6 mt-10 sm:mt-16 pt-8 sm:pt-10 border-t border-black/5">
           <div className="avro-slide-up flex items-center justify-between">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+              <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-slate-400 flex items-center gap-1.5 font-sans">
                 <TrendingUp className="w-3.5 h-3.5" /> Live Catalog
               </span>
-              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">
+              <h2 className="text-xl sm:text-2xl font-serif font-medium text-slate-900">
                 Your Products
               </h2>
             </div>
-            <Link href="/shop" className="avro-link-underline text-xs font-bold flex items-center gap-1" style={{ color: primaryColor }}>
+            <Link href="/shop" className="avro-link-underline text-xs font-serif font-medium tracking-[0.12em] uppercase flex items-center gap-1" style={{ color: primaryColor }}>
               View All ({dbProducts.length}) <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
@@ -621,15 +621,15 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
         >
           <div className="max-w-xl space-y-3 relative z-10">
             <span
-              className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white/10 inline-block font-sans"
+              className="text-[11px] font-serif font-medium tracking-[0.16em] uppercase px-3.5 py-1 rounded-full bg-white/10 inline-block font-sans"
               style={{ color: accentColor }}
             >
               {themeDef.code === "AITHRITHI_MAROON" ? "Devika's Atelier · Handcrafted Elegance" : "Curated Collections · Fast Dispatch"}
             </span>
-            <h2 className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${themeDef.typography.headingClass}`}>
+            <h2 className={`text-2xl sm:text-3xl font-serif font-medium tracking-tight ${themeDef.typography.headingClass}`}>
               {themeDef.code === "AITHRITHI_MAROON" ? "Woven with Devotion, Styled for Royalty" : "Engineered for Quality & Reliability"}
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans font-normal">
               {themeDef.code === "AITHRITHI_MAROON"
                 ? "Experience the timeless allure of authentic artisanal sarees and handcrafted designer kurtis delivered directly to your doorstep with luxury concierge unboxing."
                 : (allowReviews
@@ -641,7 +641,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           <div className="flex flex-col sm:flex-row gap-3 relative z-10 flex-shrink-0">
             <Link
               href="/shop"
-              className="avro-btn px-6 py-3 rounded-xl bg-white text-slate-900 font-bold text-xs hover:bg-[#FAF7F5] transition-colors shadow-sm text-center"
+              className="avro-btn px-6 py-3 rounded-xl bg-white text-slate-900 font-serif font-medium tracking-[0.14em] uppercase text-xs hover:bg-[#FAF7F5] transition-colors shadow-sm text-center"
               style={{
                 borderRadius: btnBorderRadius,
               }}
@@ -650,7 +650,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
             </Link>
             <Link
               href="/track"
-              className="avro-btn px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 transition-colors text-center"
+              className="avro-btn px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-serif font-medium tracking-[0.14em] uppercase text-xs border border-white/20 transition-colors text-center"
               style={{
                 borderRadius: btnBorderRadius,
               }}

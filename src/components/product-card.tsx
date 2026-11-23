@@ -68,13 +68,13 @@ export function ProductCard({
         {/* Badges */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
           {product.isComboDeal && (
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-serif font-bold tracking-wider bg-[#58111A] text-[#FAF7F5] border border-[#C5A880]/30 shadow-sm flex items-center gap-1">
+            <span className="px-2 py-0.5 rounded-full text-[9.5px] font-serif font-medium tracking-[0.14em] uppercase bg-[#58111A] text-[#FAF7F5] border border-[#C5A880]/30 shadow-sm flex items-center gap-1">
               <PackagePlus className="w-3 h-3" />
               COMBO
             </span>
           )}
           {hasDiscount && (
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-serif font-bold tracking-wider bg-[#58111A] text-[#FAF7F5] border border-[#C5A880]/30 shadow-sm">
+            <span className="px-2 py-0.5 rounded-full text-[9.5px] font-serif font-medium tracking-[0.14em] uppercase bg-[#58111A] text-[#FAF7F5] border border-[#C5A880]/30 shadow-sm">
               {discountPct}% OFF
             </span>
           )}
@@ -108,7 +108,7 @@ export function ProductCard({
 
         {/* Low stock badge */}
         {product.stockQuantity <= 5 && product.stockQuantity > 0 && (
-          <span className="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded-full text-[9px] font-bold bg-[#C5A880] text-slate-900 shadow-sm">
+          <span className="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded-full text-[9px] font-serif font-medium tracking-[0.14em] uppercase bg-[#C5A880] text-slate-900 shadow-sm">
             ONLY {product.stockQuantity} LEFT
           </span>
         )}
@@ -118,7 +118,7 @@ export function ProductCard({
           <button
             type="button"
             onClick={handleQuickAdd}
-            className={`w-full py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-lg active:scale-98 ${
+            className={`w-full py-2.5 rounded-xl text-xs font-serif font-medium uppercase tracking-[0.14em] transition-all shadow-lg active:scale-98 ${
               added
                 ? "bg-[#58111A] text-white"
                 : "bg-[#58111A] text-white hover:bg-[#36080F] backdrop-blur-sm"
@@ -141,12 +141,12 @@ export function ProductCard({
       <div className="p-4 space-y-2 flex-grow flex flex-col justify-between">
         <div>
           {product.category && (
-            <span className="text-[10px] font-serif font-bold uppercase tracking-widest text-[#C5A880] block mb-1">
+            <span className="text-[10px] font-serif font-medium uppercase tracking-[0.18em] text-[#C5A880] block mb-1">
               {product.category.name}
             </span>
           )}
           <Link href={`/product/${product.slug}`}>
-            <h3 className="font-serif font-bold text-sm text-slate-900 group-hover:text-[#58111A] transition-colors line-clamp-2">
+            <h3 className="font-serif font-medium text-sm sm:text-base text-slate-900 group-hover:text-[#58111A] transition-colors line-clamp-2 leading-snug">
               {product.title}
             </h3>
           </Link>
@@ -183,7 +183,7 @@ export function ProductCard({
 
         <div className="pt-2 flex items-center justify-between">
           <div>
-            <span className="text-sm font-extrabold text-slate-900">
+            <span className="text-sm sm:text-base font-semibold text-slate-900 font-sans tracking-tight">
               ₹{effectivePrice.toLocaleString("en-IN")}
             </span>
             {hasDiscount && (

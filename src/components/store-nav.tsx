@@ -185,17 +185,17 @@ export function StoreNav({ theme }: { theme?: any }) {
           </Link>
 
           {/* Desktop Minimal Navigation Links */}
-          <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-xs font-semibold uppercase tracking-wider">
+          <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-[11.5px] font-medium tracking-[0.14em] uppercase font-sans">
             <Link
               href="/"
               className={`transition-colors py-1 ${
                 pathname === "/"
-                  ? "font-bold text-blue-600"
+                  ? "font-semibold"
                   : isDarkNav
                   ? "text-slate-300 hover:text-white"
                   : "text-slate-600 hover:text-slate-900"
               }`}
-              style={pathname === "/" ? { color: matchingThemeDef.palette.accent } : {}}
+              style={pathname === "/" ? { color: matchingThemeDef.palette.primary } : {}}
             >
               Home
             </Link>
@@ -203,25 +203,25 @@ export function StoreNav({ theme }: { theme?: any }) {
               href="/shop"
               className={`transition-colors py-1 ${
                 pathname === "/shop"
-                  ? "font-bold"
+                  ? "font-semibold"
                   : isDarkNav
                   ? "text-slate-300 hover:text-white"
                   : "text-slate-600 hover:text-slate-900"
               }`}
-              style={pathname === "/shop" ? { color: matchingThemeDef.palette.accent } : {}}
+              style={pathname === "/shop" ? { color: matchingThemeDef.palette.primary } : {}}
             >
-              Catalog
+              Collections
             </Link>
             <Link
               href="/wishlist"
               className={`transition-colors py-1 ${
                 pathname === "/wishlist"
-                  ? "font-bold"
+                  ? "font-semibold"
                   : isDarkNav
                   ? "text-slate-300 hover:text-white"
                   : "text-slate-600 hover:text-slate-900"
               }`}
-              style={pathname === "/wishlist" ? { color: matchingThemeDef.palette.accent } : {}}
+              style={pathname === "/wishlist" ? { color: matchingThemeDef.palette.primary } : {}}
             >
               Wishlist
             </Link>
@@ -229,12 +229,12 @@ export function StoreNav({ theme }: { theme?: any }) {
               href="/track"
               className={`transition-colors py-1 ${
                 pathname === "/track"
-                  ? "font-bold"
+                  ? "font-semibold"
                   : isDarkNav
                   ? "text-slate-300 hover:text-white"
                   : "text-slate-600 hover:text-slate-900"
               }`}
-              style={pathname === "/track" ? { color: matchingThemeDef.palette.accent } : {}}
+              style={pathname === "/track" ? { color: matchingThemeDef.palette.primary } : {}}
             >
               Track Order
             </Link>
@@ -242,12 +242,12 @@ export function StoreNav({ theme }: { theme?: any }) {
               href="/about"
               className={`transition-colors py-1 ${
                 pathname === "/about"
-                  ? "font-bold"
+                  ? "font-semibold"
                   : isDarkNav
                   ? "text-slate-300 hover:text-white"
                   : "text-slate-600 hover:text-slate-900"
               }`}
-              style={pathname === "/about" ? { color: matchingThemeDef.palette.accent } : {}}
+              style={pathname === "/about" ? { color: matchingThemeDef.palette.primary } : {}}
             >
               About
             </Link>

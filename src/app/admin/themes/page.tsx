@@ -138,6 +138,7 @@ export default function ThemesAdminPage() {
   ];
 
   const fontOptions = [
+    { label: "Aithrithi Minimal Luxury (Cormorant Garamond & Jakarta Sans)", value: "'Plus Jakarta Sans', 'Cormorant Garamond', sans-serif" },
     { label: "Cormorant & Jakarta (Aithrithi Luxury Editorial)", value: "'Cormorant Garamond', 'Plus Jakarta Sans', serif" },
     { label: "Inter (Modern Minimal)", value: "Inter, -apple-system, sans-serif" },
     { label: "Plus Jakarta Sans (Crisp Tech)", value: "'Plus Jakarta Sans', sans-serif" },

@@ -124,7 +124,7 @@ export default function StoreFooter({ theme }: { theme?: any }) {
                 </div>
                 <div className="min-w-0 flex-1">
                   <strong
-                    className="block font-serif font-bold text-[11px] sm:text-xs uppercase tracking-wider truncate"
+                    className="block font-serif font-medium text-[11px] sm:text-xs uppercase tracking-[0.14em] truncate"
                     style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
                   >
                     {badge.title}
@@ -179,10 +179,12 @@ export default function StoreFooter({ theme }: { theme?: any }) {
             </Link>
 
             <p
-              className="text-xs leading-relaxed max-w-sm"
+              className="text-xs leading-relaxed max-w-sm font-sans font-normal"
               style={{ color: isDarkFooter ? "#94A3B8" : "#64748B" }}
             >
-              Independent premium commerce destination offering curated, verified-authentic essentials with priority doorstep delivery and easy returns.
+              {matchingThemeDef.code === "AITHRITHI_MAROON"
+                ? "By Devika · Luxurious handloom sarees, designer kurtis, and contemporary festive silhouettes handcrafted by master artisans with timeless perfection."
+                : "Independent premium commerce destination offering curated, verified-authentic essentials with priority doorstep delivery and easy returns."}
             </p>
 
             {/* Registered Company Address Card */}
@@ -194,7 +196,7 @@ export default function StoreFooter({ theme }: { theme?: any }) {
               }}
             >
               <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
                 <div>
                   <strong
                     className="block font-bold"
@@ -202,7 +204,7 @@ export default function StoreFooter({ theme }: { theme?: any }) {
                   >
                     Registered Office & Dispatch Hub
                   </strong>
-                  <p style={{ color: isDarkFooter ? "#CBD5E1" : "#475569" }} className="leading-tight mt-0.5">
+                  <p style={{ color: isDarkFooter ? "#CBD5E1" : "#475569" }} className="leading-tight mt-0.5 font-sans">
                     {companyAddress}, {companyCity}, {companyState} - {companyPostalCode}, {companyCountry}
                   </p>
                 </div>
@@ -211,10 +213,10 @@ export default function StoreFooter({ theme }: { theme?: any }) {
               <div className="pt-2 border-t space-y-1.5 text-[11px]" style={{ borderColor: isDarkFooter ? "rgba(255,255,255,0.06)" : "#E2E8F0" }}>
                 {supportEmail && (
                   <div className="flex items-center gap-2">
-                    <Mail className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />
+                    <Mail className="w-3.5 h-3.5 text-[#C5A880] flex-shrink-0" />
                     <a
                       href={`mailto:${supportEmail}`}
-                      className="hover:underline font-medium"
+                      className="hover:underline font-medium font-sans"
                       style={{ color: isDarkFooter ? "#E2E8F0" : "#1E293B" }}
                     >
                       {supportEmail}
@@ -223,15 +225,15 @@ export default function StoreFooter({ theme }: { theme?: any }) {
                 )}
                 {supportPhone && (
                   <div className="flex items-center gap-2">
-                    <Phone className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />
+                    <Phone className="w-3.5 h-3.5 text-[#C5A880] flex-shrink-0" />
                     <a
                       href={`tel:${supportPhone}`}
-                      className="hover:underline font-medium"
+                      className="hover:underline font-medium font-sans"
                       style={{ color: isDarkFooter ? "#E2E8F0" : "#1E293B" }}
                     >
                       {supportPhone}
                     </a>
-                    <span className="text-[10px] text-slate-400">· Helpline</span>
+                    <span className="text-[10px] text-slate-400 font-sans">· Concierge</span>
                   </div>
                 )}
               </div>
@@ -252,12 +254,12 @@ export default function StoreFooter({ theme }: { theme?: any }) {
             {/* Column 2: Collections & Shop */}
             <div className="space-y-3">
               <strong
-                className="uppercase font-bold tracking-wider text-[11px] block"
+                className="uppercase font-serif font-semibold tracking-[0.16em] text-[11.5px] block"
                 style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
               >
                 Collections
               </strong>
-              <ul className="space-y-2">
+              <ul className="space-y-2 font-sans">
                 <li>
                   <Link
                     href="/shop"
@@ -296,12 +298,12 @@ export default function StoreFooter({ theme }: { theme?: any }) {
             {/* Column 3: Customer Care & Order Services */}
             <div className="space-y-3">
               <strong
-                className="uppercase font-bold tracking-wider text-[11px] block"
+                className="uppercase font-serif font-semibold tracking-[0.16em] text-[11.5px] block"
                 style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
               >
-                Customer Care
+                Client Concierge
               </strong>
-              <ul className="space-y-2">
+              <ul className="space-y-2 font-sans">
                 <li>
                   <Link
                     href="/account"
@@ -368,10 +370,10 @@ export default function StoreFooter({ theme }: { theme?: any }) {
             {/* Column 4: Compliance, Legal & Security */}
             <div className="space-y-3 col-span-2 sm:col-span-1">
               <strong
-                className="uppercase font-bold tracking-wider text-[11px] block"
+                className="uppercase font-serif font-semibold tracking-[0.16em] text-[11.5px] block"
                 style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
               >
-                Legal & Compliance
+                Atelier Heritage
               </strong>
               <ul className="space-y-2">
                 <li>
