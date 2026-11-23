@@ -48,6 +48,8 @@ export async function GET() {
 
     let customThemes: any[] = [];
     let heroSlides: any[] = [];
+    let trustBadges: any[] = [];
+    let showTrustBadges: boolean = true;
     if (themeSetting?.socialLinksJson) {
       try {
         const parsed = JSON.parse(themeSetting.socialLinksJson);
@@ -57,10 +59,16 @@ export async function GET() {
         if (Array.isArray(parsed?.heroSlides)) {
           heroSlides = parsed.heroSlides;
         }
+        if (Array.isArray(parsed?.trustBadges)) {
+          trustBadges = parsed.trustBadges;
+        }
+        if (parsed?.showTrustBadges !== undefined) {
+          showTrustBadges = parsed.showTrustBadges;
+        }
       } catch (e) {}
     }
 
-    return NextResponse.json({ success: true, theme: themeSetting, customThemes, heroSlides });
+    return NextResponse.json({ success: true, theme: themeSetting, customThemes, heroSlides, trustBadges, showTrustBadges });
   } catch (err: any) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
@@ -142,6 +150,13 @@ export async function PUT(req: NextRequest) {
           socialObj.heroSlides = existing.heroSlides;
         }
       } catch (e) {}
+    }
+
+    if (Array.isArray(body?.trustBadges)) {
+      socialObj.trustBadges = body.trustBadges;
+    }
+    if (body?.showTrustBadges !== undefined) {
+      socialObj.showTrustBadges = body.showTrustBadges;
     }
 
     const finalSocialLinksJson = JSON.stringify(socialObj);

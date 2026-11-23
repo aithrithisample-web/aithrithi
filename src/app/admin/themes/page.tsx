@@ -38,6 +38,8 @@ import {
   Film,
   Tag,
   Play,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { AVRO_THEMES, AvroThemeDefinition, resolveStoreTheme, getAllThemes } from "@/lib/themes-registry";
 import { LockedFeatureBanner } from "@/components/admin/LockedFeatureBanner";
@@ -347,6 +349,79 @@ export default function ThemesAdminPage() {
     } finally {
       setUploadingThemeSlideIndex(null);
     }
+  };
+
+  // ----------------------------------------------------
+  // TRUST BADGES ENGINE (ADD / REMOVE / REORDER)
+  // ----------------------------------------------------
+
+  const handleAddTrustBadge = () => {
+    const existing = Array.isArray(customOverrides.trustBadges) ? customOverrides.trustBadges : [];
+    const newBadge = {
+      title: "Handcrafted Luxury",
+      subtitle: "Pure handloom & artisanal quality",
+      icon: "award",
+    };
+    setCustomOverrides({
+      ...customOverrides,
+      trustBadges: [...existing, newBadge],
+      showTrustBadges: true,
+    });
+  };
+
+  const handleUpdateTrustBadge = (index: number, field: string, value: any) => {
+    const existing = Array.isArray(customOverrides.trustBadges) ? [...customOverrides.trustBadges] : [];
+    if (!existing[index]) return;
+    existing[index] = { ...existing[index], [field]: value };
+    setCustomOverrides({ ...customOverrides, trustBadges: existing });
+  };
+
+  const handleDeleteTrustBadge = (index: number) => {
+    const existing = Array.isArray(customOverrides.trustBadges) ? customOverrides.trustBadges : [];
+    setCustomOverrides({
+      ...customOverrides,
+      trustBadges: existing.filter((_: any, i: number) => i !== index),
+    });
+  };
+
+  const handleMoveTrustBadge = (index: number, direction: "up" | "down") => {
+    const existing = Array.isArray(customOverrides.trustBadges) ? [...customOverrides.trustBadges] : [];
+    const targetIdx = direction === "up" ? index - 1 : index + 1;
+    if (targetIdx < 0 || targetIdx >= existing.length) return;
+    const temp = existing[index];
+    existing[index] = existing[targetIdx];
+    existing[targetIdx] = temp;
+    setCustomOverrides({ ...customOverrides, trustBadges: existing });
+  };
+
+  const handleResetAithrithiBadges = () => {
+    const defaultAithrithiBadges = [
+      {
+        title: "Artisanal Heritage",
+        subtitle: "Handcrafted by generational master artisans",
+        icon: "award",
+      },
+      {
+        title: "Pure Handloom Luxury",
+        subtitle: "Ethically spun mulmul, tussar silks & organic dyes",
+        icon: "heart",
+      },
+      {
+        title: "Complimentary Express Delivery",
+        subtitle: "Fast doorstep delivery with luxury gift unboxing",
+        icon: "truck",
+      },
+      {
+        title: "Effortless 7-Day Exchange",
+        subtitle: "Doorstep pickup supported by our style concierge",
+        icon: "refresh",
+      },
+    ];
+    setCustomOverrides({
+      ...customOverrides,
+      trustBadges: defaultAithrithiBadges,
+      showTrustBadges: true,
+    });
   };
 
   // ----------------------------------------------------
@@ -1474,60 +1549,180 @@ export default function ThemesAdminPage() {
             {/* Sub-Section 5: Trust Badges */}
             {editorSection === "TRUST" && (
               <div className="p-5 space-y-4 text-xs">
-                <div>
-                  <h3 className="font-extrabold text-slate-900">Value & Trust Badges</h3>
-                  <p className="text-[11px] text-slate-500">Edit the 4 storefront guarantee badges and their icons.</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-extrabold text-slate-900">Value & Trust Badges</h3>
+                    <p className="text-[11px] text-slate-500">Add, remove, and customize your storefront guarantee badges and icons.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleAddTrustBadge}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition shadow-sm cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add Badge</span>
+                  </button>
                 </div>
 
-                <div className="space-y-3">
-                  {(customOverrides.trustBadges || []).map((badge: any, i: number) => (
-                    <div key={i} className="p-3 border border-slate-200 rounded-xl space-y-2 bg-slate-50/50">
-                      <div className="flex items-center justify-between">
-                        <span className="font-extrabold text-[11px] text-slate-700">Badge #{i + 1}</span>
-                        <select
-                          value={badge.icon}
-                          onChange={(e) => {
-                            const newBadges = [...customOverrides.trustBadges];
-                            newBadges[i].icon = e.target.value;
-                            setCustomOverrides({ ...customOverrides, trustBadges: newBadges });
-                          }}
-                          className="px-2 py-1 text-[11px] rounded border border-slate-200 bg-white"
-                        >
-                          <option value="truck">Truck (Delivery)</option>
-                          <option value="shield">Shield (Security)</option>
-                          <option value="award">Award (Authentic)</option>
-                          <option value="refresh">Refresh (Returns)</option>
-                          <option value="heart">Heart (Customer Love)</option>
-                          <option value="check">Check (Verified)</option>
-                        </select>
-                      </div>
+                {/* Visibility Toggle */}
+                <div className="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-white shadow-2xs">
+                  <div>
+                    <span className="font-bold text-slate-800 block text-xs">Display Trust Badges Section</span>
+                    <span className="text-[11px] text-slate-500">Show or hide the trust guarantee strip on homepage and footer.</span>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={customOverrides.showTrustBadges !== false}
+                      onChange={(e) =>
+                        setCustomOverrides({ ...customOverrides, showTrustBadges: e.target.checked })
+                      }
+                      className="sr-only peer"
+                    />
+                    <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
 
-                      <div className="grid grid-cols-2 gap-2">
-                        <input
-                          type="text"
-                          value={badge.title}
-                          onChange={(e) => {
-                            const newBadges = [...customOverrides.trustBadges];
-                            newBadges[i].title = e.target.value;
-                            setCustomOverrides({ ...customOverrides, trustBadges: newBadges });
-                          }}
-                          placeholder="Title"
-                          className="w-full px-2 py-1 text-xs border border-slate-200 rounded bg-white font-bold"
-                        />
-                        <input
-                          type="text"
-                          value={badge.subtitle}
-                          onChange={(e) => {
-                            const newBadges = [...customOverrides.trustBadges];
-                            newBadges[i].subtitle = e.target.value;
-                            setCustomOverrides({ ...customOverrides, trustBadges: newBadges });
-                          }}
-                          placeholder="Subtitle"
-                          className="w-full px-2 py-1 text-xs border border-slate-200 rounded bg-white"
-                        />
-                      </div>
+                {/* Quick Actions / Reset Header */}
+                <div className="flex items-center justify-between gap-2 pt-1">
+                  <span className="text-[11px] font-bold text-slate-500">
+                    Active Badges ({((customOverrides.trustBadges) || []).length})
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleResetAithrithiBadges}
+                    className="text-[11px] font-bold text-rose-700 hover:text-rose-800 hover:underline inline-flex items-center gap-1 cursor-pointer"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span>Reset to Aithrithi Default Badges</span>
+                  </button>
+                </div>
+
+                {/* Badges List */}
+                <div className="space-y-3">
+                  {(!customOverrides.trustBadges || customOverrides.trustBadges.length === 0) ? (
+                    <div className="p-6 border-2 border-dashed border-slate-200 rounded-xl text-center space-y-2 bg-slate-50/50">
+                      <Shield className="w-8 h-8 text-slate-300 mx-auto" />
+                      <p className="font-bold text-slate-700">No Trust Badges Configured</p>
+                      <p className="text-[11px] text-slate-500 max-w-xs mx-auto">
+                        Add value guarantees like express delivery, handcrafted authenticity, or 7-day exchange to build buyer confidence.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={handleAddTrustBadge}
+                        className="mt-2 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Add First Badge</span>
+                      </button>
                     </div>
-                  ))}
+                  ) : (
+                    (customOverrides.trustBadges || []).map((badge: any, i: number) => (
+                      <div
+                        key={i}
+                        className="p-3.5 border border-slate-200 rounded-xl space-y-2.5 bg-white shadow-2xs hover:border-slate-300 transition-all"
+                      >
+                        <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
+                          <div className="flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-700 font-extrabold text-[10px] flex items-center justify-center">
+                              {i + 1}
+                            </span>
+                            <span className="font-bold text-[11px] text-slate-800 truncate max-w-[150px]">
+                              {badge.title || `Badge #${i + 1}`}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-1">
+                            {/* Reorder Up / Down */}
+                            <button
+                              type="button"
+                              onClick={() => handleMoveTrustBadge(i, "up")}
+                              disabled={i === 0}
+                              className="p-1 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-700 disabled:opacity-25 disabled:hover:bg-transparent cursor-pointer disabled:cursor-not-allowed"
+                              title="Move Up"
+                            >
+                              <ArrowUp className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleMoveTrustBadge(i, "down")}
+                              disabled={i === (customOverrides.trustBadges.length - 1)}
+                              className="p-1 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-700 disabled:opacity-25 disabled:hover:bg-transparent cursor-pointer disabled:cursor-not-allowed"
+                              title="Move Down"
+                            >
+                              <ArrowDown className="w-3.5 h-3.5" />
+                            </button>
+
+                            {/* Delete / Remove Badge Button */}
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteTrustBadge(i)}
+                              className="p-1 rounded hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition cursor-pointer"
+                              title="Remove Badge"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Icon & Details Form */}
+                        <div className="space-y-2">
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 mb-1">Badge Icon</label>
+                            <select
+                              value={badge.icon || "check"}
+                              onChange={(e) => handleUpdateTrustBadge(i, "icon", e.target.value)}
+                              className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-200 bg-slate-50/50 font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+                            >
+                              <option value="award">🎖️ Award (Artisanal Heritage / Certified Genuine)</option>
+                              <option value="truck">🚚 Truck (Express Doorstep Delivery)</option>
+                              <option value="heart">❤️ Heart (Pure Handloom / Loved by Customers)</option>
+                              <option value="refresh">🔄 Refresh (7-Day Easy Exchange / Doorstep Return)</option>
+                              <option value="shield">🛡️ Shield (Safe & Encrypted 256-bit Checkout)</option>
+                              <option value="sparkles">✨ Sparkles (Haute Couture / Festive Royale)</option>
+                              <option value="lock">🔒 Lock (100% Secure & Private)</option>
+                              <option value="check">✅ Checkmark (Verified Quality Inspection)</option>
+                            </select>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                              <label className="block text-[10px] font-bold text-slate-500 mb-1">Title</label>
+                              <input
+                                type="text"
+                                value={badge.title || ""}
+                                onChange={(e) => handleUpdateTrustBadge(i, "title", e.target.value)}
+                                placeholder="e.g. Artisanal Heritage"
+                                className="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg bg-slate-50/50 font-bold focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[10px] font-bold text-slate-500 mb-1">Subtitle</label>
+                              <input
+                                type="text"
+                                value={badge.subtitle || ""}
+                                onChange={(e) => handleUpdateTrustBadge(i, "subtitle", e.target.value)}
+                                placeholder="e.g. Handcrafted by master artisans"
+                                className="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg bg-slate-50/50 font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+
+                  {/* Add Badge Button below list if badges exist */}
+                  {(customOverrides.trustBadges || []).length > 0 && (
+                    <button
+                      type="button"
+                      onClick={handleAddTrustBadge}
+                      className="w-full py-2.5 rounded-xl border border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50/50 text-slate-700 hover:text-blue-700 font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Add Another Trust Badge</span>
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -1787,32 +1982,45 @@ export default function ThemesAdminPage() {
                 </div>
 
                 {/* 4. Preview Trust Badges */}
-                <div className="p-4 grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50/50 border-b border-black/5">
-                  {(customOverrides.trustBadges || []).slice(0, 4).map((tb: any, i: number) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <div
-                        className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-                        style={{ backgroundColor: "rgba(37,99,235,0.1)", color: themeConfig.accentColor }}
-                      >
-                        {tb.icon === "truck" ? (
-                          <Truck className="w-3.5 h-3.5" />
-                        ) : tb.icon === "shield" ? (
-                          <Shield className="w-3.5 h-3.5" />
-                        ) : tb.icon === "award" ? (
-                          <Award className="w-3.5 h-3.5" />
-                        ) : tb.icon === "heart" ? (
-                          <Heart className="w-3.5 h-3.5" />
-                        ) : (
-                          <Check className="w-3.5 h-3.5" />
-                        )}
+                {customOverrides.showTrustBadges !== false && (customOverrides.trustBadges || []).length > 0 && (
+                  <div
+                    className={`p-3.5 sm:p-4 grid grid-cols-2 ${(customOverrides.trustBadges || []).length === 3 ? "sm:grid-cols-3" : (customOverrides.trustBadges || []).length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-4"} gap-3 bg-slate-50/70 border-b border-black/5`}
+                  >
+                    {(customOverrides.trustBadges || []).map((tb: any, i: number) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <div
+                          className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                          style={{
+                            backgroundColor: "rgba(88, 17, 26, 0.08)",
+                            color: themeConfig?.primaryColor || "#58111A",
+                          }}
+                        >
+                          {tb.icon === "truck" ? (
+                            <Truck className="w-3.5 h-3.5" />
+                          ) : tb.icon === "shield" ? (
+                            <Shield className="w-3.5 h-3.5" />
+                          ) : tb.icon === "award" ? (
+                            <Award className="w-3.5 h-3.5" />
+                          ) : tb.icon === "refresh" ? (
+                            <RotateCcw className="w-3.5 h-3.5" />
+                          ) : tb.icon === "heart" ? (
+                            <Heart className="w-3.5 h-3.5" />
+                          ) : tb.icon === "sparkles" ? (
+                            <Sparkles className="w-3.5 h-3.5" />
+                          ) : tb.icon === "lock" ? (
+                            <Lock className="w-3.5 h-3.5" />
+                          ) : (
+                            <Check className="w-3.5 h-3.5" />
+                          )}
+                        </div>
+                        <div className="text-[10px] min-w-0">
+                          <strong className="block font-bold truncate">{tb.title}</strong>
+                          <span className="text-slate-400 block truncate text-[9px]">{tb.subtitle}</span>
+                        </div>
                       </div>
-                      <div className="text-[10px] min-w-0">
-                        <strong className="block font-bold truncate">{tb.title}</strong>
-                        <span className="text-slate-400 block truncate text-[9px]">{tb.subtitle}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
 
                 {/* 5. Preview Product Cards */}
                 <div className="p-5 space-y-3">

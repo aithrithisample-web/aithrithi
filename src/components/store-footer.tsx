@@ -12,6 +12,8 @@ import {
   Mail,
   Phone,
   Clock,
+  Sparkles,
+  Lock,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { AVRO_THEMES, resolveStoreTheme } from "@/lib/themes-registry";
@@ -28,6 +30,10 @@ function renderTrustIcon(icon: string) {
       return <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
     case "heart":
       return <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
+    case "sparkles":
+      return <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
+    case "lock":
+      return <Lock className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
     case "check":
     default:
       return <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
@@ -38,6 +44,18 @@ export default function StoreFooter({ theme }: { theme?: any }) {
   const searchParams = useSearchParams();
   const previewParam = searchParams?.get("theme") || searchParams?.get("previewTheme");
   const matchingThemeDef = resolveStoreTheme(previewParam || theme?.activeTheme, theme);
+
+  let customOverrides: any = {};
+  try {
+    if (theme?.socialLinksJson) {
+      customOverrides = JSON.parse(theme.socialLinksJson);
+    }
+  } catch (e) {}
+
+  const showTrustBadges = !previewParam && customOverrides.showTrustBadges !== undefined ? customOverrides.showTrustBadges : true;
+  const trustBadges = !previewParam && Array.isArray(customOverrides.trustBadges)
+    ? customOverrides.trustBadges
+    : matchingThemeDef.trustBadges;
 
   const brandName = theme?.brandName || "Aithrithi";
   const currentYear = new Date().getFullYear();
@@ -80,35 +98,45 @@ export default function StoreFooter({ theme }: { theme?: any }) {
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
         {/* 1. Industry Trust Badges Strip — Ultra Minimal & Refined */}
-        <div
-          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 pb-6 sm:pb-8 border-b text-xs"
-          style={{ borderColor: isDarkFooter ? "rgba(255,255,255,0.08)" : "#E2E8F0" }}
-        >
-          {matchingThemeDef.trustBadges.map((badge, idx) => (
-            <div key={idx} className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-              <div
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold flex-shrink-0"
-                style={{
-                  backgroundColor: isDarkFooter ? "rgba(255,255,255,0.06)" : "rgba(88,17,26,0.05)",
-                  color: isDarkFooter ? "#F1F5F9" : matchingThemeDef.palette.primary,
-                }}
-              >
-                {renderTrustIcon(badge.icon)}
-              </div>
-              <div className="min-w-0 flex-1">
-                <strong
-                  className="block font-serif font-bold text-[11px] sm:text-xs uppercase tracking-wider truncate"
-                  style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
+        {showTrustBadges && trustBadges.length > 0 && (
+          <div
+            className={`grid grid-cols-2 ${
+              trustBadges.length === 1
+                ? "grid-cols-1"
+                : trustBadges.length === 2
+                ? "grid-cols-2 lg:grid-cols-2"
+                : trustBadges.length === 3
+                ? "grid-cols-2 lg:grid-cols-3"
+                : "grid-cols-2 lg:grid-cols-4"
+            } gap-3 sm:gap-6 pb-6 sm:pb-8 border-b text-xs`}
+            style={{ borderColor: isDarkFooter ? "rgba(255,255,255,0.08)" : "#E2E8F0" }}
+          >
+            {trustBadges.map((badge: any, idx: number) => (
+              <div key={idx} className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold flex-shrink-0"
+                  style={{
+                    backgroundColor: isDarkFooter ? "rgba(255,255,255,0.06)" : "rgba(88,17,26,0.05)",
+                    color: isDarkFooter ? "#F1F5F9" : matchingThemeDef.palette.primary,
+                  }}
                 >
-                  {badge.title}
-                </strong>
-                <span className={`text-[10px] sm:text-[10.5px] line-clamp-1 block leading-tight font-sans mt-0.5 ${isDarkFooter ? "text-slate-400" : "text-slate-500"}`}>
-                  {badge.subtitle}
-                </span>
+                  {renderTrustIcon(badge.icon)}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <strong
+                    className="block font-serif font-bold text-[11px] sm:text-xs uppercase tracking-wider truncate"
+                    style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
+                  >
+                    {badge.title}
+                  </strong>
+                  <span className={`text-[10px] sm:text-[10.5px] line-clamp-1 block leading-tight font-sans mt-0.5 ${isDarkFooter ? "text-slate-400" : "text-slate-500"}`}>
+                    {badge.subtitle}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* 2. Main 4-Column Professional Footer */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10 text-xs">

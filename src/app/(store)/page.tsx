@@ -13,6 +13,8 @@ import {
   Heart,
   Star,
   TrendingUp,
+  Sparkles,
+  Lock,
 } from "lucide-react";
 import { AVRO_THEMES, AvroThemeDefinition, resolveStoreTheme } from "@/lib/themes-registry";
 import { ProductCard } from "@/components/product-card";
@@ -32,6 +34,10 @@ function renderTrustIcon(icon: string) {
       return <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
     case "heart":
       return <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
+    case "sparkles":
+      return <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
+    case "lock":
+      return <Lock className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
     case "check":
     default:
       return <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
@@ -86,7 +92,8 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
   const ctaPrimary = !themeParam && (dbTheme?.heroCtaText || customOverrides.ctaPrimary) ? (dbTheme?.heroCtaText || customOverrides.ctaPrimary) : themeDef.hero.ctaPrimary;
   const ctaPrimaryLink = !themeParam && dbTheme?.heroCtaLink ? dbTheme.heroCtaLink : "/shop";
   const ctaSecondary = !themeParam && customOverrides.ctaSecondary ? customOverrides.ctaSecondary : themeDef.hero.ctaSecondary;
-  const trustBadges = !themeParam && Array.isArray(customOverrides.trustBadges) && customOverrides.trustBadges.length > 0 ? customOverrides.trustBadges : themeDef.trustBadges;
+  const showTrustBadges = !themeParam && customOverrides.showTrustBadges !== undefined ? customOverrides.showTrustBadges : true;
+  const trustBadges = !themeParam && Array.isArray(customOverrides.trustBadges) ? customOverrides.trustBadges : themeDef.trustBadges;
 
   const headline = dbTheme?.bannerHeadline && !themeParam ? dbTheme.bannerHeadline : themeDef.hero.headline;
   const subheadline = dbTheme?.bannerSubheadline && !themeParam ? dbTheme.bannerSubheadline : themeDef.hero.subheadline;
@@ -325,42 +332,52 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       {/* =====================================================
           2. BRAND HERITAGE & PROMISE STRIP — Ultra-Minimal & Refined
           ===================================================== */}
-      <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-4 sm:mt-6">
-        <div
-          className="border-y py-3 sm:py-4.5 grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6"
-          style={{ borderColor: "rgba(88, 17, 26, 0.12)" }}
-        >
-          {trustBadges.map((badge: any, idx: number) => (
-            <div
-              key={idx}
-              className="flex items-center gap-2.5 sm:gap-3 group min-w-0"
-            >
+      {showTrustBadges && trustBadges.length > 0 && (
+        <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-4 sm:mt-6">
+          <div
+            className={`border-y py-3 sm:py-4.5 grid grid-cols-2 ${
+              trustBadges.length === 1
+                ? "grid-cols-1"
+                : trustBadges.length === 2
+                ? "grid-cols-2 lg:grid-cols-2"
+                : trustBadges.length === 3
+                ? "grid-cols-2 lg:grid-cols-3"
+                : "grid-cols-2 lg:grid-cols-4"
+            } gap-3.5 sm:gap-6`}
+            style={{ borderColor: "rgba(88, 17, 26, 0.12)" }}
+          >
+            {trustBadges.map((badge: any, idx: number) => (
               <div
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors"
-                style={{
-                  backgroundColor: "rgba(88, 17, 26, 0.05)",
-                  color: primaryColor,
-                }}
+                key={idx}
+                className="flex items-center gap-2.5 sm:gap-3 group min-w-0"
               >
-                {renderTrustIcon(badge.icon)}
-              </div>
-              <div className="min-w-0 flex-1">
-                <strong
-                  className="block text-[11px] sm:text-xs font-serif font-bold tracking-wider uppercase truncate"
-                  style={{ color: textColor }}
+                <div
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors"
+                  style={{
+                    backgroundColor: "rgba(88, 17, 26, 0.05)",
+                    color: primaryColor,
+                  }}
                 >
-                  {badge.title}
-                </strong>
-                <span
-                  className="text-[10px] sm:text-[10.5px] line-clamp-1 block leading-tight text-stone-500 font-sans mt-0.5"
-                >
-                  {badge.subtitle}
-                </span>
+                  {renderTrustIcon(badge.icon)}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <strong
+                    className="block text-[11px] sm:text-xs font-serif font-bold tracking-wider uppercase truncate"
+                    style={{ color: textColor }}
+                  >
+                    {badge.title}
+                  </strong>
+                  <span
+                    className="text-[10px] sm:text-[10.5px] line-clamp-1 block leading-tight text-stone-500 font-sans mt-0.5"
+                  >
+                    {badge.subtitle}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* =====================================================
           3. CATEGORY SHOWCASE — hover lift + zoom
