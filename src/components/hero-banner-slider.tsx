@@ -133,16 +133,18 @@ export function HeroBannerSlider({
           borderRadius: themeDef.typography.buttonRadius === "rounded-none" ? "0px" : "24px",
         }}
       >
-        <img
-          src={fallbackImage}
-          alt={fallbackTitle}
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = "/aithrithi-hero.jpg";
-          }}
-          className={`w-full h-full object-cover transition-transform duration-700 ${
-            isAithrithiTheme ? "group-hover:scale-[1.02]" : "group-hover:scale-105"
-          }`}
-        />
+        <Link href="/shop" className="block w-full h-full cursor-pointer">
+          <img
+            src={fallbackImage}
+            alt={fallbackTitle}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/aithrithi-hero.jpg";
+            }}
+            className={`w-full h-full object-cover transition-transform duration-700 ${
+              isAithrithiTheme ? "group-hover:scale-[1.015]" : "group-hover:scale-105"
+            }`}
+          />
+        </Link>
         {!isAithrithiTheme && (
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
         )}
@@ -168,13 +170,13 @@ export function HeroBannerSlider({
 
         {/* Subtle Luxury Corner Accent for Aithrithi */}
         {isAithrithiTheme && (
-          <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10">
+          <div className="absolute bottom-3 right-3 sm:bottom-5 sm:right-6 z-10">
             <Link
               href="/shop"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#58111A]/90 hover:bg-[#58111A] text-white shadow-lg backdrop-blur-sm border border-white/20 transition-all hover:scale-105"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-1.5 sm:px-6 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold bg-[#58111A]/95 hover:bg-[#58111A] text-white shadow-xl backdrop-blur-md border border-white/20 transition-all hover:scale-105 active:scale-95"
             >
               <span>Explore Collection</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </Link>
           </div>
         )}
@@ -190,7 +192,11 @@ export function HeroBannerSlider({
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="relative overflow-hidden aspect-[4/5] min-h-[360px] sm:min-h-[440px] shadow-2xl border transition-all group select-none touch-pan-y"
+      className={`relative overflow-hidden shadow-2xl border transition-all group select-none touch-pan-y ${
+        themeDef.code === "AITHRITHI_MAROON"
+          ? "aspect-[2/1] w-full"
+          : "aspect-[4/5] min-h-[360px] sm:min-h-[440px]"
+      }`}
       style={{
         borderColor: isDarkHero ? "rgba(255,255,255,0.15)" : themeDef.palette.border,
         borderRadius: themeDef.typography.buttonRadius === "rounded-none" ? "0px" : "24px",

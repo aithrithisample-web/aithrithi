@@ -144,134 +144,31 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       style={{ backgroundColor: backgroundColor, color: textColor }}
     >
       {/* =====================================================
-          1. HERO SECTION — Professional split layout with animations
+          1. HERO SECTION — Cinematic Full Banner for Aithrithi / Split for others
           ===================================================== */}
-      <section
-        className={`relative overflow-hidden border-b transition-colors duration-300 ${
-          isDarkHero
-            ? "py-20 sm:py-28 text-white border-white/10"
-            : "py-16 sm:py-24 text-slate-900 border-black/5"
-        }`}
-        style={{ backgroundColor: isDarkHero ? cardBgColor : backgroundColor }}
-      >
-        {/* Decorative background orbs */}
-        <div
-          className="pointer-events-none absolute inset-0 overflow-hidden"
-          aria-hidden
+      {themeDef.code === "AITHRITHI_MAROON" ? (
+        <section
+          className="relative overflow-hidden pt-3 sm:pt-5 pb-6 sm:pb-8 border-b border-black/5 transition-colors duration-300"
+          style={{ backgroundColor: backgroundColor }}
         >
-          <div
-            className="absolute -top-32 -left-32 w-96 h-96 rounded-full blur-3xl opacity-20 avro-float-slow"
-            style={{ background: `radial-gradient(circle, ${accentColor} 0%, transparent 70%)` }}
-          />
-          <div
-            className="absolute -bottom-24 right-0 w-72 h-72 rounded-full blur-3xl opacity-15 avro-float"
-            style={{ background: `radial-gradient(circle, ${primaryColor} 0%, transparent 70%)`, animationDelay: "2s" }}
-          />
-        </div>
+          {/* Subtle warm glow background */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+            <div
+              className="absolute -top-32 -left-32 w-96 h-96 rounded-full blur-3xl opacity-20 avro-float-slow"
+              style={{ background: `radial-gradient(circle, ${accentColor} 0%, transparent 70%)` }}
+            />
+            <div
+              className="absolute -bottom-24 right-0 w-72 h-72 rounded-full blur-3xl opacity-15 avro-float"
+              style={{ background: `radial-gradient(circle, ${primaryColor} 0%, transparent 70%)`, animationDelay: "2s" }}
+            />
+          </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className={`grid grid-cols-1 items-center ${
-            themeDef.code === "AITHRITHI_MAROON"
-              ? "lg:grid-cols-12 gap-8 lg:gap-10"
-              : "lg:grid-cols-12 gap-12"
-          }`}>
-
-            {/* Left — Hero content */}
-            <div className={`space-y-6 ${
-              themeDef.code === "AITHRITHI_MAROON" ? "lg:col-span-5" : "lg:col-span-7"
-            }`}>
-
-              {/* Badge */}
-              <div
-                className="avro-slide-up inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider shadow-sm"
-                style={{
-                  backgroundColor: themeDef.palette.badgeBg,
-                  color: themeDef.palette.badgeText,
-                  borderRadius: badgeBorderRadius,
-                }}
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-current opacity-80 animate-pulse" />
-                {heroBadge}
-              </div>
-
-              {/* Headline */}
-              <h1
-                className={`avro-slide-up-delay-1 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight ${themeDef.typography.headingClass}`}
-                style={{ color: isDarkHero ? "#FFFFFF" : textColor }}
-              >
-                {headline}{" "}
-                {headlineHighlight && (
-                  <span
-                    className="italic font-serif"
-                    style={{ color: accentColor }}
-                  >
-                    {headlineHighlight}
-                  </span>
-                )}
-              </h1>
-
-              {/* Subheadline */}
-              <p
-                className="avro-slide-up-delay-2 text-base sm:text-lg max-w-xl leading-relaxed"
-                style={{ color: isDarkHero ? "#CBD5E1" : textMutedColor }}
-              >
-                {subheadline}
-              </p>
-
-              {/* CTA Buttons */}
-              <div className="avro-slide-up-delay-3 flex flex-wrap gap-4 pt-2">
-                <Link
-                  href={ctaPrimaryLink}
-                  className="avro-btn px-6 py-3.5 font-bold text-xs uppercase tracking-wider flex items-center gap-2 text-white"
-                  style={{
-                    backgroundColor: primaryColor,
-                    borderRadius: btnBorderRadius,
-                  }}
-                >
-                  {ctaPrimary}
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-
-                <Link
-                  href="#categories"
-                  className="avro-btn px-6 py-3.5 font-bold text-xs uppercase tracking-wider border transition-all"
-                  style={{
-                    borderColor: isDarkHero ? "rgba(255,255,255,0.2)" : themeDef.palette.border,
-                    backgroundColor: isDarkHero ? "rgba(255,255,255,0.05)" : "#FFFFFF",
-                    color: isDarkHero ? "#FFFFFF" : textColor,
-                    borderRadius: btnBorderRadius,
-                  }}
-                >
-                  {ctaSecondary}
-                </Link>
-              </div>
-
-              {/* Trust micro-strip */}
-              <div className="avro-slide-up-delay-4 flex flex-wrap gap-4 pt-1">
-                {[
-                  { icon: <Shield className="w-3.5 h-3.5" />, text: "Secure Checkout" },
-                  { icon: <Truck className="w-3.5 h-3.5" />, text: "Fast Delivery" },
-                  { icon: <RotateCcw className="w-3.5 h-3.5" />, text: "Easy Returns" },
-                ].map((item) => (
-                  <div
-                    key={item.text}
-                    className="flex items-center gap-1.5 text-[11px] font-semibold opacity-70"
-                    style={{ color: isDarkHero ? "#94A3B8" : textMutedColor }}
-                  >
-                    <span style={{ color: accentColor }}>{item.icon}</span>
-                    {item.text}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right — Hero banner slider / carousel (supports images & video ads with right scroll) */}
-            <div className={`avro-slide-right ${
-              themeDef.code === "AITHRITHI_MAROON" ? "lg:col-span-7" : "lg:col-span-5"
-            }`}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            {/* Full-width Cinematic Hero Banner */}
+            <div className="relative group overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl border border-black/5 bg-[#58111A]">
               <HeroBannerSlider
                 slides={heroSlides}
-                fallbackImage={heroImage}
+                fallbackImage={heroImage || "/aithrithi-hero.jpg"}
                 fallbackTitle={themeDef.name}
                 fallbackTagline={themeDef.tagline}
                 themeDef={themeDef}
@@ -281,9 +178,162 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                 buttonRadius={buttonRadius}
               />
             </div>
+
+            {/* Quick Category Chips for Fast 1-Tap Mobile Navigation */}
+            <div className="mt-4 sm:mt-6 flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
+              {[
+                { label: "All Sarees", query: "Saree" },
+                { label: "Designer Kurtis", query: "Kurti" },
+                { label: "Silk Heritage", query: "Silk" },
+                { label: "Festive Royale", query: "Festive" },
+                { label: "New Arrivals", query: "New" },
+              ].map((item) => (
+                <Link
+                  key={item.label}
+                  href={`/shop?q=${encodeURIComponent(item.query)}`}
+                  className="px-4 py-1.5 sm:px-5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold border shadow-sm transition-all duration-200 hover:scale-105 hover:shadow-md"
+                  style={{
+                    borderColor: themeDef.palette.border,
+                    backgroundColor: cardBgColor,
+                    color: textColor,
+                  }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : (
+        <section
+          className={`relative overflow-hidden border-b transition-colors duration-300 ${
+            isDarkHero
+              ? "py-20 sm:py-28 text-white border-white/10"
+              : "py-16 sm:py-24 text-slate-900 border-black/5"
+          }`}
+          style={{ backgroundColor: isDarkHero ? cardBgColor : backgroundColor }}
+        >
+          {/* Decorative background orbs */}
+          <div
+            className="pointer-events-none absolute inset-0 overflow-hidden"
+            aria-hidden
+          >
+            <div
+              className="absolute -top-32 -left-32 w-96 h-96 rounded-full blur-3xl opacity-20 avro-float-slow"
+              style={{ background: `radial-gradient(circle, ${accentColor} 0%, transparent 70%)` }}
+            />
+            <div
+              className="absolute -bottom-24 right-0 w-72 h-72 rounded-full blur-3xl opacity-15 avro-float"
+              style={{ background: `radial-gradient(circle, ${primaryColor} 0%, transparent 70%)`, animationDelay: "2s" }}
+            />
+          </div>
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="grid grid-cols-1 items-center lg:grid-cols-12 gap-12">
+              {/* Left — Hero content */}
+              <div className="space-y-6 lg:col-span-7">
+                {/* Badge */}
+                <div
+                  className="avro-slide-up inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider shadow-sm"
+                  style={{
+                    backgroundColor: themeDef.palette.badgeBg,
+                    color: themeDef.palette.badgeText,
+                    borderRadius: badgeBorderRadius,
+                  }}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-current opacity-80 animate-pulse" />
+                  {heroBadge}
+                </div>
+
+                {/* Headline */}
+                <h1
+                  className={`avro-slide-up-delay-1 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight ${themeDef.typography.headingClass}`}
+                  style={{ color: isDarkHero ? "#FFFFFF" : textColor }}
+                >
+                  {headline}{" "}
+                  {headlineHighlight && (
+                    <span
+                      className="italic font-serif"
+                      style={{ color: accentColor }}
+                    >
+                      {headlineHighlight}
+                    </span>
+                  )}
+                </h1>
+
+                {/* Subheadline */}
+                <p
+                  className="avro-slide-up-delay-2 text-base sm:text-lg max-w-xl leading-relaxed"
+                  style={{ color: isDarkHero ? "#CBD5E1" : textMutedColor }}
+                >
+                  {subheadline}
+                </p>
+
+                {/* CTA Buttons */}
+                <div className="avro-slide-up-delay-3 flex flex-wrap gap-4 pt-2">
+                  <Link
+                    href={ctaPrimaryLink}
+                    className="avro-btn px-6 py-3.5 font-bold text-xs uppercase tracking-wider flex items-center gap-2 text-white"
+                    style={{
+                      backgroundColor: primaryColor,
+                      borderRadius: btnBorderRadius,
+                    }}
+                  >
+                    {ctaPrimary}
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+
+                  <Link
+                    href="#categories"
+                    className="avro-btn px-6 py-3.5 font-bold text-xs uppercase tracking-wider border transition-all"
+                    style={{
+                      borderColor: isDarkHero ? "rgba(255,255,255,0.2)" : themeDef.palette.border,
+                      backgroundColor: isDarkHero ? "rgba(255,255,255,0.05)" : "#FFFFFF",
+                      color: isDarkHero ? "#FFFFFF" : textColor,
+                      borderRadius: btnBorderRadius,
+                    }}
+                  >
+                    {ctaSecondary}
+                  </Link>
+                </div>
+
+                {/* Trust micro-strip */}
+                <div className="avro-slide-up-delay-4 flex flex-wrap gap-4 pt-1">
+                  {[
+                    { icon: <Shield className="w-3.5 h-3.5" />, text: "Secure Checkout" },
+                    { icon: <Truck className="w-3.5 h-3.5" />, text: "Fast Delivery" },
+                    { icon: <RotateCcw className="w-3.5 h-3.5" />, text: "Easy Returns" },
+                  ].map((item) => (
+                    <div
+                      key={item.text}
+                      className="flex items-center gap-1.5 text-[11px] font-semibold opacity-70"
+                      style={{ color: isDarkHero ? "#94A3B8" : textMutedColor }}
+                    >
+                      <span style={{ color: accentColor }}>{item.icon}</span>
+                      {item.text}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right — Hero banner slider / carousel (supports images & video ads with right scroll) */}
+              <div className="avro-slide-right lg:col-span-5">
+                <HeroBannerSlider
+                  slides={heroSlides}
+                  fallbackImage={heroImage}
+                  fallbackTitle={themeDef.name}
+                  fallbackTagline={themeDef.tagline}
+                  themeDef={themeDef}
+                  isDarkHero={isDarkHero}
+                  primaryColor={primaryColor}
+                  accentColor={accentColor}
+                  buttonRadius={buttonRadius}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* =====================================================
           2. TRUST BADGES STRIP — animated entry
