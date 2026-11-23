@@ -15,9 +15,6 @@ import {
   TrendingUp,
   Sparkles,
   Lock,
-  Instagram,
-  ExternalLink,
-  Play,
 } from "lucide-react";
 import { AVRO_THEMES, AvroThemeDefinition, resolveStoreTheme } from "@/lib/themes-registry";
 import { ProductCard } from "@/components/product-card";
@@ -97,51 +94,6 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
   const ctaSecondary = !themeParam && customOverrides.ctaSecondary ? customOverrides.ctaSecondary : themeDef.hero.ctaSecondary;
   const showTrustBadges = !themeParam && customOverrides.showTrustBadges !== undefined ? customOverrides.showTrustBadges : true;
   const trustBadges = !themeParam && Array.isArray(customOverrides.trustBadges) ? customOverrides.trustBadges : themeDef.trustBadges;
-
-  // Instagram Integration Settings (Admin Synced)
-  const showInstagram = !themeParam && customOverrides.showInstagramSection !== undefined ? customOverrides.showInstagramSection : true;
-  const instagramUrl = !themeParam && customOverrides.instagramUrl ? customOverrides.instagramUrl : "https://instagram.com/aithrithi.in";
-  const instagramHandle = !themeParam && customOverrides.instagramHandle ? customOverrides.instagramHandle : "@aithrithi.in";
-  const instagramButtonText = !themeParam && customOverrides.instagramButtonText ? customOverrides.instagramButtonText : `Follow ${instagramHandle} on Instagram`;
-  const instagramTitle = !themeParam && customOverrides.instagramTitle ? customOverrides.instagramTitle : "Atelier on Instagram";
-  const instagramSubtitle = !themeParam && customOverrides.instagramSubtitle ? customOverrides.instagramSubtitle : "Tag #AithrithiDevika to be featured in our royal couture gallery";
-  const instagramPosts =
-    !themeParam && Array.isArray(customOverrides.instagramPosts) && customOverrides.instagramPosts.length > 0
-      ? customOverrides.instagramPosts
-      : [
-          {
-            id: "ig-1",
-            imageUrl: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80",
-            caption: "Crimson Zari Kanjivaram Silk Saree · Devika's signature handloom edition draped with royal elegance.",
-            likes: "4.8k",
-            postUrl: instagramUrl,
-            isVideo: false,
-          },
-          {
-            id: "ig-2",
-            imageUrl: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80",
-            caption: "Pure Tussar Silk Saree in Raw Honey Gold · Handwoven with generational heritage craftsmanship.",
-            likes: "3.2k",
-            postUrl: instagramUrl,
-            isVideo: true,
-          },
-          {
-            id: "ig-3",
-            imageUrl: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=800&q=80",
-            caption: "Festive Embroidered Kurti Set with Banarasi Dupatta · Styled for grand celebrations.",
-            likes: "2.9k",
-            postUrl: instagramUrl,
-            isVideo: false,
-          },
-          {
-            id: "ig-4",
-            imageUrl: "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=800&q=80",
-            caption: "Regal Emerald Green Chanderi Silk · Delicate zari motifs finished by hand.",
-            likes: "5.1k",
-            postUrl: instagramUrl,
-            isVideo: true,
-          },
-        ];
 
   const headline = dbTheme?.bannerHeadline && !themeParam ? dbTheme.bannerHeadline : themeDef.hero.headline;
   const subheadline = dbTheme?.bannerSubheadline && !themeParam ? dbTheme.bannerSubheadline : themeDef.hero.subheadline;
@@ -737,91 +689,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       )}
 
       {/* =====================================================
-          6. INSTAGRAM SHOWCASE & CURATED LOOKS (Synced with Admin Panel)
-          ===================================================== */}
-      {showInstagram && (
-        <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-12 sm:mt-18 pt-8 sm:pt-10 border-t border-black/5">
-          <div className="avro-slide-up flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
-            <div>
-              <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-serif font-medium tracking-[0.18em] uppercase mb-1" style={{ color: accentColor }}>
-                <Instagram className="w-3.5 h-3.5" />
-                <span>{instagramSubtitle}</span>
-              </div>
-              <h2 className={`text-2xl sm:text-3xl font-serif font-medium tracking-tight ${themeDef.typography.headingClass}`} style={{ color: textColor }}>
-                {instagramTitle}
-              </h2>
-            </div>
-
-            <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
-              <a
-                href={instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 rounded-full bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 text-white font-serif font-medium tracking-[0.12em] uppercase text-xs shadow-sm hover:shadow-md transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5"
-              >
-                <Instagram className="w-3.5 h-3.5" />
-                <span>{instagramButtonText}</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
-
-              <Link
-                href="/instagram"
-                className="px-4 py-2 rounded-full border border-stone-300 hover:border-[#58111A] text-stone-800 hover:text-[#58111A] font-serif font-medium tracking-[0.12em] uppercase text-xs transition-all hover:bg-stone-50"
-              >
-                View Lookbook
-              </Link>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 avro-stagger-grid">
-            {instagramPosts.slice(0, 4).map((post: any, idx: number) => (
-              <a
-                key={post.id || idx}
-                href={post.postUrl || instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-black/5 shadow-xs hover:shadow-xl transition-all duration-500 block bg-stone-100"
-              >
-                <img
-                  src={post.imageUrl}
-                  alt={post.caption || "Aithrithi Instagram"}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3.5 text-white">
-                  <div className="flex justify-between items-center">
-                    <span className="p-1.5 rounded-full bg-white/20 backdrop-blur-md">
-                      <Instagram className="w-3.5 h-3.5" />
-                    </span>
-                    {post.isVideo && (
-                      <span className="p-1 rounded-full bg-black/40 backdrop-blur-md">
-                        <Play className="w-3 h-3 fill-white" />
-                      </span>
-                    )}
-                  </div>
-
-                  <div>
-                    <p className="text-[11px] leading-snug line-clamp-2 font-sans mb-2 text-stone-200">
-                      {post.caption}
-                    </p>
-                    <div className="flex items-center justify-between text-[10px] font-serif">
-                      <span className="flex items-center gap-1 text-rose-300">
-                        <Heart className="w-3 h-3 fill-rose-400 text-rose-400" />
-                        {post.likes || "2.4k"}
-                      </span>
-                      <span className="text-[#C5A880] flex items-center gap-0.5">
-                        View on Instagram <ArrowRight className="w-3 h-3" />
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* =====================================================
-          7. CALLOUT BANNER — full-width CTA strip
+          6. CALLOUT BANNER — full-width CTA strip
           ===================================================== */}
       <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-10 sm:mt-16">
         <div

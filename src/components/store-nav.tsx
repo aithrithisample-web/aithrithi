@@ -14,7 +14,6 @@ import {
   Package,
   Home,
   Compass,
-  Instagram,
 } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 import { useWishlist } from "@/context/wishlist-context";
@@ -212,20 +211,6 @@ export function StoreNav({ theme }: { theme?: any }) {
               style={pathname === "/shop" ? { color: matchingThemeDef.palette.primary } : {}}
             >
               Collections
-            </Link>
-            <Link
-              href="/instagram"
-              className={`transition-colors py-1 flex items-center gap-1 ${
-                pathname === "/instagram"
-                  ? "font-semibold"
-                  : isDarkNav
-                  ? "text-slate-300 hover:text-white"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-              style={pathname === "/instagram" ? { color: matchingThemeDef.palette.primary } : {}}
-            >
-              <Instagram className="w-3.5 h-3.5" />
-              <span>Lookbook</span>
             </Link>
             <Link
               href="/wishlist"
@@ -497,21 +482,6 @@ export function StoreNav({ theme }: { theme?: any }) {
               >
                 <span>Shop All Collections</span>
                 {pathname === "/shop" && <span className="w-1.5 h-1.5 rounded-full bg-current" />}
-              </Link>
-
-              <Link
-                href="/instagram"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center justify-between min-h-[44px] py-2 px-2 rounded-lg transition-colors ${
-                  pathname === "/instagram" ? "font-bold" : "opacity-85 hover:opacity-100"
-                }`}
-                style={pathname === "/instagram" ? { color: matchingThemeDef.palette.accent } : {}}
-              >
-                <div className="flex items-center gap-2">
-                  <Instagram className="w-4 h-4 text-rose-500" />
-                  <span>Instagram Lookbook</span>
-                </div>
-                {pathname === "/instagram" && <span className="w-1.5 h-1.5 rounded-full bg-current" />}
               </Link>
 
               <Link
