@@ -1,9 +1,18 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: "cover",
+  themeColor: "#58111A",
+};
 
 export const metadata: Metadata = {
-  title: "AVRO Storefront — Modern E-Commerce",
-  description: "Powered by AVRO. High-performance independent e-commerce platform.",
+  title: "Aithrithi — Sarees & Kurti | Haute Couture",
+  description: "By Devika · Luxurious handloom sarees, designer kurtis, and contemporary festive silhouettes.",
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
@@ -20,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-x-hidden">
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/favicon.svg" />
@@ -31,7 +40,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-800 font-sans antialiased">
+      <body className="min-h-screen flex flex-col bg-[#FAF7F5] text-slate-800 font-sans antialiased overflow-x-hidden w-full max-w-full selection:bg-[#58111A]/15">
         {children}
       </body>
     </html>

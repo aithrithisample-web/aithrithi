@@ -152,13 +152,13 @@ export default async function StoreLayout({
           />
         </head>
         <div
-          className="min-h-screen flex flex-col transition-colors duration-300 pb-16 md:pb-0"
+          className="min-h-screen flex flex-col transition-colors duration-300 pb-24 sm:pb-28 md:pb-0 overflow-x-hidden w-full max-w-full"
           style={{
             fontFamily: theme?.fontFamily || "Inter, -apple-system, sans-serif",
           }}
         >
           <StoreNav theme={theme} />
-          <main className="flex-grow">{children}</main>
+          <main className="flex-grow w-full max-w-full overflow-x-hidden">{children}</main>
           <StoreFooter theme={theme} />
           <ThemePreviewDock initialThemeCode={theme?.activeTheme} />
         </div>

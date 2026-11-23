@@ -147,23 +147,23 @@ export function StoreNav({ theme }: { theme?: any }) {
           </div>
         )}
 
-        {/* Prominent Navbar with Highly Enlarged Logo */}
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-18 sm:h-22 md:h-24 flex items-center justify-between gap-4">
-          {/* Brand Logo & Name (Highly Enlarged Luxury Scale) */}
-          <Link href="/" className="flex items-center gap-3.5 group flex-shrink-0 py-1.5">
+        {/* Prominent Navbar with Highly Enlarged Logo — Responsive for iPhone 15 & Desktop */}
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 md:h-22 flex items-center justify-between gap-2 sm:gap-4 overflow-hidden">
+          {/* Brand Logo & Name */}
+          <Link href="/" className="flex items-center gap-2 sm:gap-3.5 group min-w-0 max-w-[210px] xs:max-w-[250px] sm:max-w-none flex-shrink py-1">
             {theme?.logoUrl ? (
               <img
                 src={theme.logoUrl}
                 alt={brandName}
-                className="h-10 sm:h-14 md:h-16 max-w-[220px] sm:max-w-[300px] md:max-w-[360px] w-auto object-contain transition-transform group-hover:scale-105 drop-shadow-sm"
+                className="h-8.5 sm:h-12 md:h-14 max-w-[95px] sm:max-w-[280px] w-auto object-contain transition-transform group-hover:scale-105 drop-shadow-sm flex-shrink-0"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}
               />
             ) : null}
-            <div className="flex flex-col">
+            <div className="flex flex-col min-w-0">
               <span
-                className={`font-serif font-extrabold text-2xl sm:text-3xl md:text-4xl tracking-tight leading-none transition-transform group-hover:scale-[1.02] ${
+                className={`font-serif font-extrabold text-lg xs:text-xl sm:text-2xl md:text-3xl tracking-tight leading-none truncate transition-transform group-hover:scale-[1.01] ${
                   isDarkNav ? "text-white" : "text-slate-900"
                 }`}
                 style={{
@@ -173,7 +173,7 @@ export function StoreNav({ theme }: { theme?: any }) {
                 {brandName}
               </span>
               {matchingThemeDef.code === "AITHRITHI_MAROON" && (
-                <span className="text-[10px] sm:text-[11px] font-sans tracking-[0.24em] uppercase text-stone-500 font-semibold mt-0.5">
+                <span className="text-[8px] xs:text-[9px] sm:text-[11px] font-sans tracking-[0.14em] sm:tracking-[0.24em] uppercase text-stone-500 font-semibold mt-0.5 truncate block">
                   By Devika · Sarees & Kurti
                 </span>
               )}
@@ -249,12 +249,12 @@ export function StoreNav({ theme }: { theme?: any }) {
             </Link>
           </nav>
 
-          {/* Action Icons (Minimal & Touch-Optimized) */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            {/* Wishlist Link with Subtle Badge */}
+          {/* Action Icons (Minimal, Touch-Optimized & Perfectly Fitted for iPhone 15) */}
+          <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+            {/* Wishlist Link — on mobile, easily accessible via bottom navigation bar */}
             <Link
               href="/wishlist"
-              className={`relative w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
+              className={`hidden sm:flex relative w-9 h-9 rounded-full items-center justify-center transition-colors ${
                 isDarkNav
                   ? "hover:bg-white/10 text-slate-200"
                   : "hover:bg-slate-100 text-slate-700"
@@ -270,10 +270,10 @@ export function StoreNav({ theme }: { theme?: any }) {
               )}
             </Link>
 
-            {/* Cart Link with Subtle Badge */}
+            {/* Cart Link with Badge */}
             <Link
               href="/cart"
-              className={`relative w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
+              className={`relative w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-colors ${
                 isDarkNav
                   ? "hover:bg-white/10 text-slate-200"
                   : "hover:bg-slate-100 text-slate-700"
@@ -284,7 +284,7 @@ export function StoreNav({ theme }: { theme?: any }) {
               <ShoppingBag className="w-4 h-4" />
               {itemCount > 0 && (
                 <span
-                  className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full text-white text-[9px] font-bold flex items-center justify-center"
+                  className="absolute -top-0.5 -right-0.5 min-w-[15px] h-3.5 px-0.5 rounded-full text-white text-[8px] font-bold flex items-center justify-center shadow-xs"
                   style={{ backgroundColor: matchingThemeDef.palette.accent }}
                 >
                   {itemCount}
@@ -292,8 +292,8 @@ export function StoreNav({ theme }: { theme?: any }) {
               )}
             </Link>
 
-            {/* Account Dropdown */}
-            <div className="relative" ref={dropdownRef}>
+            {/* Account Dropdown — on mobile, accessible via bottom navigation bar */}
+            <div className="hidden sm:block relative" ref={dropdownRef}>
               <button
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                 className={`flex items-center gap-1.5 h-8.5 px-2.5 rounded-full transition-colors text-xs font-semibold ${
@@ -419,7 +419,7 @@ export function StoreNav({ theme }: { theme?: any }) {
             {/* Mobile Menu Hamburger Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`md:hidden w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
+              className={`md:hidden w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-colors flex-shrink-0 ${
                 isDarkNav ? "text-slate-200 hover:bg-white/10" : "text-slate-700 hover:bg-slate-100"
               }`}
               aria-label="Toggle Navigation Menu"
@@ -579,17 +579,17 @@ export function StoreNav({ theme }: { theme?: any }) {
         )}
       </header>
 
-      {/* NATIVE MOBILE BOTTOM NAVIGATION BAR FOR IPHONE & ANDROID */}
+      {/* NATIVE MOBILE BOTTOM NAVIGATION BAR FOR IPHONE 15 & ANDROID */}
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 backdrop-blur-lg border-t shadow-lg transition-all"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 backdrop-blur-xl border-t shadow-2xl transition-all"
         style={{
-          backgroundColor: isDarkNav ? "rgba(15, 23, 42, 0.94)" : "rgba(255, 255, 255, 0.94)",
-          borderColor: isDarkNav ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.06)",
-          paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))",
+          backgroundColor: isDarkNav ? "rgba(15, 23, 42, 0.96)" : "rgba(255, 255, 255, 0.96)",
+          borderColor: isDarkNav ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)",
+          paddingBottom: "max(0.65rem, env(safe-area-inset-bottom))",
         }}
         aria-label="Mobile Bottom Navigation"
       >
-        <div className="flex items-center justify-around h-13 px-2">
+        <div className="flex items-center justify-around h-13 max-w-md mx-auto px-2">
           {/* Home */}
           <Link
             href="/"

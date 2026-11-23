@@ -163,9 +163,9 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
             />
           </div>
 
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
             {/* Full-width Cinematic Hero Banner */}
-            <div className="relative group overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl border border-black/5 bg-[#58111A]">
+            <div className="relative group overflow-hidden rounded-xl sm:rounded-3xl shadow-2xl border border-black/5 bg-[#58111A]">
               <HeroBannerSlider
                 slides={heroSlides}
                 fallbackImage={heroImage || "/aithrithi-hero.jpg"}
@@ -179,8 +179,8 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
               />
             </div>
 
-            {/* Quick Category Chips for Fast 1-Tap Mobile Navigation */}
-            <div className="mt-4 sm:mt-6 flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
+            {/* Quick Category Chips — Horizontal Touch Carousel on Mobile / Centered on Desktop */}
+            <div className="mt-3 sm:mt-6 flex items-center sm:justify-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar py-1 px-0.5 touch-pan-x">
               {[
                 { label: "All Sarees", query: "Saree" },
                 { label: "Designer Kurtis", query: "Kurti" },
@@ -191,7 +191,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                 <Link
                   key={item.label}
                   href={`/shop?q=${encodeURIComponent(item.query)}`}
-                  className="px-4 py-1.5 sm:px-5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold border shadow-sm transition-all duration-200 hover:scale-105 hover:shadow-md"
+                  className="px-3 py-1.5 sm:px-5 sm:py-2 rounded-full text-[11px] sm:text-sm font-semibold border shadow-xs transition-all duration-200 hover:scale-105 hover:shadow-md flex-shrink-0 whitespace-nowrap active:scale-95"
                   style={{
                     borderColor: themeDef.palette.border,
                     backgroundColor: cardBgColor,
@@ -336,21 +336,21 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       )}
 
       {/* =====================================================
-          2. TRUST BADGES STRIP — animated entry
+          2. TRUST BADGES STRIP — responsive grid for iPhone 15
           ===================================================== */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-6 sm:mt-10">
         <div
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 rounded-2xl border shadow-sm"
+          className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 p-3.5 sm:p-6 rounded-2xl border shadow-xs"
           style={{ backgroundColor: cardBgColor, borderColor: themeDef.palette.border }}
         >
           {trustBadges.map((badge: any, idx: number) => (
             <div
               key={idx}
-              className="avro-slide-up flex items-center gap-3 group"
+              className="avro-slide-up flex items-center gap-2 sm:gap-3 group min-w-0"
               style={{ animationDelay: `${idx * 0.08}s` }}
             >
               <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center font-bold flex-shrink-0 shadow-sm transition-transform group-hover:scale-110 duration-200"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center font-bold flex-shrink-0 shadow-xs transition-transform group-hover:scale-110 duration-200"
                 style={{
                   backgroundColor: themeDef.palette.badgeBg,
                   color: themeDef.palette.badgeText,
@@ -358,14 +358,14 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
               >
                 {renderTrustIcon(badge.icon)}
               </div>
-              <div>
+              <div className="min-w-0 flex-1">
                 <strong
-                  className="block text-xs font-extrabold"
+                  className="block text-[11px] sm:text-xs font-extrabold truncate"
                   style={{ color: textColor }}
                 >
                   {badge.title}
                 </strong>
-                <span className="text-[11px]" style={{ color: textMutedColor }}>
+                <span className="text-[10px] sm:text-[11px] line-clamp-1 block" style={{ color: textMutedColor }}>
                   {badge.subtitle}
                 </span>
               </div>
@@ -377,17 +377,17 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       {/* =====================================================
           3. CATEGORY SHOWCASE — hover lift + zoom
           ===================================================== */}
-      <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 mt-16">
-        <div className="avro-slide-up flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+      <section id="categories" className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-4 sm:space-y-6 mt-10 sm:mt-16">
+        <div className="avro-slide-up flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-3">
           <div>
             <span
-              className="text-xs font-bold uppercase tracking-wider block mb-1"
+              className="text-[11px] sm:text-xs font-bold uppercase tracking-wider block mb-1"
               style={{ color: themeDef.palette.accent }}
             >
               Curated Collections
             </span>
             <h2
-              className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${themeDef.typography.headingClass}`}
+              className={`text-xl sm:text-3xl font-extrabold tracking-tight ${themeDef.typography.headingClass}`}
               style={{ color: themeDef.palette.text }}
             >
               Shop by Category
@@ -395,19 +395,19 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           </div>
           <Link
             href="/shop"
-            className="avro-link-underline text-xs font-bold flex items-center gap-1"
+            className="avro-link-underline text-xs font-bold flex items-center gap-1 self-start sm:self-auto"
             style={{ color: themeDef.palette.accent }}
           >
             Browse All Categories <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 avro-stagger-grid">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 avro-stagger-grid">
           {themeDef.sampleCategories.map((category, idx) => (
             <Link
               key={category.slug}
               href={`/shop?category=${category.slug}`}
-              className="avro-card avro-slide-up group overflow-hidden border shadow-sm relative flex flex-col justify-end aspect-square"
+              className="avro-card avro-slide-up group overflow-hidden border shadow-xs relative flex flex-col justify-end aspect-square"
               style={{
                 borderColor: themeDef.palette.border,
                 borderRadius: cardBorderRadius,
@@ -418,26 +418,16 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                 alt={category.name}
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-600"
               />
-              {/* Gradient overlay — deeper on hover */}
+              {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent group-hover:from-black/90 transition-all duration-300" />
 
-              {/* Shimmer overlay on hover */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                style={{ background: `linear-gradient(135deg, ${accentColor}22 0%, transparent 60%)` }}
-              />
-
-              <div className="relative z-10 p-5 text-white">
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-300 block">
+              <div className="relative z-10 p-3 sm:p-5 text-white">
+                <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-slate-300 block">
                   {category.itemCount}
                 </span>
-                <h3 className="font-extrabold text-sm sm:text-base tracking-tight leading-snug group-hover:text-white transition-colors">
+                <h3 className="font-extrabold text-xs sm:text-base tracking-tight leading-snug group-hover:text-white transition-colors truncate">
                   {category.name}
                 </h3>
-                {/* Arrow that slides in on hover */}
-                <div className="flex items-center gap-1 mt-1 opacity-0 group-hover:opacity-100 translate-x-[-8px] group-hover:translate-x-0 transition-all duration-300">
-                  <span className="text-[11px] font-semibold text-slate-200">Shop now</span>
-                  <ArrowRight className="w-3 h-3 text-slate-200" />
-                </div>
               </div>
             </Link>
           ))}
@@ -447,17 +437,17 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       {/* =====================================================
           4. FEATURED PRODUCTS — theme curated or database
           ===================================================== */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 mt-16">
-        <div className="avro-slide-up flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-4 sm:space-y-6 mt-10 sm:mt-16">
+        <div className="avro-slide-up flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-3">
           <div>
             <span
-              className="text-xs font-bold uppercase tracking-wider block mb-1 flex items-center gap-1.5"
+              className="text-[11px] sm:text-xs font-bold uppercase tracking-wider block mb-1 flex items-center gap-1.5"
               style={{ color: themeDef.palette.accent }}
             >
               <Flame className="w-3.5 h-3.5" /> Trending Now
             </span>
             <h2
-              className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${themeDef.typography.headingClass}`}
+              className={`text-xl sm:text-3xl font-extrabold tracking-tight ${themeDef.typography.headingClass}`}
               style={{ color: themeDef.palette.text }}
             >
               Bestsellers in {themeDef.name}
@@ -528,10 +518,10 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                 </div>
 
                 {/* Info */}
-                <div className="p-4 space-y-2 flex-grow flex flex-col justify-between">
+                <div className="p-3 sm:p-4 space-y-1.5 sm:space-y-2 flex-grow flex flex-col justify-between">
                   <div>
                     <span
-                      className="text-[10px] font-bold uppercase tracking-wider block mb-1"
+                      className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider block mb-0.5 sm:mb-1"
                       style={{ color: themeDef.palette.textMuted }}
                     >
                       {p.category}
@@ -558,13 +548,13 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                   <div className="pt-2 flex items-center justify-between">
                     <div>
                       <span
-                        className="text-sm font-extrabold"
+                        className="text-xs sm:text-sm font-extrabold"
                         style={{ color: themeDef.palette.text }}
                       >
                         ₹{p.price.toLocaleString("en-IN")}
                       </span>
                       {hasDiscount && (
-                        <span className="text-[11px] text-slate-400 line-through ml-2">
+                        <span className="text-[10px] sm:text-[11px] text-slate-400 line-through ml-1.5">
                           ₹{p.compareAtPrice?.toLocaleString("en-IN")}
                         </span>
                       )}
@@ -572,14 +562,14 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
 
                     <Link
                       href="/shop"
-                      className="avro-btn p-2 rounded-xl transition-all flex items-center justify-center text-white"
+                      className="avro-btn p-1.5 sm:p-2 rounded-xl transition-all flex items-center justify-center text-white"
                       style={{
                         backgroundColor: themeDef.palette.primary,
                         borderRadius: themeDef.typography.buttonRadius === "rounded-none" ? "0px" : "10px",
                       }}
                       title="View product"
                     >
-                      <ShoppingBag className="w-4 h-4" />
+                      <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </Link>
                   </div>
                 </div>
@@ -593,13 +583,13 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           5. DATABASE PRODUCTS (if seeded)
           ===================================================== */}
       {dbProducts.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 mt-16 pt-10 border-t border-black/5">
+        <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-4 sm:space-y-6 mt-10 sm:mt-16 pt-8 sm:pt-10 border-t border-black/5">
           <div className="avro-slide-up flex items-center justify-between">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                 <TrendingUp className="w-3.5 h-3.5" /> Live Catalog
               </span>
-              <h2 className="text-2xl font-extrabold text-slate-900">
+              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">
                 Your Products
               </h2>
             </div>
@@ -608,7 +598,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 avro-stagger-grid">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 avro-stagger-grid">
             {dbProducts.map((p) => (
               <ProductCard key={p.id} product={p} showReviews={allowReviews} />
             ))}
@@ -619,9 +609,9 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       {/* =====================================================
           6. CALLOUT BANNER — full-width CTA strip
           ===================================================== */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-10 sm:mt-16">
         <div
-          className="rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xl"
+          className="rounded-2xl sm:rounded-3xl p-5 sm:p-12 text-white relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xl"
           style={{ backgroundColor: themeDef.palette.footerBg }}
         >
           {/* Background pattern */}

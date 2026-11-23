@@ -78,16 +78,16 @@ export default function StoreFooter({ theme }: { theme?: any }) {
         color: isDarkFooter ? "#CBD5E1" : "#475569",
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
         {/* 1. Industry Trust Badges Strip (2 cols on mobile, 4 on desktop) */}
         <div
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 pb-12 border-b text-xs"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 pb-8 sm:pb-12 border-b text-xs"
           style={{ borderColor: isDarkFooter ? "rgba(255,255,255,0.1)" : "#E2E8F0" }}
         >
           {matchingThemeDef.trustBadges.map((badge, idx) => (
-            <div key={idx} className="flex items-center gap-3.5">
+            <div key={idx} className="flex items-center gap-2 sm:gap-3.5 min-w-0">
               <div
-                className="w-11 h-11 rounded-xl flex items-center justify-center font-bold flex-shrink-0 shadow-2xs"
+                className="w-8 h-8 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center font-bold flex-shrink-0 shadow-2xs"
                 style={{
                   backgroundColor: matchingThemeDef.palette.badgeBg,
                   color: matchingThemeDef.palette.badgeText,
@@ -95,14 +95,14 @@ export default function StoreFooter({ theme }: { theme?: any }) {
               >
                 {renderTrustIcon(badge.icon)}
               </div>
-              <div>
+              <div className="min-w-0 flex-1">
                 <strong
-                  className="block font-bold text-xs"
+                  className="block font-bold text-[11px] sm:text-xs truncate"
                   style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
                 >
                   {badge.title}
                 </strong>
-                <span className={isDarkFooter ? "text-slate-400" : "text-slate-500"}>
+                <span className={`text-[10px] sm:text-xs line-clamp-1 ${isDarkFooter ? "text-slate-400" : "text-slate-500"}`}>
                   {badge.subtitle}
                 </span>
               </div>
@@ -111,31 +111,31 @@ export default function StoreFooter({ theme }: { theme?: any }) {
         </div>
 
         {/* 2. Main 4-Column Professional Footer */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 text-xs">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10 text-xs">
           {/* Column 1: Company Profile & Registered Office (5 cols) */}
           <div className="lg:col-span-5 space-y-4">
-            <Link href="/" className="inline-flex items-center gap-3.5 group">
+            <Link href="/" className="inline-flex items-center gap-2.5 sm:gap-3.5 group flex-wrap sm:flex-nowrap">
               {theme?.logoUrl ? (
-                <div className="bg-white p-2 rounded-xl border border-slate-200/80 shadow-sm flex-shrink-0 flex items-center justify-center">
+                <div className="bg-white p-1.5 sm:p-2 rounded-xl border border-slate-200/80 shadow-sm flex-shrink-0 flex items-center justify-center">
                   <img
                     src={theme.logoUrl}
                     alt={brandName}
-                    className="h-10 sm:h-12 max-w-[180px] w-auto object-contain"
+                    className="h-8 sm:h-12 max-w-[110px] sm:max-w-[180px] w-auto object-contain"
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = "none";
                     }}
                   />
                 </div>
               ) : null}
-              <div className="flex flex-col">
+              <div className="flex flex-col min-w-0">
                 <span
-                  className="text-2xl sm:text-3xl font-serif font-extrabold tracking-tight block leading-none"
+                  className="text-xl sm:text-3xl font-serif font-extrabold tracking-tight block leading-none truncate"
                   style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
                 >
                   {brandName}
                 </span>
                 {matchingThemeDef.code === "AITHRITHI_MAROON" && (
-                  <span className="text-[10px] font-sans tracking-[0.24em] uppercase text-stone-400 font-semibold mt-1">
+                  <span className="text-[9px] sm:text-[10px] font-sans tracking-[0.18em] sm:tracking-[0.24em] uppercase text-stone-400 font-semibold mt-1 truncate block">
                     By Devika · Sarees & Kurti
                   </span>
                 )}
