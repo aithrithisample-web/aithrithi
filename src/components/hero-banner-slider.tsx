@@ -8,7 +8,6 @@ import {
   ArrowRight,
   Play,
   Film,
-  Sparkles,
   Tag,
   Star,
 } from "lucide-react";
@@ -246,8 +245,8 @@ export function HeroBannerSlider({
             </>
           ) : (
             <>
-              <Sparkles className="w-3 h-3 text-amber-400" />
-              <span>FEATURED AD</span>
+              <Tag className="w-3 h-3 text-white/80" />
+              <span>COLLECTION</span>
             </>
           )}
         </span>

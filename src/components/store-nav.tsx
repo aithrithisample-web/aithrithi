@@ -12,7 +12,6 @@ import {
   X,
   ChevronDown,
   Package,
-  Zap,
   Home,
   Compass,
 } from "lucide-react";
@@ -147,15 +146,15 @@ export function StoreNav({ theme }: { theme?: any }) {
           </div>
         )}
 
-        {/* Prominent Navbar with Highly Enlarged Logo — Responsive for iPhone 15 & Desktop */}
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 md:h-22 flex items-center justify-between gap-2 sm:gap-4 overflow-hidden">
-          {/* Brand Logo & Name */}
-          <Link href="/" className="flex items-center gap-2 sm:gap-3.5 group min-w-0 max-w-[210px] xs:max-w-[250px] sm:max-w-none flex-shrink py-1">
+        {/* Sleek Minimal Navbar with Snug Logo Fit */}
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4 overflow-hidden">
+          {/* Brand Logo & Name — Scaled to fit navbar height cleanly */}
+          <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group min-w-0 max-w-[220px] xs:max-w-[260px] sm:max-w-none flex-shrink py-0.5">
             {theme?.logoUrl ? (
               <img
                 src={theme.logoUrl}
                 alt={brandName}
-                className="h-8.5 sm:h-12 md:h-14 max-w-[95px] sm:max-w-[280px] w-auto object-contain transition-transform group-hover:scale-105 drop-shadow-sm flex-shrink-0"
+                className="h-10 sm:h-12 md:h-13 max-w-[110px] sm:max-w-[240px] w-auto object-contain transition-transform group-hover:scale-105 drop-shadow-xs flex-shrink-0"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}
@@ -163,7 +162,7 @@ export function StoreNav({ theme }: { theme?: any }) {
             ) : null}
             <div className="flex flex-col min-w-0">
               <span
-                className={`font-serif font-extrabold text-lg xs:text-xl sm:text-2xl md:text-3xl tracking-tight leading-none truncate transition-transform group-hover:scale-[1.01] ${
+                className={`font-serif font-extrabold text-xl sm:text-2xl md:text-3xl tracking-tight leading-none truncate transition-transform group-hover:scale-[1.01] ${
                   isDarkNav ? "text-white" : "text-slate-900"
                 }`}
                 style={{
@@ -173,7 +172,7 @@ export function StoreNav({ theme }: { theme?: any }) {
                 {brandName}
               </span>
               {matchingThemeDef.code === "AITHRITHI_MAROON" && (
-                <span className="text-[8px] xs:text-[9px] sm:text-[11px] font-sans tracking-[0.14em] sm:tracking-[0.24em] uppercase text-stone-500 font-semibold mt-0.5 truncate block">
+                <span className="text-[8px] sm:text-[9.5px] font-sans tracking-[0.16em] sm:tracking-[0.22em] uppercase text-stone-500 font-semibold mt-0.5 truncate block">
                   By Devika · Sarees & Kurti
                 </span>
               )}
@@ -402,13 +401,13 @@ export function StoreNav({ theme }: { theme?: any }) {
 
                       <button
                         onClick={handleInstantGuestLogin}
-                        className="w-full flex items-center justify-between p-2 bg-blue-50/70 hover:bg-blue-100/70 text-blue-800 rounded-lg font-bold transition text-left"
+                        className="w-full flex items-center justify-between p-2 bg-stone-100 hover:bg-stone-200 text-stone-900 rounded-lg font-bold transition text-left"
                       >
                         <div className="flex items-center gap-1.5">
-                          <Zap className="w-3.5 h-3.5 text-blue-600" />
+                          <User className="w-3.5 h-3.5 text-[#58111A]" />
                           <span>Continue as Guest</span>
                         </div>
-                        <span className="text-[9px] font-mono text-blue-500 uppercase">1-Click</span>
+                        <span className="text-[10px] text-stone-500">Quick Access</span>
                       </button>
                     </>
                   )}

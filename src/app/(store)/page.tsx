@@ -12,7 +12,6 @@ import {
   Award,
   Heart,
   Star,
-  Flame,
   TrendingUp,
 } from "lucide-react";
 import { AVRO_THEMES, AvroThemeDefinition, resolveStoreTheme } from "@/lib/themes-registry";
@@ -24,18 +23,18 @@ import { getStorePermissions } from "@/lib/permissions";
 function renderTrustIcon(icon: string) {
   switch (icon) {
     case "truck":
-      return <Truck className="w-5 h-5" />;
+      return <Truck className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
     case "shield":
-      return <Shield className="w-5 h-5" />;
+      return <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
     case "award":
-      return <Award className="w-5 h-5" />;
+      return <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
     case "refresh":
-      return <RotateCcw className="w-5 h-5" />;
+      return <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
     case "heart":
-      return <Heart className="w-5 h-5" />;
+      return <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
     case "check":
     default:
-      return <Check className="w-5 h-5" />;
+      return <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
   }
 }
 
@@ -148,21 +147,9 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           ===================================================== */}
       {themeDef.code === "AITHRITHI_MAROON" ? (
         <section
-          className="relative overflow-hidden pt-3 sm:pt-5 pb-6 sm:pb-8 border-b border-black/5 transition-colors duration-300"
+          className="relative overflow-hidden pt-3 sm:pt-4 pb-5 sm:pb-7 border-b border-black/5 transition-colors duration-300"
           style={{ backgroundColor: backgroundColor }}
         >
-          {/* Subtle warm glow background */}
-          <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-            <div
-              className="absolute -top-32 -left-32 w-96 h-96 rounded-full blur-3xl opacity-20 avro-float-slow"
-              style={{ background: `radial-gradient(circle, ${accentColor} 0%, transparent 70%)` }}
-            />
-            <div
-              className="absolute -bottom-24 right-0 w-72 h-72 rounded-full blur-3xl opacity-15 avro-float"
-              style={{ background: `radial-gradient(circle, ${primaryColor} 0%, transparent 70%)`, animationDelay: "2s" }}
-            />
-          </div>
-
           <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
             {/* Full-width Cinematic Hero Banner */}
             <div className="relative group overflow-hidden rounded-xl sm:rounded-3xl shadow-2xl border border-black/5 bg-[#58111A]">
@@ -336,36 +323,37 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       )}
 
       {/* =====================================================
-          2. TRUST BADGES STRIP — responsive grid for iPhone 15
+          2. BRAND HERITAGE & PROMISE STRIP — Ultra-Minimal & Refined
           ===================================================== */}
-      <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-6 sm:mt-10">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-4 sm:mt-6">
         <div
-          className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 p-3.5 sm:p-6 rounded-2xl border shadow-xs"
-          style={{ backgroundColor: cardBgColor, borderColor: themeDef.palette.border }}
+          className="border-y py-3 sm:py-4.5 grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6"
+          style={{ borderColor: "rgba(88, 17, 26, 0.12)" }}
         >
           {trustBadges.map((badge: any, idx: number) => (
             <div
               key={idx}
-              className="avro-slide-up flex items-center gap-2 sm:gap-3 group min-w-0"
-              style={{ animationDelay: `${idx * 0.08}s` }}
+              className="flex items-center gap-2.5 sm:gap-3 group min-w-0"
             >
               <div
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center font-bold flex-shrink-0 shadow-xs transition-transform group-hover:scale-110 duration-200"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors"
                 style={{
-                  backgroundColor: themeDef.palette.badgeBg,
-                  color: themeDef.palette.badgeText,
+                  backgroundColor: "rgba(88, 17, 26, 0.05)",
+                  color: primaryColor,
                 }}
               >
                 {renderTrustIcon(badge.icon)}
               </div>
               <div className="min-w-0 flex-1">
                 <strong
-                  className="block text-[11px] sm:text-xs font-extrabold truncate"
+                  className="block text-[11px] sm:text-xs font-serif font-bold tracking-wider uppercase truncate"
                   style={{ color: textColor }}
                 >
                   {badge.title}
                 </strong>
-                <span className="text-[10px] sm:text-[11px] line-clamp-1 block" style={{ color: textMutedColor }}>
+                <span
+                  className="text-[10px] sm:text-[10.5px] line-clamp-1 block leading-tight text-stone-500 font-sans mt-0.5"
+                >
                   {badge.subtitle}
                 </span>
               </div>
@@ -441,16 +429,16 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
         <div className="avro-slide-up flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-3">
           <div>
             <span
-              className="text-[11px] sm:text-xs font-bold uppercase tracking-wider block mb-1 flex items-center gap-1.5"
+              className="text-[11px] sm:text-xs font-serif font-bold tracking-widest uppercase block mb-1"
               style={{ color: themeDef.palette.accent }}
             >
-              <Flame className="w-3.5 h-3.5" /> Trending Now
+              Signature Collection · Handcrafted
             </span>
             <h2
               className={`text-xl sm:text-3xl font-extrabold tracking-tight ${themeDef.typography.headingClass}`}
               style={{ color: themeDef.palette.text }}
             >
-              Bestsellers in {themeDef.name}
+              Curated Bestsellers
             </h2>
           </div>
           <Link
@@ -614,12 +602,6 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           className="rounded-2xl sm:rounded-3xl p-5 sm:p-12 text-white relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xl"
           style={{ backgroundColor: themeDef.palette.footerBg }}
         >
-          {/* Background pattern */}
-          <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-10" aria-hidden>
-            <div className="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl avro-float-slow"
-              style={{ background: `radial-gradient(circle, ${accentColor} 0%, transparent 60%)` }} />
-          </div>
-
           <div className="max-w-xl space-y-3 relative z-10">
             <span
               className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white/10 inline-block"

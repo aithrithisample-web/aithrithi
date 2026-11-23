@@ -19,18 +19,18 @@ import { AVRO_THEMES, resolveStoreTheme } from "@/lib/themes-registry";
 function renderTrustIcon(icon: string) {
   switch (icon) {
     case "truck":
-      return <Truck className="w-5 h-5" />;
+      return <Truck className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
     case "shield":
-      return <ShieldCheck className="w-5 h-5" />;
+      return <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
     case "award":
-      return <Award className="w-5 h-5" />;
+      return <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
     case "refresh":
-      return <RotateCcw className="w-5 h-5" />;
+      return <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
     case "heart":
-      return <Heart className="w-5 h-5" />;
+      return <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
     case "check":
     default:
-      return <Check className="w-5 h-5" />;
+      return <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
   }
 }
 
@@ -79,30 +79,30 @@ export default function StoreFooter({ theme }: { theme?: any }) {
       }}
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
-        {/* 1. Industry Trust Badges Strip (2 cols on mobile, 4 on desktop) */}
+        {/* 1. Industry Trust Badges Strip — Ultra Minimal & Refined */}
         <div
-          className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 pb-8 sm:pb-12 border-b text-xs"
-          style={{ borderColor: isDarkFooter ? "rgba(255,255,255,0.1)" : "#E2E8F0" }}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 pb-6 sm:pb-8 border-b text-xs"
+          style={{ borderColor: isDarkFooter ? "rgba(255,255,255,0.08)" : "#E2E8F0" }}
         >
           {matchingThemeDef.trustBadges.map((badge, idx) => (
-            <div key={idx} className="flex items-center gap-2 sm:gap-3.5 min-w-0">
+            <div key={idx} className="flex items-center gap-2.5 sm:gap-3 min-w-0">
               <div
-                className="w-8 h-8 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center font-bold flex-shrink-0 shadow-2xs"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold flex-shrink-0"
                 style={{
-                  backgroundColor: matchingThemeDef.palette.badgeBg,
-                  color: matchingThemeDef.palette.badgeText,
+                  backgroundColor: isDarkFooter ? "rgba(255,255,255,0.06)" : "rgba(88,17,26,0.05)",
+                  color: isDarkFooter ? "#F1F5F9" : matchingThemeDef.palette.primary,
                 }}
               >
                 {renderTrustIcon(badge.icon)}
               </div>
               <div className="min-w-0 flex-1">
                 <strong
-                  className="block font-bold text-[11px] sm:text-xs truncate"
+                  className="block font-serif font-bold text-[11px] sm:text-xs uppercase tracking-wider truncate"
                   style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
                 >
                   {badge.title}
                 </strong>
-                <span className={`text-[10px] sm:text-xs line-clamp-1 ${isDarkFooter ? "text-slate-400" : "text-slate-500"}`}>
+                <span className={`text-[10px] sm:text-[10.5px] line-clamp-1 block leading-tight font-sans mt-0.5 ${isDarkFooter ? "text-slate-400" : "text-slate-500"}`}>
                   {badge.subtitle}
                 </span>
               </div>
