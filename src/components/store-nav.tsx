@@ -152,8 +152,8 @@ export function StoreNav({ theme }: { theme?: any }) {
           <Link href="/" className="flex items-center group min-w-0 max-w-[170px] sm:max-w-[240px] flex-shrink py-0.5" title={brandName}>
             {matchingThemeDef.code === "AITHRITHI_MAROON" ? (
               <img
-                src={isDarkNav ? "/aithrithi-nav-logo.png" : "/aithrithi-nav-logo-maroon.png"}
-                alt="Aithrithi.in By Devika"
+                src={theme?.logoUrl || (isDarkNav ? "/aithrithi-nav-logo.png" : "/aithrithi-nav-logo-maroon.png")}
+                alt={brandName}
                 className="h-9 sm:h-11 md:h-12 w-auto max-w-[160px] sm:max-w-[220px] object-contain transition-transform group-hover:scale-105 drop-shadow-xs"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "/aithrithi-nav-logo-maroon.png";

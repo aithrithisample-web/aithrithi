@@ -188,8 +188,8 @@ export function ProductViewClient({
                 onClick={() => setActiveMediaType("video")}
                 className={`w-20 md:w-full aspect-square rounded-2xl overflow-hidden border-2 flex-shrink-0 transition-all relative group bg-slate-900 flex flex-col items-center justify-center text-white shadow-2xs ${
                   activeMediaType === "video"
-                    ? "border-[#2563EB] ring-2 ring-[#2563EB]/20 shadow-md"
-                    : "border-slate-800 hover:border-blue-500 opacity-90 hover:opacity-100"
+                    ? "border-[var(--color-primary,#58111A)] ring-2 ring-[var(--color-primary,#58111A)]/20 shadow-md"
+                    : "border-slate-800 hover:border-[#C5A880] opacity-90 hover:opacity-100"
                 }`}
                 title={product.videoTitle || "Play product video demonstration"}
               >
@@ -200,10 +200,10 @@ export function ProductViewClient({
                     className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-300"
                   />
                 )}
-                <div className="relative z-10 w-9 h-9 rounded-full bg-blue-600/90 group-hover:bg-blue-600 flex items-center justify-center shadow-lg transition-transform group-hover:scale-110">
+                <div className="relative z-10 w-9 h-9 rounded-full bg-[var(--color-primary,#58111A)]/90 group-hover:bg-[var(--color-primary,#58111A)] flex items-center justify-center shadow-lg transition-transform group-hover:scale-110">
                   <Play className="w-4 h-4 text-white fill-white ml-0.5" />
                 </div>
-                <span className="relative z-10 text-[9px] font-extrabold uppercase tracking-wider text-blue-200 mt-1">
+                <span className="relative z-10 text-[9px] font-extrabold uppercase tracking-wider text-[#C5A880] mt-1">
                   Video
                 </span>
               </button>
@@ -216,11 +216,11 @@ export function ProductViewClient({
       <div className="lg:col-span-5 space-y-6">
         <div>
           {product.category && (
-            <span className="text-xs font-bold uppercase tracking-wider text-[#2563EB] block mb-1">
+            <span className="text-xs font-serif font-bold uppercase tracking-widest text-[var(--color-accent,#C5A880)] block mb-1">
               {product.category.name}
             </span>
           )}
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0A192F] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-serif font-extrabold text-slate-900 tracking-tight">
             {product.title}
           </h1>
           <div className="flex flex-wrap items-center gap-3 mt-2">
@@ -231,7 +231,7 @@ export function ProductViewClient({
                 {/* Clickable Review Rating Anchor */}
                 <a
                   href="#product-reviews"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 hover:text-blue-600 transition-colors group cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 hover:text-[var(--color-primary,#58111A)] transition-colors group cursor-pointer"
                 >
                   <div className="flex items-center gap-0.5">
                     {[1, 2, 3, 4, 5].map((s) => (
@@ -245,10 +245,10 @@ export function ProductViewClient({
                       />
                     ))}
                   </div>
-                  <span className="font-bold text-slate-900 group-hover:text-blue-600">
+                  <span className="font-bold text-slate-900 group-hover:text-[var(--color-primary,#58111A)]">
                     {avgRating}
                   </span>
-                  <span className="text-slate-500 underline decoration-slate-300 group-hover:decoration-blue-600">
+                  <span className="text-slate-500 underline decoration-slate-300 group-hover:decoration-[var(--color-primary,#58111A)]">
                     ({reviewCount} customer {reviewCount === 1 ? "review" : "reviews"})
                   </span>
                 </a>
@@ -366,7 +366,7 @@ export function ProductViewClient({
           <button
             type="button"
             onClick={handleBuyNow}
-            className="w-full py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs uppercase tracking-wider transition-all shadow"
+            className="w-full py-3 rounded-xl bg-[var(--color-primary,#58111A)] hover:opacity-90 text-white font-serif font-bold text-xs uppercase tracking-widest transition-all shadow-md active:scale-98"
           >
             Buy Now with 1-Click
           </button>
@@ -375,11 +375,11 @@ export function ProductViewClient({
         {/* Service assurances */}
         <div className="pt-6 border-t border-slate-200 grid grid-cols-2 gap-4 text-[11px] text-slate-600">
           <div className="flex items-center gap-2">
-            <Truck className="w-4 h-4 text-[#2563EB]" />
+            <Truck className="w-4 h-4 text-[var(--color-primary,#58111A)]" />
             <span>Fast Express Courier</span>
           </div>
           <div className="flex items-center gap-2">
-            <RotateCcw className="w-4 h-4 text-purple-600" />
+            <RotateCcw className="w-4 h-4 text-[#C5A880]" />
             <span>7-Day Return Policy</span>
           </div>
           <div className="flex items-center gap-2">
@@ -387,7 +387,7 @@ export function ProductViewClient({
             <span>Secure Server Processing</span>
           </div>
           <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-amber-500" />
+            <Zap className="w-4 h-4 text-[#C5A880]" />
             <span>Instant Dispatch</span>
           </div>
         </div>
@@ -433,7 +433,7 @@ export function ProductViewClient({
         <button
           type="button"
           onClick={handleBuyNow}
-          className="flex-1 py-2.5 px-2.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-[11px] uppercase tracking-wider shadow-sm"
+          className="flex-1 py-2.5 px-2.5 rounded-xl bg-[var(--color-primary,#58111A)] hover:opacity-90 text-white font-serif font-bold text-[11px] uppercase tracking-wider shadow-sm active:scale-95"
         >
           Buy Now
         </button>

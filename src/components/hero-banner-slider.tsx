@@ -170,14 +170,6 @@ export function HeroBannerSlider({
         {/* Subtle Luxury Corner Accent for Aithrithi */}
         {isAithrithiTheme && (
           <>
-            {/* 3D Floating Haute Couture Badge */}
-            <div className="absolute top-2.5 left-2.5 sm:top-5 sm:left-6 z-10 avro-3d-float">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full text-[9px] sm:text-[10.5px] font-serif font-bold uppercase tracking-[0.2em] bg-black/55 text-[#FAF7F5] backdrop-blur-md border border-white/25 shadow-xl">
-                <span className="text-[#C5A880]">✦</span>
-                <span>Haute Couture · Festive 2026</span>
-              </span>
-            </div>
-
             {/* Luxury 3D Glassmorphism Action Pill */}
             <div className="absolute bottom-2.5 right-2.5 sm:bottom-5 sm:right-6 z-10">
               <Link

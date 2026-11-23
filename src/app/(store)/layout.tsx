@@ -154,7 +154,9 @@ export default async function StoreLayout({
         <div
           className="min-h-screen flex flex-col transition-colors duration-300 pb-24 sm:pb-28 md:pb-0 overflow-x-hidden w-full max-w-full"
           style={{
-            fontFamily: theme?.fontFamily || "Inter, -apple-system, sans-serif",
+            fontFamily: theme?.fontFamily || "'Cormorant Garamond', 'Plus Jakarta Sans', serif",
+            ["--color-primary" as any]: theme?.primaryColor || "#58111A",
+            ["--color-accent" as any]: theme?.accentColor || "#C5A880",
           }}
         >
           <StoreNav theme={theme} />

@@ -53,9 +53,9 @@ export function ProductCard({
   };
 
   return (
-    <div className="avro-card group rounded-2xl bg-white border border-slate-200/90 overflow-hidden shadow-sm flex flex-col justify-between relative">
+    <div className="avro-3d-card group rounded-2xl bg-white border border-[#EFE7E4] hover:border-[#C5A880]/60 overflow-hidden shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between relative">
       {/* Product Image */}
-      <Link href={`/product/${product.slug}`} className="block relative aspect-square bg-slate-50 overflow-hidden">
+      <Link href={`/product/${product.slug}`} className="block relative aspect-square bg-[#FAF7F5] overflow-hidden">
         <img
           src={primaryImg}
           alt={product.title}
@@ -68,13 +68,13 @@ export function ProductCard({
         {/* Badges */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
           {product.isComboDeal && (
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-600 text-white shadow-sm flex items-center gap-1">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-serif font-bold tracking-wider bg-[#58111A] text-[#FAF7F5] border border-[#C5A880]/30 shadow-sm flex items-center gap-1">
               <PackagePlus className="w-3 h-3" />
               COMBO
             </span>
           )}
           {hasDiscount && (
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-600 text-white shadow-sm">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-serif font-bold tracking-wider bg-[#58111A] text-[#FAF7F5] border border-[#C5A880]/30 shadow-sm">
               {discountPct}% OFF
             </span>
           )}
@@ -91,14 +91,14 @@ export function ProductCard({
                        hover:bg-white active:scale-95"
             title={isSaved ? "Remove from wishlist" : "Save to wishlist"}
           >
-            <Heart className={`w-4 h-4 transition-colors ${isSaved ? "fill-rose-500 text-rose-500" : "text-slate-400 hover:text-rose-500"}`} />
+            <Heart className={`w-4 h-4 transition-colors ${isSaved ? "fill-[#58111A] text-[#58111A]" : "text-slate-400 hover:text-[#58111A]"}`} />
           </button>
 
           {/* Quick view */}
           <Link
             href={`/product/${product.slug}`}
             onClick={(e) => e.stopPropagation()}
-            className="p-2 rounded-xl bg-white/95 backdrop-blur-sm shadow-sm text-slate-400 hover:text-slate-800
+            className="p-2 rounded-xl bg-white/95 backdrop-blur-sm shadow-sm text-slate-400 hover:text-[#58111A]
                        opacity-0 sm:group-hover:opacity-100 scale-90 sm:group-hover:scale-100 transition-all duration-200 delay-75"
             title="View product"
           >
@@ -108,7 +108,7 @@ export function ProductCard({
 
         {/* Low stock badge */}
         {product.stockQuantity <= 5 && product.stockQuantity > 0 && (
-          <span className="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500 text-white shadow-sm">
+          <span className="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded-full text-[9px] font-bold bg-[#C5A880] text-slate-900 shadow-sm">
             ONLY {product.stockQuantity} LEFT
           </span>
         )}
@@ -120,8 +120,8 @@ export function ProductCard({
             onClick={handleQuickAdd}
             className={`w-full py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-lg active:scale-98 ${
               added
-                ? "bg-emerald-600 text-white"
-                : "bg-slate-900/95 text-white hover:bg-slate-800 backdrop-blur-sm"
+                ? "bg-[#58111A] text-white"
+                : "bg-[#58111A] text-white hover:bg-[#36080F] backdrop-blur-sm"
             }`}
           >
             {added ? (
@@ -141,12 +141,12 @@ export function ProductCard({
       <div className="p-4 space-y-2 flex-grow flex flex-col justify-between">
         <div>
           {product.category && (
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+            <span className="text-[10px] font-serif font-bold uppercase tracking-widest text-[#C5A880] block mb-1">
               {product.category.name}
             </span>
           )}
           <Link href={`/product/${product.slug}`}>
-            <h3 className="font-bold text-xs text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+            <h3 className="font-serif font-bold text-sm text-slate-900 group-hover:text-[#58111A] transition-colors line-clamp-2">
               {product.title}
             </h3>
           </Link>
@@ -200,7 +200,7 @@ export function ProductCard({
             className={`flex p-2.5 sm:p-2 rounded-xl transition-all shadow-sm active:scale-95 items-center justify-center cursor-pointer ${
               added
                 ? "bg-emerald-600 text-white"
-                : "bg-slate-100 hover:bg-slate-900 text-slate-800 hover:text-white"
+                : "bg-stone-100 hover:bg-[#58111A] text-slate-800 hover:text-white"
             }`}
             title="Quick add to cart"
             aria-label="Add to cart"

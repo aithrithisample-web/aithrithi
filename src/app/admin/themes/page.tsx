@@ -119,7 +119,8 @@ export default function ThemesAdminPage() {
   const [ctShowAnnouncement, setCtShowAnnouncement] = useState(true);
 
   const categories = [
-    { key: "ALL", label: "All 13 Presets" },
+    { key: "ALL", label: "All Presets" },
+    { key: "Luxury Couture & Artisanal Living", label: "Haute Couture" },
     { key: "Fashion & Apparel", label: "Fashion" },
     { key: "Consumer Electronics & Gadgets", label: "Electronics" },
     { key: "Grocery & Daily Fresh", label: "Grocery" },
@@ -135,6 +136,7 @@ export default function ThemesAdminPage() {
   ];
 
   const fontOptions = [
+    { label: "Cormorant & Jakarta (Aithrithi Luxury Editorial)", value: "'Cormorant Garamond', 'Plus Jakarta Sans', serif" },
     { label: "Inter (Modern Minimal)", value: "Inter, -apple-system, sans-serif" },
     { label: "Plus Jakarta Sans (Crisp Tech)", value: "'Plus Jakarta Sans', sans-serif" },
     { label: "Outfit (Geometric Clean)", value: "Outfit, sans-serif" },
@@ -144,6 +146,7 @@ export default function ThemesAdminPage() {
   ];
 
   const heroImagePresets = [
+    { label: "Aithrithi Festive Maroon", url: "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/aithrithi-hero.jpg" },
     { label: "General Retail", url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=85" },
     { label: "Fashion Lookbook", url: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=85" },
     { label: "Electronics & Audio", url: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&w=1200&q=85" },

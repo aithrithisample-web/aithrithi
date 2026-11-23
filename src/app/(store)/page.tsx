@@ -581,7 +581,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                 Your Products
               </h2>
             </div>
-            <Link href="/shop" className="avro-link-underline text-xs font-bold text-blue-600 flex items-center gap-1">
+            <Link href="/shop" className="avro-link-underline text-xs font-bold flex items-center gap-1" style={{ color: primaryColor }}>
               View All ({dbProducts.length}) <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
@@ -604,31 +604,39 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
         >
           <div className="max-w-xl space-y-3 relative z-10">
             <span
-              className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white/10 inline-block"
+              className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white/10 inline-block font-sans"
               style={{ color: accentColor }}
             >
-              Curated Collections · Fast Dispatch
+              {themeDef.code === "AITHRITHI_MAROON" ? "Devika's Atelier · Handcrafted Elegance" : "Curated Collections · Fast Dispatch"}
             </span>
             <h2 className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${themeDef.typography.headingClass}`}>
-              Engineered for Quality & Reliability
+              {themeDef.code === "AITHRITHI_MAROON" ? "Woven with Devotion, Styled for Royalty" : "Engineered for Quality & Reliability"}
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              {allowReviews
-                ? "Discover our carefully curated catalog with verified customer reviews, transparent pricing, and rapid doorstep delivery across India."
-                : "Discover our carefully curated catalog with premium quality, transparent pricing, and rapid doorstep delivery across India."}
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+              {themeDef.code === "AITHRITHI_MAROON"
+                ? "Experience the timeless allure of authentic artisanal sarees and handcrafted designer kurtis delivered directly to your doorstep with luxury concierge unboxing."
+                : (allowReviews
+                    ? "Discover our carefully curated catalog with verified customer reviews, transparent pricing, and rapid doorstep delivery across India."
+                    : "Discover our carefully curated catalog with premium quality, transparent pricing, and rapid doorstep delivery across India.")}
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 relative z-10 flex-shrink-0">
             <Link
               href="/shop"
-              className="avro-btn px-6 py-3 rounded-xl bg-white text-slate-900 font-bold text-xs hover:bg-slate-100 transition-colors shadow-sm text-center"
+              className="avro-btn px-6 py-3 rounded-xl bg-white text-slate-900 font-bold text-xs hover:bg-[#FAF7F5] transition-colors shadow-sm text-center"
+              style={{
+                borderRadius: btnBorderRadius,
+              }}
             >
-              Browse All Products
+              {themeDef.code === "AITHRITHI_MAROON" ? "Explore Sarees & Kurtis" : "Browse All Products"}
             </Link>
             <Link
               href="/track"
               className="avro-btn px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 transition-colors text-center"
+              style={{
+                borderRadius: btnBorderRadius,
+              }}
             >
               Track My Order
             </Link>
