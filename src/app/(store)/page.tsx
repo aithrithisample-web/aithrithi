@@ -102,6 +102,43 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
   const permissions = await getStorePermissions();
   const allowReviews = permissions.check("productReviews").allowed;
 
+  let dbCategories: any[] = [];
+  try {
+    dbCategories = await prisma.category.findMany({
+      include: {
+        _count: { select: { products: true } },
+      },
+      orderBy: { sortOrder: "asc" },
+    });
+  } catch (e) {
+    // Database unseeded or unreachable
+  }
+
+  let dbFeaturedProducts: any[] = [];
+  try {
+    dbFeaturedProducts = await prisma.product.findMany({
+      where: {
+        status: "PUBLISHED",
+        featured: true,
+      },
+      include: {
+        images: { orderBy: { sortOrder: "asc" } },
+        variants: true,
+        category: true,
+        reviews: allowReviews
+          ? {
+              where: { isApproved: true },
+              select: { rating: true },
+            }
+          : false,
+      },
+      take: 8,
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (e) {
+    // Database unseeded or unreachable
+  }
+
   let dbProducts: any[] = [];
   try {
     dbProducts = await prisma.product.findMany({
@@ -117,12 +154,52 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
             }
           : false,
       },
-      take: 4,
+      take: 12,
       orderBy: { createdAt: "desc" },
     });
   } catch (e) {
     // Database unseeded or unreachable
   }
+
+  // Curated Featured Products: Prioritize marked featured products, else recent products
+  const featuredProductsToDisplay =
+    dbFeaturedProducts.length > 0
+      ? dbFeaturedProducts
+      : dbProducts.slice(0, 4);
+
+  // Live Catalog products: Remaining products not already shown in Featured showcase
+  const catalogProducts =
+    dbFeaturedProducts.length > 0
+      ? dbProducts.filter((p) => !dbFeaturedProducts.some((fp) => fp.id === p.id))
+      : dbProducts.slice(4);
+
+  // Categories for showcase: Live DB categories from Admin Panel or theme defaults
+  const categoriesToDisplay =
+    dbCategories.length > 0
+      ? dbCategories.map((c) => ({
+          slug: c.slug,
+          name: c.name,
+          imageUrl:
+            c.image ||
+            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80",
+          itemCount: `${c._count?.products || 0} Products`,
+        }))
+      : themeDef.sampleCategories;
+
+  // Hero Quick Chips: Live DB categories if available, else curated keywords
+  const heroQuickChips =
+    dbCategories.length > 0
+      ? dbCategories.slice(0, 6).map((c) => ({
+          label: c.name,
+          href: `/shop?category=${encodeURIComponent(c.slug)}`,
+        }))
+      : [
+          { label: "Handloom Sarees", href: "/shop?q=Saree" },
+          { label: "Designer Kurtis", href: "/shop?q=Kurti" },
+          { label: "Pure Tussar Silks", href: "/shop?q=Silk" },
+          { label: "Festive Royale", href: "/shop?q=Festive" },
+          { label: "New Arrivals", href: "/shop?q=New" },
+        ];
 
   const isDarkHero =
     themeDef.hero.style === "tech-contrast" ||
@@ -173,18 +250,12 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
               />
             </div>
 
-            {/* Quick Category Chips — Refined Editorial 3D Strip */}
+            {/* Quick Category Chips — Refined Editorial 3D Strip (Live Synced with Admin Categories) */}
             <div className="mt-3.5 sm:mt-6 flex items-center sm:justify-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar py-1 px-0.5 touch-pan-x">
-              {[
-                { label: "Handloom Sarees", query: "Saree" },
-                { label: "Designer Kurtis", query: "Kurti" },
-                { label: "Pure Tussar Silks", query: "Silk" },
-                { label: "Festive Royale", query: "Festive" },
-                { label: "New Arrivals", query: "New" },
-              ].map((item) => (
+              {heroQuickChips.map((item) => (
                 <Link
                   key={item.label}
-                  href={`/shop?q=${encodeURIComponent(item.query)}`}
+                  href={item.href}
                   className="px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-full text-[11px] sm:text-xs font-serif font-medium tracking-[0.14em] uppercase border shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md flex-shrink-0 whitespace-nowrap active:scale-95 hover:border-[#58111A] hover:bg-[#58111A] hover:text-white"
                   style={{
                     borderColor: "rgba(88, 17, 26, 0.15)",
@@ -408,10 +479,10 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 avro-stagger-grid">
-          {themeDef.sampleCategories.map((category, idx) => (
+          {categoriesToDisplay.map((category) => (
             <Link
               key={category.slug}
-              href={`/shop?category=${category.slug}`}
+              href={`/shop?category=${encodeURIComponent(category.slug)}`}
               className="avro-3d-card avro-slide-up group overflow-hidden border shadow-xs relative flex flex-col justify-end aspect-square"
               style={{
                 borderColor: themeDef.palette.border,
@@ -467,135 +538,141 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           </Link>
         </div>
 
-        {/* Product Cards Grid — 2 columns on mobile, 4 on desktop */}
+        {/* Product Cards Grid — 2 columns on mobile, 4 on desktop (Live Synced with Admin Featured status) */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 avro-stagger-grid">
-          {themeDef.sampleProducts.map((p) => {
-            const hasDiscount = p.compareAtPrice && p.compareAtPrice > p.price;
-            const discountPct = hasDiscount
-              ? Math.round(((p.compareAtPrice! - p.price) / p.compareAtPrice!) * 100)
-              : 0;
-            return (
-              <div
-                key={p.slug}
-                className="avro-3d-card avro-slide-up group overflow-hidden shadow-xs flex flex-col border"
-                style={{
-                  backgroundColor: themeDef.palette.cardBg,
-                  borderColor: themeDef.palette.border,
-                  borderRadius: cardBorderRadius,
-                }}
-              >
-                {/* Product image */}
-                <div className="relative aspect-square overflow-hidden bg-slate-100">
-                  <img
-                    src={p.imageUrl}
-                    alt={p.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+          {featuredProductsToDisplay.length > 0 ? (
+            featuredProductsToDisplay.map((p: any) => (
+              <ProductCard key={p.id} product={p} showReviews={allowReviews} />
+            ))
+          ) : (
+            themeDef.sampleProducts.map((p) => {
+              const hasDiscount = p.compareAtPrice && p.compareAtPrice > p.price;
+              const discountPct = hasDiscount
+                ? Math.round(((p.compareAtPrice! - p.price) / p.compareAtPrice!) * 100)
+                : 0;
+              return (
+                <div
+                  key={p.slug}
+                  className="avro-3d-card avro-slide-up group overflow-hidden shadow-xs flex flex-col border"
+                  style={{
+                    backgroundColor: themeDef.palette.cardBg,
+                    borderColor: themeDef.palette.border,
+                    borderRadius: cardBorderRadius,
+                  }}
+                >
+                  {/* Product image */}
+                  <div className="relative aspect-square overflow-hidden bg-slate-100">
+                    <img
+                      src={p.imageUrl}
+                      alt={p.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
 
-                  {/* Badges */}
-                  <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
-                    {p.badge && (
-                      <span
-                        className="px-2 py-0.5 text-[9.5px] font-serif font-medium tracking-[0.14em] uppercase text-white shadow-sm"
-                        style={{
-                          backgroundColor: themeDef.palette.primary,
-                          borderRadius: themeDef.typography.badgeRadius === "rounded-none" ? "0px" : "6px",
-                        }}
-                      >
-                        {p.badge}
-                      </span>
-                    )}
-                    {hasDiscount && (
-                      <span className="px-2 py-0.5 text-[9.5px] font-serif font-medium tracking-[0.14em] uppercase bg-[#58111A] text-white shadow-sm"
-                        style={{ borderRadius: "6px" }}>
-                        {discountPct}% OFF
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Wishlist placeholder */}
-                  <button
-                    className="absolute top-3 right-3 p-2 rounded-xl bg-white/90 backdrop-blur-sm text-slate-400 hover:text-rose-500 hover:bg-white shadow-sm transition-all opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 duration-200"
-                    title="Save to wishlist"
-                  >
-                    <Heart className="w-4 h-4" />
-                  </button>
-                </div>
-
-                {/* Info */}
-                <div className="p-3 sm:p-4 space-y-1.5 sm:space-y-2 flex-grow flex flex-col justify-between">
-                  <div>
-                    <span
-                      className="text-[9.5px] sm:text-[10px] font-serif font-medium tracking-[0.16em] uppercase block mb-0.5 sm:mb-1"
-                      style={{ color: themeDef.palette.textMuted }}
-                    >
-                      {p.category}
-                    </span>
-                    <h3
-                      className="font-serif font-medium text-xs sm:text-sm line-clamp-2 leading-snug"
-                      style={{ color: themeDef.palette.text }}
-                    >
-                      {p.title}
-                    </h3>
-
-                    {/* Star rating */}
-                    <div className="flex items-center gap-1 mt-1">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-2.5 h-2.5 ${i < Math.floor(p.rating) ? "fill-amber-400 text-amber-400" : "text-slate-300"}`}
-                        />
-                      ))}
-                      <span className="text-[10px] ml-0.5 font-sans" style={{ color: textMutedColor }}>{p.rating}</span>
-                    </div>
-                  </div>
-
-                  <div className="pt-2 flex items-center justify-between">
-                    <div>
-                      <span
-                        className="text-xs sm:text-sm font-semibold font-sans tracking-tight"
-                        style={{ color: themeDef.palette.text }}
-                      >
-                        ₹{p.price.toLocaleString("en-IN")}
-                      </span>
+                    {/* Badges */}
+                    <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
+                      {p.badge && (
+                        <span
+                          className="px-2 py-0.5 text-[9.5px] font-serif font-medium tracking-[0.14em] uppercase text-white shadow-sm"
+                          style={{
+                            backgroundColor: themeDef.palette.primary,
+                            borderRadius: themeDef.typography.badgeRadius === "rounded-none" ? "0px" : "6px",
+                          }}
+                        >
+                          {p.badge}
+                        </span>
+                      )}
                       {hasDiscount && (
-                        <span className="text-[10px] sm:text-[11px] text-slate-400 line-through ml-1.5 font-sans">
-                          ₹{p.compareAtPrice?.toLocaleString("en-IN")}
+                        <span className="px-2 py-0.5 text-[9.5px] font-serif font-medium tracking-[0.14em] uppercase bg-[#58111A] text-white shadow-sm"
+                          style={{ borderRadius: "6px" }}>
+                          {discountPct}% OFF
                         </span>
                       )}
                     </div>
 
-                    <Link
-                      href="/shop"
-                      className="avro-btn p-1.5 sm:p-2 rounded-xl transition-all flex items-center justify-center text-white"
-                      style={{
-                        backgroundColor: themeDef.palette.primary,
-                        borderRadius: themeDef.typography.buttonRadius === "rounded-none" ? "0px" : "10px",
-                      }}
-                      title="View product"
+                    {/* Wishlist placeholder */}
+                    <button
+                      className="absolute top-3 right-3 p-2 rounded-xl bg-white/90 backdrop-blur-sm text-slate-400 hover:text-rose-500 hover:bg-white shadow-sm transition-all opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 duration-200"
+                      title="Save to wishlist"
                     >
-                      <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    </Link>
+                      <Heart className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  {/* Info */}
+                  <div className="p-3 sm:p-4 space-y-1.5 sm:space-y-2 flex-grow flex flex-col justify-between">
+                    <div>
+                      <span
+                        className="text-[9.5px] sm:text-[10px] font-serif font-medium tracking-[0.16em] uppercase block mb-0.5 sm:mb-1"
+                        style={{ color: themeDef.palette.textMuted }}
+                      >
+                        {p.category}
+                      </span>
+                      <h3
+                        className="font-serif font-medium text-xs sm:text-sm line-clamp-2 leading-snug"
+                        style={{ color: themeDef.palette.text }}
+                      >
+                        {p.title}
+                      </h3>
+
+                      {/* Star rating */}
+                      <div className="flex items-center gap-1 mt-1">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-2.5 h-2.5 ${i < Math.floor(p.rating) ? "fill-amber-400 text-amber-400" : "text-slate-300"}`}
+                          />
+                        ))}
+                        <span className="text-[10px] ml-0.5 font-sans" style={{ color: textMutedColor }}>{p.rating}</span>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 flex items-center justify-between">
+                      <div>
+                        <span
+                          className="text-xs sm:text-sm font-semibold font-sans tracking-tight"
+                          style={{ color: themeDef.palette.text }}
+                        >
+                          ₹{p.price.toLocaleString("en-IN")}
+                        </span>
+                        {hasDiscount && (
+                          <span className="text-[10px] sm:text-[11px] text-slate-400 line-through ml-1.5 font-sans">
+                            ₹{p.compareAtPrice?.toLocaleString("en-IN")}
+                          </span>
+                        )}
+                      </div>
+
+                      <Link
+                        href="/shop"
+                        className="avro-btn p-1.5 sm:p-2 rounded-xl transition-all flex items-center justify-center text-white"
+                        style={{
+                          backgroundColor: themeDef.palette.primary,
+                          borderRadius: themeDef.typography.buttonRadius === "rounded-none" ? "0px" : "10px",
+                        }}
+                        title="View product"
+                      >
+                        <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
       </section>
 
       {/* =====================================================
-          5. DATABASE PRODUCTS (if seeded)
+          5. DATABASE PRODUCTS (Live Catalog / Discover Collections)
           ===================================================== */}
-      {dbProducts.length > 0 && (
+      {catalogProducts.length > 0 && (
         <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-4 sm:space-y-6 mt-10 sm:mt-16 pt-8 sm:pt-10 border-t border-black/5">
           <div className="avro-slide-up flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-slate-400 flex items-center gap-1.5 font-sans">
+              <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-stone-500 flex items-center gap-1.5 font-sans">
                 <TrendingUp className="w-3.5 h-3.5" /> Live Catalog
               </span>
               <h2 className="text-xl sm:text-2xl font-serif font-medium text-slate-900">
-                Your Products
+                Latest Collections & New Arrivals
               </h2>
             </div>
             <Link href="/shop" className="avro-link-underline text-xs font-serif font-medium tracking-[0.12em] uppercase flex items-center gap-1" style={{ color: primaryColor }}>
@@ -604,7 +681,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 avro-stagger-grid">
-            {dbProducts.map((p) => (
+            {catalogProducts.map((p) => (
               <ProductCard key={p.id} product={p} showReviews={allowReviews} />
             ))}
           </div>

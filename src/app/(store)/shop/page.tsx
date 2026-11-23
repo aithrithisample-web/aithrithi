@@ -9,9 +9,10 @@ import { getStorePermissions } from "@/lib/permissions";
 export default async function ShopCatalogPage({
   searchParams,
 }: {
-  searchParams: { category?: string; search?: string; sort?: string };
+  searchParams: { category?: string; search?: string; sort?: string; q?: string };
 }) {
-  const { category, search, sort } = searchParams;
+  const { category, search, sort, q } = searchParams || {};
+  const searchTerm = search || q;
   const permissions = await getStorePermissions();
   const allowReviews = permissions.check("productReviews").allowed;
 
@@ -29,11 +30,11 @@ export default async function ShopCatalogPage({
   if (category) {
     where.category = { slug: category };
   }
-  if (search) {
+  if (searchTerm) {
     where.OR = [
-      { title: { contains: search } },
-      { description: { contains: search } },
-      { sku: { contains: search } },
+      { title: { contains: searchTerm, mode: "insensitive" } },
+      { description: { contains: searchTerm, mode: "insensitive" } },
+      { sku: { contains: searchTerm, mode: "insensitive" } },
     ];
   }
 

@@ -44,6 +44,7 @@ export default function ProductsAdminPage() {
   const [categories, setCategories] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("ALL");
+  const [featuredFilter, setFeaturedFilter] = useState<"ALL" | "FEATURED" | "STANDARD">("ALL");
   const [loading, setLoading] = useState(true);
 
   // Modal State
@@ -367,10 +368,53 @@ export default function ProductsAdminPage() {
   const comboBundlePrice = fullComboOriginalTotal * (1 - discountRate);
   const totalCustomerSavings = fullComboOriginalTotal - comboBundlePrice;
 
-  // Filter products by search and category
+  // Quick 1-Click Toggle for Featured status
+  const handleToggleFeatured = async (id: string, currentFeatured: boolean, productTitle: string) => {
+    const newFeatured = !currentFeatured;
+    // Optimistic UI update
+    setProducts((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, featured: newFeatured } : item))
+    );
+
+    try {
+      const res = await fetch("/api/admin/products", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, featured: newFeatured }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        showToast(
+          "success",
+          newFeatured
+            ? `⭐ "${productTitle}" is now Featured on Homepage Bestsellers!`
+            : `"${productTitle}" removed from Featured showcase.`
+        );
+      } else {
+        // Revert on failure
+        setProducts((prev) =>
+          prev.map((item) => (item.id === id ? { ...item, featured: currentFeatured } : item))
+        );
+        showToast("error", data.error || "Failed to update featured status.");
+      }
+    } catch {
+      setProducts((prev) =>
+        prev.map((item) => (item.id === id ? { ...item, featured: currentFeatured } : item))
+      );
+      showToast("error", "Network error updating featured status.");
+    }
+  };
+
+  // Filter products by search, category, and featured status
   const filteredProducts = products.filter((p) => {
     const matchesCat = selectedCategory === "ALL" || p.categoryId === selectedCategory;
-    return matchesCat;
+    const matchesFeatured =
+      featuredFilter === "ALL"
+        ? true
+        : featuredFilter === "FEATURED"
+        ? Boolean(p.featured)
+        : !p.featured;
+    return matchesCat && matchesFeatured;
   });
 
   return (
@@ -449,6 +493,15 @@ export default function ProductsAdminPage() {
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs">
+          <span className="text-[11px] font-bold text-amber-600 uppercase tracking-wider block">Featured Showcase</span>
+          <span className="text-2xl font-black text-amber-950 mt-1 block flex items-center gap-1.5">
+            <Star className="w-5 h-5 fill-amber-400 text-amber-500" />
+            {products.filter((p) => p.featured).length}
+          </span>
+          <span className="text-[10px] text-slate-500 mt-0.5 block">Live on Homepage Curated</span>
+        </div>
+
+        <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs">
           <span className="text-[11px] font-bold text-emerald-600 uppercase tracking-wider block">Published</span>
           <span className="text-2xl font-black text-emerald-950 mt-1 block">
             {products.filter((p) => p.status === "PUBLISHED").length}
@@ -462,14 +515,6 @@ export default function ProductsAdminPage() {
             {products.filter((p) => p.isComboDeal).length}
           </span>
           <span className="text-[10px] text-slate-500 mt-0.5 block">High-AOV package deals</span>
-        </div>
-
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs">
-          <span className="text-[11px] font-bold text-blue-600 uppercase tracking-wider block">With Videos</span>
-          <span className="text-2xl font-black text-blue-950 mt-1 block">
-            {products.filter((p) => p.videoUrl).length}
-          </span>
-          <span className="text-[10px] text-slate-500 mt-0.5 block">Multimedia rich items</span>
         </div>
       </div>
 
@@ -486,8 +531,18 @@ export default function ProductsAdminPage() {
           />
         </div>
 
-        <div className="flex items-center gap-2.5 w-full md:w-auto">
-          <span className="text-xs font-bold text-slate-500 hidden sm:inline">Category:</span>
+        <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+          <span className="text-xs font-bold text-slate-500 hidden sm:inline">Filter:</span>
+          <select
+            value={featuredFilter}
+            onChange={(e) => setFeaturedFilter(e.target.value as any)}
+            className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+          >
+            <option value="ALL">All Items</option>
+            <option value="FEATURED">⭐ Featured Only</option>
+            <option value="STANDARD">Standard (Not Featured)</option>
+          </select>
+
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
@@ -513,6 +568,7 @@ export default function ProductsAdminPage() {
                 <th className="py-3 px-4">Category / SKU</th>
                 <th className="py-3 px-4">Price</th>
                 <th className="py-3 px-4">Stock</th>
+                <th className="py-3 px-4">Featured</th>
                 <th className="py-3 px-4">Deals & Media</th>
                 <th className="py-3 px-4">Status</th>
                 <th className="py-3 px-5 text-right">Actions</th>
@@ -521,7 +577,7 @@ export default function ProductsAdminPage() {
             <tbody className="divide-y divide-slate-100">
               {filteredProducts.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-400 font-semibold">
+                  <td colSpan={8} className="py-12 text-center text-slate-400 font-semibold">
                     {loading ? "Loading product catalog..." : "No products found matching criteria."}
                   </td>
                 </tr>
@@ -584,6 +640,23 @@ export default function ProductsAdminPage() {
                         >
                           {p.stockQuantity} in stock
                         </span>
+                      </td>
+
+                      {/* Featured 1-Click Toggle */}
+                      <td className="py-3.5 px-4">
+                        <button
+                          type="button"
+                          onClick={() => handleToggleFeatured(p.id, Boolean(p.featured), p.title)}
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-bold transition-all shadow-2xs active:scale-95 cursor-pointer ${
+                            p.featured
+                              ? "bg-amber-50 text-amber-800 border border-amber-300 hover:bg-amber-100"
+                              : "bg-slate-50 text-slate-500 border border-slate-200 hover:bg-slate-100"
+                          }`}
+                          title={p.featured ? "Click to unmark from Featured Curated Bestsellers" : "Click to mark as Featured Curated Bestseller on Homepage"}
+                        >
+                          <Star className={`w-3.5 h-3.5 ${p.featured ? "fill-amber-400 text-amber-500" : "text-slate-400"}`} />
+                          <span>{p.featured ? "Featured" : "Standard"}</span>
+                        </button>
                       </td>
 
                       {/* Deals & Media Badges */}
