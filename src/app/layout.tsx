@@ -14,10 +14,7 @@ export const metadata: Metadata = {
   title: "Aithrithi — Sarees & Kurti | Haute Couture",
   description: "By Devika · Luxurious handloom sarees, designer kurtis, and contemporary festive silhouettes.",
   icons: {
-    icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/favicon.svg", type: "image/svg+xml" },
-    ],
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
     shortcut: "/favicon.svg",
     apple: "/favicon.svg",
   },

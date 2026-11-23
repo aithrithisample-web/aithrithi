@@ -139,17 +139,12 @@ export default async function StoreLayout({
         <head>
           <link
             rel="icon"
-            href={
-              theme?.faviconUrl ||
-              "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/favicon.svg"
-            }
+            href={theme?.faviconUrl || "/favicon.svg"}
+            type="image/svg+xml"
           />
           <link
             rel="apple-touch-icon"
-            href={
-              theme?.faviconUrl ||
-              "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/favicon.svg"
-            }
+            href={theme?.faviconUrl || "/favicon.svg"}
           />
         </head>
         <div

@@ -1,9 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
-  <rect width="100" height="100" rx="22" fill="#0A192F"/>
-  <!-- Diagonal left leg of A -->
-  <line x1="26" y1="80" x2="50" y2="20" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/>
-  <!-- Diagonal right leg of A -->
-  <line x1="74" y1="80" x2="50" y2="20" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/>
-  <!-- Vibrant Electric Blue crossbar characteristic of AVRO logo -->
-  <line x1="33" y1="58" x2="67" y2="58" stroke="#2563EB" stroke-width="9" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+  <defs>
+    <!-- Royal Maroon Luxury Gradient -->
+    <linearGradient id="aithrithiBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#58111A"/>
+      <stop offset="50%" stop-color="#440D14"/>
+      <stop offset="100%" stop-color="#2D060B"/>
+    </linearGradient>
+
+    <!-- Antique Royal Gold Gradient -->
+    <linearGradient id="aithrithiGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F7EEDD"/>
+      <stop offset="30%" stop-color="#E2CFB4"/>
+      <stop offset="70%" stop-color="#C5A880"/>
+      <stop offset="100%" stop-color="#9C7E54"/>
+    </linearGradient>
+
+    <!-- Subtle Drop Shadow -->
+    <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2.5" stdDeviation="2.5" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Squircle Base with Gold Border -->
+  <rect width="128" height="128" rx="28" fill="url(#aithrithiBg)"/>
+  <rect x="2.5" y="2.5" width="123" height="123" rx="25.5" fill="none" stroke="url(#aithrithiGold)" stroke-width="2" stroke-opacity="0.45"/>
+
+  <!-- Subtle Corner Dots -->
+  <circle cx="16" cy="16" r="1.5" fill="#C5A880" opacity="0.6"/>
+  <circle cx="112" cy="16" r="1.5" fill="#C5A880" opacity="0.6"/>
+  <circle cx="16" cy="112" r="1.5" fill="#C5A880" opacity="0.6"/>
+  <circle cx="112" cy="112" r="1.5" fill="#C5A880" opacity="0.6"/>
+
+  <g filter="url(#goldGlow)">
+    <!-- High-Fashion Editorial Didone Lettermark "A" -->
+    <path
+      d="M 33 93 L 45 93 L 45 90 L 41.5 90 C 39.8 90 39 89.2 39.5 87.8 L 59 31 L 65.5 31 L 85.5 87.8 C 86 89.2 85.2 90 83.5 90 L 80 90 L 80 93 L 95 93 L 95 90 L 90.5 90 C 88.8 90 87.6 89.2 87.1 87.8 L 81.5 71.5 L 45 71.5 L 39.5 87.8 C 39 89.2 37.8 90 36 90 L 33 90 Z M 46.8 66 L 79.6 66 L 63.2 18.5 Z"
+      fill="url(#aithrithiGold)"
+    />
+
+    <!-- Royal Haute Couture Diamond / Star Accent at Apex -->
+    <path
+      d="M 63.5 8 Q 63.5 13.5 68 14.5 Q 63.5 15.5 63.5 21 Q 63.5 15.5 59 14.5 Q 63.5 13.5 63.5 8 Z"
+      fill="#FFF8EE"
+    />
+
+    <!-- Delicate Atelier Baseline Accent -->
+    <line x1="42" y1="102" x2="85" y2="102" stroke="url(#aithrithiGold)" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.85"/>
+    <circle cx="63.5" cy="102" r="2" fill="url(#aithrithiGold)"/>
+  </g>
 </svg>
