@@ -40,6 +40,8 @@ import {
   Play,
   ArrowUp,
   ArrowDown,
+  Instagram,
+  MessageCircle,
 } from "lucide-react";
 import { AVRO_THEMES, AvroThemeDefinition, resolveStoreTheme, getAllThemes } from "@/lib/themes-registry";
 import { LockedFeatureBanner } from "@/components/admin/LockedFeatureBanner";
@@ -77,7 +79,8 @@ export default function ThemesAdminPage() {
   });
 
   const [activeTab, setActiveTab] = useState<"EDITOR" | "CUSTOM" | "LIBRARY">("EDITOR");
-  const [editorSection, setEditorSection] = useState<"COLORS" | "TYPOGRAPHY" | "HERO" | "ANNOUNCEMENT" | "TRUST" | "FOOTER">("COLORS");
+  const [editorSection, setEditorSection] = useState<"COLORS" | "TYPOGRAPHY" | "HERO" | "ANNOUNCEMENT" | "TRUST" | "FOOTER" | "SOCIAL">("COLORS");
+  const [uploadingIgIndex, setUploadingIgIndex] = useState<number | null>(null);
   const [viewportMode, setViewportMode] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -423,6 +426,74 @@ export default function ThemesAdminPage() {
       trustBadges: defaultAithrithiBadges,
       showTrustBadges: true,
     });
+  };
+
+  // ----------------------------------------------------
+  // INSTAGRAM & WHATSAPP SOCIAL ENGINE
+  // ----------------------------------------------------
+
+  const handleAddInstagramPost = () => {
+    const existing = Array.isArray(customOverrides.instagramPosts) ? customOverrides.instagramPosts : [];
+    const newPost = {
+      id: `ig-${Date.now()}`,
+      imageUrl: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80",
+      caption: "New Atelier Look · Handcrafted luxury handloom saree by Devika.",
+      likes: "2.5k",
+      postUrl: customOverrides.instagramUrl || "https://instagram.com/aithrithi.in",
+      category: "Handloom Saree",
+      isVideo: false,
+    };
+    setCustomOverrides({ ...customOverrides, instagramPosts: [...existing, newPost] });
+  };
+
+  const handleUpdateInstagramPost = (index: number, field: string, value: any) => {
+    const existing = Array.isArray(customOverrides.instagramPosts) ? [...customOverrides.instagramPosts] : [];
+    if (existing[index]) {
+      existing[index] = { ...existing[index], [field]: value };
+      setCustomOverrides({ ...customOverrides, instagramPosts: existing });
+    }
+  };
+
+  const handleDeleteInstagramPost = (index: number) => {
+    const existing = Array.isArray(customOverrides.instagramPosts) ? [...customOverrides.instagramPosts] : [];
+    existing.splice(index, 1);
+    setCustomOverrides({ ...customOverrides, instagramPosts: existing });
+  };
+
+  const handleMoveInstagramPost = (index: number, direction: "up" | "down") => {
+    const existing = Array.isArray(customOverrides.instagramPosts) ? [...customOverrides.instagramPosts] : [];
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= existing.length) return;
+    const temp = existing[index];
+    existing[index] = existing[targetIndex];
+    existing[targetIndex] = temp;
+    setCustomOverrides({ ...customOverrides, instagramPosts: existing });
+  };
+
+  const handleUploadIgImage = async (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingIgIndex(index);
+    const data = new FormData();
+    data.append("file", file);
+
+    try {
+      const res = await fetch("/api/admin/media", {
+        method: "POST",
+        body: data,
+      });
+      const result = await res.json();
+      if (res.ok && result.url) {
+        handleUpdateInstagramPost(index, "imageUrl", result.url);
+      } else {
+        alert(result.error || "File upload failed.");
+      }
+    } catch (err: any) {
+      alert("Upload failed: " + err.message);
+    } finally {
+      setUploadingIgIndex(null);
+    }
   };
 
   // ----------------------------------------------------
@@ -986,6 +1057,17 @@ export default function ThemesAdminPage() {
                 }`}
               >
                 Branding
+              </button>
+              <button
+                onClick={() => setEditorSection("SOCIAL")}
+                className={`px-3 py-1.5 rounded-lg whitespace-nowrap transition-all flex items-center gap-1.5 ${
+                  editorSection === "SOCIAL"
+                    ? "bg-white text-slate-900 shadow-2xs font-extrabold"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                <span>Instagram & WhatsApp</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               </button>
             </div>
 
@@ -1754,6 +1836,462 @@ export default function ThemesAdminPage() {
                     onChange={(e) => setThemeConfig({ ...themeConfig, footerText: e.target.value })}
                     className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs"
                   />
+                </div>
+              </div>
+            )}
+
+            {/* Sub-Section 7: Instagram & WhatsApp Social Integration */}
+            {editorSection === "SOCIAL" && (
+              <div className="p-5 space-y-6 text-xs">
+                {/* 1. WHATSAPP FLOATING BUTTON CONTROLS */}
+                <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/40 space-y-3.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-xs">
+                        <MessageCircle className="w-4 h-4 fill-white" />
+                      </div>
+                      <div>
+                        <h4 className="font-extrabold text-slate-900 text-xs">WhatsApp Floating Concierge</h4>
+                        <p className="text-[10.5px] text-slate-500">Enable 1-tap buyer chat on all storefront pages</p>
+                      </div>
+                    </div>
+
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={customOverrides.showWhatsAppButton !== false}
+                        onChange={(e) =>
+                          setCustomOverrides({ ...customOverrides, showWhatsAppButton: e.target.checked })
+                        }
+                        className="sr-only peer"
+                      />
+                      <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#25D366]"></div>
+                    </label>
+                  </div>
+
+                  <div className="space-y-3 pt-1 border-t border-emerald-100">
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        WhatsApp Phone Number (with Country Code) *
+                      </label>
+                      <input
+                        type="text"
+                        value={customOverrides.whatsappNumber || themeConfig.supportPhone || "+91 94965 90984"}
+                        onChange={(e) =>
+                          setCustomOverrides({ ...customOverrides, whatsappNumber: e.target.value })
+                        }
+                        placeholder="+91 98765 43210"
+                        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs font-mono font-bold bg-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">
+                        Pre-filled Greeting Message
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={
+                          customOverrides.whatsappMessage ||
+                          "Hello Aithrithi! I would like to inquire about your handcrafted collection."
+                        }
+                        onChange={(e) =>
+                          setCustomOverrides({ ...customOverrides, whatsappMessage: e.target.value })
+                        }
+                        placeholder="Message that automatically populates when a buyer taps WhatsApp"
+                        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs bg-white"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block font-bold text-slate-700 mb-1">Tooltip Text</label>
+                        <input
+                          type="text"
+                          value={customOverrides.whatsappTooltip || "Chat with Style Concierge"}
+                          onChange={(e) =>
+                            setCustomOverrides({ ...customOverrides, whatsappTooltip: e.target.value })
+                          }
+                          placeholder="Chat with Style Concierge"
+                          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs bg-white"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block font-bold text-slate-700 mb-1">Position on Screen</label>
+                        <select
+                          value={customOverrides.whatsappPosition || "bottom-right"}
+                          onChange={(e) =>
+                            setCustomOverrides({ ...customOverrides, whatsappPosition: e.target.value })
+                          }
+                          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs font-bold bg-white"
+                        >
+                          <option value="bottom-right">Bottom-Right (Standard)</option>
+                          <option value="bottom-left">Bottom-Left</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="pt-1 flex items-center justify-between">
+                      <span className="text-[10px] text-slate-400">Positioned above mobile navigation bar</span>
+                      <a
+                        href={`https://wa.me/${(customOverrides.whatsappNumber || themeConfig.supportPhone || "+919496590984").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(customOverrides.whatsappMessage || "Hello Aithrithi!")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] font-bold text-emerald-700 hover:underline flex items-center gap-1"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        <span>Test WhatsApp Link</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. INSTAGRAM PROFILE & SECTION CONTROLS */}
+                <div className="p-4 rounded-xl border border-rose-200 bg-rose-50/30 space-y-3.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 text-white flex items-center justify-center shadow-xs">
+                        <Instagram className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="font-extrabold text-slate-900 text-xs">Instagram Profile & Integration</h4>
+                        <p className="text-[10.5px] text-slate-500">Connect your Instagram page and storefront gallery</p>
+                      </div>
+                    </div>
+
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={customOverrides.showInstagramSection !== false}
+                        onChange={(e) =>
+                          setCustomOverrides({ ...customOverrides, showInstagramSection: e.target.checked })
+                        }
+                        className="sr-only peer"
+                      />
+                      <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-rose-500 peer-checked:to-purple-600"></div>
+                    </label>
+                  </div>
+
+                  <div className="space-y-3 pt-1 border-t border-rose-100">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block font-bold text-slate-700 mb-1">Instagram Page URL *</label>
+                        <input
+                          type="text"
+                          value={customOverrides.instagramUrl || "https://instagram.com/aithrithi.in"}
+                          onChange={(e) =>
+                            setCustomOverrides({ ...customOverrides, instagramUrl: e.target.value })
+                          }
+                          placeholder="https://instagram.com/yourbrand"
+                          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs font-mono bg-white"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block font-bold text-slate-700 mb-1">Instagram Handle</label>
+                        <input
+                          type="text"
+                          value={customOverrides.instagramHandle || "@aithrithi.in"}
+                          onChange={(e) =>
+                            setCustomOverrides({ ...customOverrides, instagramHandle: e.target.value })
+                          }
+                          placeholder="@aithrithi.in"
+                          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs font-mono font-bold bg-white"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block font-bold text-slate-700 mb-1">Button Call-To-Action Text</label>
+                        <input
+                          type="text"
+                          value={
+                            customOverrides.instagramButtonText ||
+                            `Follow ${customOverrides.instagramHandle || "@aithrithi.in"} on Instagram`
+                          }
+                          onChange={(e) =>
+                            setCustomOverrides({ ...customOverrides, instagramButtonText: e.target.value })
+                          }
+                          placeholder="Follow on Instagram"
+                          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs bg-white"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block font-bold text-slate-700 mb-1">Homepage Section Title</label>
+                        <input
+                          type="text"
+                          value={customOverrides.instagramTitle || "Atelier on Instagram"}
+                          onChange={(e) =>
+                            setCustomOverrides({ ...customOverrides, instagramTitle: e.target.value })
+                          }
+                          placeholder="Atelier on Instagram"
+                          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs bg-white"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">Section Subtitle / Hashtag</label>
+                      <input
+                        type="text"
+                        value={
+                          customOverrides.instagramSubtitle ||
+                          "Tag #AithrithiDevika to be featured in our royal couture gallery"
+                        }
+                        onChange={(e) =>
+                          setCustomOverrides({ ...customOverrides, instagramSubtitle: e.target.value })
+                        }
+                        placeholder="Tag #AithrithiDevika to be featured"
+                        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs bg-white"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between pt-1">
+                      <a
+                        href="/instagram"
+                        target="_blank"
+                        className="text-[11px] font-bold text-rose-700 hover:underline flex items-center gap-1"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        <span>Preview Live /instagram Page</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. CURATED INSTAGRAM LOOKBOOK POSTS MANAGER */}
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-extrabold text-slate-900 text-xs">Curated Instagram Lookbook Gallery</h4>
+                      <p className="text-[10.5px] text-slate-500">
+                        {Array.isArray(customOverrides.instagramPosts) ? customOverrides.instagramPosts.length : 4} post(s) shown on storefront
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleAddInstagramPost}
+                      className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-[11px] flex items-center gap-1 cursor-pointer transition shadow-xs"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Add Look</span>
+                    </button>
+                  </div>
+
+                  {/* List of Posts */}
+                  <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
+                    {(customOverrides.instagramPosts || [
+                      {
+                        id: "ig-1",
+                        imageUrl: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80",
+                        caption: "Crimson Zari Kanjivaram Silk Saree · Devika's signature handloom edition draped with royal elegance.",
+                        likes: "4.8k",
+                        postUrl: customOverrides.instagramUrl || "https://instagram.com/aithrithi.in",
+                        category: "Handloom Saree",
+                        isVideo: false,
+                      },
+                      {
+                        id: "ig-2",
+                        imageUrl: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80",
+                        caption: "Pure Tussar Silk Saree in Raw Honey Gold · Handwoven with generational heritage craftsmanship.",
+                        likes: "3.2k",
+                        postUrl: customOverrides.instagramUrl || "https://instagram.com/aithrithi.in",
+                        category: "Tussar Silk",
+                        isVideo: true,
+                      },
+                      {
+                        id: "ig-3",
+                        imageUrl: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=800&q=80",
+                        caption: "Festive Embroidered Kurti Set with Banarasi Dupatta · Styled for grand celebrations.",
+                        likes: "2.9k",
+                        postUrl: customOverrides.instagramUrl || "https://instagram.com/aithrithi.in",
+                        category: "Designer Kurti",
+                        isVideo: false,
+                      },
+                      {
+                        id: "ig-4",
+                        imageUrl: "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=800&q=80",
+                        caption: "Regal Emerald Green Chanderi Silk · Delicate zari motifs finished by hand.",
+                        likes: "5.1k",
+                        postUrl: customOverrides.instagramUrl || "https://instagram.com/aithrithi.in",
+                        category: "Chanderi Silk",
+                        isVideo: true,
+                      },
+                    ]).map((post: any, idx: number) => {
+                      const isUploading = uploadingIgIndex === idx;
+
+                      return (
+                        <div
+                          key={post.id || idx}
+                          className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-2.5 shadow-2xs hover:border-slate-300 transition"
+                        >
+                          <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                            <span className="font-extrabold text-[11px] text-slate-800 flex items-center gap-1.5">
+                              <Instagram className="w-3.5 h-3.5 text-rose-500" />
+                              <span>Look #{idx + 1} {post.isVideo ? "(Reel)" : "(Photo)"}</span>
+                            </span>
+
+                            <div className="flex items-center gap-1">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleUpdateInstagramPost(idx, "isVideo", !post.isVideo)
+                                }
+                                className={`px-2 py-0.5 rounded text-[10px] font-bold border transition ${
+                                  post.isVideo
+                                    ? "bg-purple-50 text-purple-700 border-purple-200"
+                                    : "bg-slate-50 text-slate-600 border-slate-200"
+                                }`}
+                              >
+                                {post.isVideo ? "Reel Video" : "Static Photo"}
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() => handleMoveInstagramPost(idx, "up")}
+                                disabled={idx === 0}
+                                className="p-1 rounded text-slate-400 hover:text-slate-700 disabled:opacity-20 cursor-pointer"
+                                title="Move Up"
+                              >
+                                <ArrowUp className="w-3 h-3" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleMoveInstagramPost(idx, "down")}
+                                disabled={
+                                  idx === ((customOverrides.instagramPosts?.length || 4) - 1)
+                                }
+                                className="p-1 rounded text-slate-400 hover:text-slate-700 disabled:opacity-20 cursor-pointer"
+                                title="Move Down"
+                              >
+                                <ArrowDown className="w-3 h-3" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteInstagramPost(idx)}
+                                className="p-1 rounded text-rose-600 hover:bg-rose-50 cursor-pointer"
+                                title="Delete Look"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                            {/* Thumbnail preview */}
+                            <div className="sm:col-span-3 aspect-[4/5] rounded-lg overflow-hidden border border-slate-200 bg-slate-50 relative">
+                              {post.imageUrl ? (
+                                <img
+                                  src={post.imageUrl}
+                                  alt="Preview"
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-slate-300">
+                                  <ImageIcon className="w-6 h-6" />
+                                </div>
+                              )}
+                              <label className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white cursor-pointer text-[10px] font-bold">
+                                <Upload className="w-4 h-4 mb-0.5" />
+                                <span>Change</span>
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={(e) => handleUploadIgImage(e, idx)}
+                                  className="hidden"
+                                />
+                              </label>
+                            </div>
+
+                            {/* Inputs */}
+                            <div className="sm:col-span-9 space-y-2">
+                              <div>
+                                <label className="block text-[10px] font-bold text-slate-600 mb-0.5">
+                                  Image URL or Direct Upload
+                                </label>
+                                <div className="flex items-center gap-1.5">
+                                  <input
+                                    type="text"
+                                    value={post.imageUrl || ""}
+                                    onChange={(e) =>
+                                      handleUpdateInstagramPost(idx, "imageUrl", e.target.value)
+                                    }
+                                    placeholder="https://..."
+                                    className="flex-1 px-2.5 py-1 text-xs border border-slate-200 rounded-lg font-mono"
+                                  />
+                                  <label className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10.5px] cursor-pointer flex items-center gap-1 flex-shrink-0">
+                                    {isUploading ? (
+                                      <Loader2 className="w-3 h-3 animate-spin" />
+                                    ) : (
+                                      <Upload className="w-3 h-3" />
+                                    )}
+                                    <span>Upload from PC</span>
+                                    <input
+                                      type="file"
+                                      accept="image/*"
+                                      onChange={(e) => handleUploadIgImage(e, idx)}
+                                      className="hidden"
+                                      disabled={isUploading}
+                                    />
+                                  </label>
+                                </div>
+                              </div>
+
+                              <div className="grid grid-cols-2 gap-2">
+                                <div>
+                                  <label className="block text-[10px] font-bold text-slate-600 mb-0.5">
+                                    Likes Display
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={post.likes || "2.5k"}
+                                    onChange={(e) =>
+                                      handleUpdateInstagramPost(idx, "likes", e.target.value)
+                                    }
+                                    placeholder="e.g. 4.8k"
+                                    className="w-full px-2.5 py-1 text-xs border border-slate-200 rounded-lg"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-[10px] font-bold text-slate-600 mb-0.5">
+                                    Category / Look Tag
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={post.category || "Handloom Saree"}
+                                    onChange={(e) =>
+                                      handleUpdateInstagramPost(idx, "category", e.target.value)
+                                    }
+                                    placeholder="e.g. Banarasi Silk"
+                                    className="w-full px-2.5 py-1 text-xs border border-slate-200 rounded-lg"
+                                  />
+                                </div>
+                              </div>
+
+                              <div>
+                                <label className="block text-[10px] font-bold text-slate-600 mb-0.5">
+                                  Post Caption / Details
+                                </label>
+                                <input
+                                  type="text"
+                                  value={post.caption || ""}
+                                  onChange={(e) =>
+                                    handleUpdateInstagramPost(idx, "caption", e.target.value)
+                                  }
+                                  placeholder="Brief description for hover cards"
+                                  className="w-full px-2.5 py-1 text-xs border border-slate-200 rounded-lg"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             )}

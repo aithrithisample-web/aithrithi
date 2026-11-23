@@ -40,9 +40,11 @@ export async function GET() {
     }
 
     let heroSlides: any[] = [];
+    let socialData: any = {};
     if (themeSetting.socialLinksJson) {
       try {
         const parsed = JSON.parse(themeSetting.socialLinksJson);
+        socialData = parsed;
         if (Array.isArray(parsed?.heroSlides)) {
           heroSlides = parsed.heroSlides;
         }
@@ -54,6 +56,11 @@ export async function GET() {
       settings: {
         ...themeSetting,
         heroSlides,
+        instagramUrl: socialData.instagramUrl || "https://instagram.com/aithrithi.in",
+        instagramHandle: socialData.instagramHandle || "@aithrithi.in",
+        whatsappNumber: socialData.whatsappNumber || themeSetting.supportPhone || "+91 94965 90984",
+        whatsappMessage: socialData.whatsappMessage || "Hello Aithrithi! I would like to inquire about your handcrafted collection.",
+        showWhatsAppButton: socialData.showWhatsAppButton !== false,
       },
     });
   } catch (err: any) {
@@ -104,6 +111,11 @@ export async function PUT(req: NextRequest) {
     if (Array.isArray(heroSlides)) {
       socialObj.heroSlides = heroSlides;
     }
+    if (body?.instagramUrl !== undefined) socialObj.instagramUrl = body.instagramUrl;
+    if (body?.instagramHandle !== undefined) socialObj.instagramHandle = body.instagramHandle;
+    if (body?.whatsappNumber !== undefined) socialObj.whatsappNumber = body.whatsappNumber;
+    if (body?.whatsappMessage !== undefined) socialObj.whatsappMessage = body.whatsappMessage;
+    if (body?.showWhatsAppButton !== undefined) socialObj.showWhatsAppButton = body.showWhatsAppButton;
     const finalSocialLinksJson = JSON.stringify(socialObj);
 
     const updated = await prisma.storeThemeSetting.upsert({

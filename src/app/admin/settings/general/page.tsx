@@ -26,6 +26,8 @@ import {
   Trash2,
   Tag,
   Play,
+  Instagram,
+  MessageCircle,
 } from "lucide-react";
 
 export default function GeneralSettingsAdminPage() {
@@ -51,6 +53,8 @@ export default function GeneralSettingsAdminPage() {
     companyCountry: "India",
     supportEmail: "info.technexttech@gmail.com",
     supportPhone: "+91 94965 90984",
+    whatsappNumber: "+91 94965 90984",
+    instagramUrl: "https://instagram.com/aithrithi.in",
     taxId: "07AAACT9021M1Z4",
     bannerHeadline: "Find your next",
     bannerSubheadline: "Shop top-rated essentials, minimalist apparel, and daily curated finds with fast delivery.",
@@ -89,6 +93,8 @@ export default function GeneralSettingsAdminPage() {
           companyCountry: data.settings.companyCountry || "India",
           supportEmail: data.settings.supportEmail || "",
           supportPhone: data.settings.supportPhone || "",
+          whatsappNumber: data.settings.whatsappNumber || data.settings.supportPhone || "+91 94965 90984",
+          instagramUrl: data.settings.instagramUrl || "https://instagram.com/aithrithi.in",
           taxId: data.settings.taxId || "",
           bannerHeadline: data.settings.bannerHeadline || "Find your next",
           bannerSubheadline: data.settings.bannerSubheadline || "",
@@ -566,6 +572,42 @@ export default function GeneralSettingsAdminPage() {
                 placeholder="+91 98765 43210"
                 className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               />
+            </div>
+
+            {/* WhatsApp Floating Button Contact */}
+            <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200">
+              <label className="block text-xs font-bold text-emerald-950 mb-1.5 flex items-center gap-1.5">
+                <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                <span>WhatsApp Floating Concierge Number</span>
+              </label>
+              <input
+                type="text"
+                value={formData.whatsappNumber}
+                onChange={(e) => setFormData({ ...formData, whatsappNumber: e.target.value })}
+                placeholder="+91 98765 43210"
+                className="w-full px-3.5 py-2.5 border border-emerald-300 rounded-xl text-xs font-mono font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 bg-white"
+              />
+              <span className="text-[11px] text-emerald-800 block mt-1">
+                Connected to the 1-tap floating WhatsApp button on all storefront pages.
+              </span>
+            </div>
+
+            {/* Instagram Profile Link */}
+            <div className="p-4 rounded-2xl bg-rose-50/70 border border-rose-200">
+              <label className="block text-xs font-bold text-rose-950 mb-1.5 flex items-center gap-1.5">
+                <Instagram className="w-4 h-4 text-rose-600" />
+                <span>Official Instagram URL</span>
+              </label>
+              <input
+                type="text"
+                value={formData.instagramUrl}
+                onChange={(e) => setFormData({ ...formData, instagramUrl: e.target.value })}
+                placeholder="https://instagram.com/aithrithi.in"
+                className="w-full px-3.5 py-2.5 border border-rose-300 rounded-xl text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 bg-white"
+              />
+              <span className="text-[11px] text-rose-800 block mt-1">
+                Linked to the homepage &apos;Follow on Instagram&apos; banner, footer, and /instagram lookbook.
+              </span>
             </div>
 
             <div className="md:col-span-2 p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80">

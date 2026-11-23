@@ -7,6 +7,7 @@ import { WishlistProvider } from "@/context/wishlist-context";
 import { StoreNav } from "@/components/store-nav";
 import StoreFooter from "@/components/store-footer";
 import { ThemePreviewDock } from "@/components/theme-preview-dock";
+import { WhatsAppFloatingWidget } from "@/components/whatsapp-floating-widget";
 import { getStoreLicenseStatus } from "@/lib/license-client";
 import { getCachedStoreTheme } from "@/lib/theme-cache";
 import { AlertOctagon, Key, ShieldAlert, ArrowRight, ExternalLink, RefreshCw } from "lucide-react";
@@ -162,6 +163,7 @@ export default async function StoreLayout({
           <StoreNav theme={theme} />
           <main className="flex-grow w-full max-w-full overflow-x-hidden">{children}</main>
           <StoreFooter theme={theme} />
+          <WhatsAppFloatingWidget theme={theme} />
           <ThemePreviewDock initialThemeCode={theme?.activeTheme} />
         </div>
       </WishlistProvider>

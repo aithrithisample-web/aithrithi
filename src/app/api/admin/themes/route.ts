@@ -158,6 +158,18 @@ export async function PUT(req: NextRequest) {
     if (body?.showTrustBadges !== undefined) {
       socialObj.showTrustBadges = body.showTrustBadges;
     }
+    if (body?.instagramUrl !== undefined) socialObj.instagramUrl = body.instagramUrl;
+    if (body?.instagramHandle !== undefined) socialObj.instagramHandle = body.instagramHandle;
+    if (body?.instagramButtonText !== undefined) socialObj.instagramButtonText = body.instagramButtonText;
+    if (body?.instagramTitle !== undefined) socialObj.instagramTitle = body.instagramTitle;
+    if (body?.instagramSubtitle !== undefined) socialObj.instagramSubtitle = body.instagramSubtitle;
+    if (body?.showInstagramSection !== undefined) socialObj.showInstagramSection = body.showInstagramSection;
+    if (Array.isArray(body?.instagramPosts)) socialObj.instagramPosts = body.instagramPosts;
+    if (body?.showWhatsAppButton !== undefined) socialObj.showWhatsAppButton = body.showWhatsAppButton;
+    if (body?.whatsappNumber !== undefined) socialObj.whatsappNumber = body.whatsappNumber;
+    if (body?.whatsappMessage !== undefined) socialObj.whatsappMessage = body.whatsappMessage;
+    if (body?.whatsappTooltip !== undefined) socialObj.whatsappTooltip = body.whatsappTooltip;
+    if (body?.whatsappPosition !== undefined) socialObj.whatsappPosition = body.whatsappPosition;
 
     const finalSocialLinksJson = JSON.stringify(socialObj);
 

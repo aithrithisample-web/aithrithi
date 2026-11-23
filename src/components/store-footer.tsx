@@ -14,6 +14,9 @@ import {
   Clock,
   Sparkles,
   Lock,
+  Instagram,
+  MessageCircle,
+  ExternalLink,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { AVRO_THEMES, resolveStoreTheme } from "@/lib/themes-registry";
@@ -246,6 +249,31 @@ export default function StoreFooter({ theme }: { theme?: any }) {
                   </span>
                 </div>
               )}
+            </div>
+
+            {/* Direct Instagram & WhatsApp Connect Buttons */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 max-w-sm pt-1">
+              <a
+                href={customOverrides.instagramUrl || "https://instagram.com/aithrithi.in"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 px-3 py-2 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 text-white font-serif font-medium tracking-[0.1em] uppercase text-[11px] shadow-sm hover:opacity-95 transition flex items-center justify-center gap-1.5"
+              >
+                <Instagram className="w-3.5 h-3.5" />
+                <span>Instagram</span>
+                <ExternalLink className="w-2.5 h-2.5" />
+              </a>
+
+              <a
+                href={`https://wa.me/${(customOverrides.whatsappNumber || theme?.supportPhone || "+919496590984").replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hello Aithrithi! I would like to inquire about your collections.")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 px-3 py-2 rounded-xl bg-[#25D366] hover:bg-[#20BD5A] text-white font-serif font-medium tracking-[0.1em] uppercase text-[11px] shadow-sm transition flex items-center justify-center gap-1.5"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span>WhatsApp</span>
+                <ExternalLink className="w-2.5 h-2.5" />
+              </a>
             </div>
           </div>
 
