@@ -114,24 +114,32 @@ export default function StoreFooter({ theme }: { theme?: any }) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 text-xs">
           {/* Column 1: Company Profile & Registered Office (5 cols) */}
           <div className="lg:col-span-5 space-y-4">
-            <Link href="/" className="inline-flex items-center gap-3">
-              <div className="bg-white p-1.5 rounded-xl border border-slate-200/80 shadow-2xs flex-shrink-0 flex items-center justify-center">
-                <img
-                  src={theme?.logoUrl || "/avro-logo.png"}
-                  alt={brandName}
-                  className="h-8 max-w-[140px] w-auto object-contain"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/avro-logo.png";
-                  }}
-                />
+            <Link href="/" className="inline-flex items-center gap-3.5 group">
+              {theme?.logoUrl ? (
+                <div className="bg-white p-2 rounded-xl border border-slate-200/80 shadow-sm flex-shrink-0 flex items-center justify-center">
+                  <img
+                    src={theme.logoUrl}
+                    alt={brandName}
+                    className="h-10 sm:h-12 max-w-[180px] w-auto object-contain"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = "none";
+                    }}
+                  />
+                </div>
+              ) : null}
+              <div className="flex flex-col">
+                <span
+                  className="text-2xl sm:text-3xl font-serif font-extrabold tracking-tight block leading-none"
+                  style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
+                >
+                  {brandName}
+                </span>
+                {matchingThemeDef.code === "AITHRITHI_MAROON" && (
+                  <span className="text-[10px] font-sans tracking-[0.24em] uppercase text-stone-400 font-semibold mt-1">
+                    By Devika · Sarees & Kurti
+                  </span>
+                )}
               </div>
-              <span
-                className="text-base font-extrabold tracking-tight block"
-                style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
-              >
-                {brandName}
-              </span>
             </Link>
 
             <p

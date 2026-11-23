@@ -147,27 +147,37 @@ export function StoreNav({ theme }: { theme?: any }) {
           </div>
         )}
 
-        {/* Minimal, Reduced-Height Navbar */}
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4">
-          {/* Brand Logo & Name (Clean Minimal Layout) */}
-          <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
-            <img
-              src={theme?.logoUrl || "/avro-logo.png"}
-              alt={brandName}
-              className="h-6 sm:h-7.5 max-w-[120px] sm:max-w-[140px] w-auto object-contain transition-transform group-hover:scale-105"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/avro-logo.png";
-              }}
-            />
-            <span
-              className={`font-extrabold text-sm sm:text-base tracking-tight leading-none ${
-                isDarkNav ? "text-white" : "text-slate-900"
-              }`}
-              style={{ fontFamily: matchingThemeDef.typography.fontFamily }}
-            >
-              {brandName}
-            </span>
+        {/* Prominent Navbar with Highly Enlarged Logo */}
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-18 sm:h-22 md:h-24 flex items-center justify-between gap-4">
+          {/* Brand Logo & Name (Highly Enlarged Luxury Scale) */}
+          <Link href="/" className="flex items-center gap-3.5 group flex-shrink-0 py-1.5">
+            {theme?.logoUrl ? (
+              <img
+                src={theme.logoUrl}
+                alt={brandName}
+                className="h-10 sm:h-14 md:h-16 max-w-[220px] sm:max-w-[300px] md:max-w-[360px] w-auto object-contain transition-transform group-hover:scale-105 drop-shadow-sm"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = "none";
+                }}
+              />
+            ) : null}
+            <div className="flex flex-col">
+              <span
+                className={`font-serif font-extrabold text-2xl sm:text-3xl md:text-4xl tracking-tight leading-none transition-transform group-hover:scale-[1.02] ${
+                  isDarkNav ? "text-white" : "text-slate-900"
+                }`}
+                style={{
+                  color: matchingThemeDef.code === "AITHRITHI_MAROON" ? matchingThemeDef.palette.primary : undefined,
+                }}
+              >
+                {brandName}
+              </span>
+              {matchingThemeDef.code === "AITHRITHI_MAROON" && (
+                <span className="text-[10px] sm:text-[11px] font-sans tracking-[0.24em] uppercase text-stone-500 font-semibold mt-0.5">
+                  By Devika · Sarees & Kurti
+                </span>
+              )}
+            </div>
           </Link>
 
           {/* Desktop Minimal Navigation Links */}

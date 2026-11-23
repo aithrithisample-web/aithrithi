@@ -170,10 +170,16 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className={`grid grid-cols-1 items-center ${
+            themeDef.code === "AITHRITHI_MAROON"
+              ? "lg:grid-cols-12 gap-8 lg:gap-10"
+              : "lg:grid-cols-12 gap-12"
+          }`}>
 
             {/* Left — Hero content */}
-            <div className="lg:col-span-7 space-y-6">
+            <div className={`space-y-6 ${
+              themeDef.code === "AITHRITHI_MAROON" ? "lg:col-span-5" : "lg:col-span-7"
+            }`}>
 
               {/* Badge */}
               <div
@@ -260,7 +266,9 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
             </div>
 
             {/* Right — Hero banner slider / carousel (supports images & video ads with right scroll) */}
-            <div className="avro-slide-right lg:col-span-5">
+            <div className={`avro-slide-right ${
+              themeDef.code === "AITHRITHI_MAROON" ? "lg:col-span-7" : "lg:col-span-5"
+            }`}>
               <HeroBannerSlider
                 slides={heroSlides}
                 fallbackImage={heroImage}

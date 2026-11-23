@@ -119,45 +119,65 @@ export function HeroBannerSlider({
 
   // If no banner slides configured, render single fallback image
   if (totalSlides === 0) {
+    const isAithrithiTheme = themeDef.code === "AITHRITHI_MAROON";
+
     return (
       <div
-        className="relative overflow-hidden aspect-[4/5] shadow-2xl border transition-all group"
+        className={`relative overflow-hidden shadow-2xl border transition-all group ${
+          isAithrithiTheme
+            ? "aspect-[2/1] sm:aspect-[2/1] lg:aspect-[2/1] w-full"
+            : "aspect-[4/5]"
+        }`}
         style={{
-          borderColor: isDarkHero ? "rgba(255,255,255,0.1)" : themeDef.palette.border,
+          borderColor: isDarkHero ? "rgba(255,255,255,0.15)" : themeDef.palette.border,
           borderRadius: themeDef.typography.buttonRadius === "rounded-none" ? "0px" : "24px",
         }}
       >
         <img
           src={fallbackImage}
           alt={fallbackTitle}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "/aithrithi-hero.jpg";
+          }}
+          className={`w-full h-full object-cover transition-transform duration-700 ${
+            isAithrithiTheme ? "group-hover:scale-[1.02]" : "group-hover:scale-105"
+          }`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+        {!isAithrithiTheme && (
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+        )}
 
-        {/* Floating card at bottom */}
-        <div className="absolute bottom-4 left-4 right-4 p-4 rounded-xl bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-between avro-fade-in-delay-3">
-          <div>
-            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-300 block">
-              Featured Collection
-            </span>
-            <strong className="text-sm font-extrabold block">{fallbackTitle}</strong>
-            <span className="text-[11px] text-slate-200 line-clamp-1">{fallbackTagline}</span>
+        {/* Floating card at bottom (only for other themes so Aithrithi's artwork remains completely unobstructed) */}
+        {!isAithrithiTheme && (
+          <div className="absolute bottom-4 left-4 right-4 p-4 rounded-xl bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-between avro-fade-in-delay-3">
+            <div>
+              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-300 block">
+                Featured Collection
+              </span>
+              <strong className="text-sm font-extrabold block">{fallbackTitle}</strong>
+              <span className="text-[11px] text-slate-200 line-clamp-1">{fallbackTagline}</span>
+            </div>
+            <Link
+              href="/shop"
+              className="avro-btn p-2 rounded-lg bg-white text-slate-900 font-bold hover:bg-slate-100 flex-shrink-0"
+            >
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
-          <Link
-            href="/shop"
-            className="avro-btn p-2 rounded-lg bg-white text-slate-900 font-bold hover:bg-slate-100 flex-shrink-0"
-          >
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+        )}
 
-        {/* Decorative corner accent */}
-        <div
-          className="absolute top-4 right-4 w-8 h-8 rounded-full border-2 flex items-center justify-center backdrop-blur-sm"
-          style={{ borderColor: "rgba(255,255,255,0.4)", background: "rgba(255,255,255,0.1)" }}
-        >
-          <Star className="w-3.5 h-3.5 text-white fill-white" />
-        </div>
+        {/* Subtle Luxury Corner Accent for Aithrithi */}
+        {isAithrithiTheme && (
+          <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10">
+            <Link
+              href="/shop"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#58111A]/90 hover:bg-[#58111A] text-white shadow-lg backdrop-blur-sm border border-white/20 transition-all hover:scale-105"
+            >
+              <span>Explore Collection</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        )}
       </div>
     );
   }

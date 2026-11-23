@@ -107,7 +107,7 @@ export const AVRO_THEMES: AvroThemeDefinition[] = [
       subheadline: "Handcrafted with devotion. Luxurious handloom mulmul, pure tussar silks, and timeless contemporary silhouettes tailored for the discerning modern connoisseur.",
       ctaPrimary: "Explore Collection",
       ctaSecondary: "View Lookbook",
-      imageUrl: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=85",
+      imageUrl: "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/aithrithi-hero.jpg",
       style: "editorial-split",
     },
     announcementBar: {
