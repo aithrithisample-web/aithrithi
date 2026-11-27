@@ -14,6 +14,8 @@ import {
   Package,
   Home,
   Compass,
+  Search,
+  Truck,
 } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 import { useWishlist } from "@/context/wishlist-context";
@@ -146,125 +148,72 @@ export function StoreNav({ theme }: { theme?: any }) {
           </div>
         )}
 
-        {/* Sleek Minimal Navbar with Snug Typography Logo Fit */}
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4 overflow-hidden">
-          {/* Brand Typography Logo — Luxury Scale & Pixel-Perfect Navbar Fit */}
-          <Link href="/" className="flex items-center group min-w-0 max-w-[170px] sm:max-w-[240px] flex-shrink py-0.5" title={brandName}>
-            {matchingThemeDef.code === "AITHRITHI_MAROON" ? (
+        {/* ROW 1: Centered Logo + Utility Action Icons (Vedhika Style) */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3.5 flex items-center justify-between gap-4">
+          {/* Mobile Hamburger Toggle (Left on Mobile, hidden on Desktop) */}
+          <div className="flex md:hidden items-center">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="w-9 h-9 rounded-full flex items-center justify-center text-slate-800 hover:bg-slate-100 transition-colors"
+              aria-label="Toggle Navigation Menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+
+          {/* Desktop Left Search Quick Jump */}
+          <div className="hidden md:flex items-center gap-3 flex-1">
+            <Link
+              href="/shop"
+              className="inline-flex items-center gap-2 text-xs text-slate-500 hover:text-[#DEB660] transition-colors uppercase tracking-wider font-sans font-medium"
+            >
+              <Search className="w-4 h-4 text-slate-700" />
+              <span>Search Catalog</span>
+            </Link>
+          </div>
+
+          {/* Centered Brand Emblem & Wordmark (Vedhika Style) */}
+          <div className="flex-shrink-0 text-center flex flex-col items-center">
+            <Link href="/" className="inline-flex flex-col items-center group py-0.5" title={brandName}>
               <img
-                src={theme?.logoUrl || (isDarkNav ? "/aithrithi-nav-logo.png" : "/aithrithi-nav-logo-maroon.png")}
+                src={theme?.logoUrl || "/aithrithi-nav-logo-maroon.png"}
                 alt={brandName}
-                className="h-9 sm:h-11 md:h-12 w-auto max-w-[160px] sm:max-w-[220px] object-contain transition-transform group-hover:scale-105 drop-shadow-xs"
+                className="h-9 sm:h-12 md:h-13 w-auto max-w-[170px] sm:max-w-[220px] object-contain transition-transform group-hover:scale-105"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "/aithrithi-nav-logo-maroon.png";
                 }}
               />
-            ) : (
-              <>
-                {theme?.logoUrl ? (
-                  <img
-                    src={theme.logoUrl}
-                    alt={brandName}
-                    className="h-9 sm:h-11 md:h-12 max-w-[100px] sm:max-w-[200px] w-auto object-contain transition-transform group-hover:scale-105 drop-shadow-xs flex-shrink-0"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                    }}
-                  />
-                ) : null}
-                <div className="flex flex-col min-w-0 ml-2">
-                  <span
-                    className={`font-serif font-extrabold text-xl sm:text-2xl md:text-3xl tracking-tight leading-none truncate transition-transform group-hover:scale-[1.01] ${
-                      isDarkNav ? "text-white" : "text-slate-900"
-                    }`}
-                  >
-                    {brandName}
-                  </span>
-                </div>
-              </>
-            )}
-          </Link>
-
-          {/* Desktop Minimal Navigation Links */}
-          <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-[11.5px] font-medium tracking-[0.14em] uppercase font-sans">
-            <Link
-              href="/"
-              className={`transition-colors py-1 ${
-                pathname === "/"
-                  ? "font-semibold"
-                  : isDarkNav
-                  ? "text-slate-300 hover:text-white"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-              style={pathname === "/" ? { color: matchingThemeDef.palette.primary } : {}}
-            >
-              Home
+              <span className="hidden sm:block text-[9px] uppercase tracking-[0.24em] font-serif text-[#C5A880] mt-0.5 font-medium">
+                The First Designer Fashion Store from Kerala
+              </span>
             </Link>
+          </div>
+
+          {/* Right-Aligned Utility Icons (Search on mobile, Track, Wishlist, Account, Cart) */}
+          <div className="flex items-center justify-end gap-1 sm:gap-2.5 flex-1">
+            {/* Mobile Search Button */}
             <Link
               href="/shop"
-              className={`transition-colors py-1 ${
-                pathname === "/shop"
-                  ? "font-semibold"
-                  : isDarkNav
-                  ? "text-slate-300 hover:text-white"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-              style={pathname === "/shop" ? { color: matchingThemeDef.palette.primary } : {}}
+              className="flex md:hidden w-8.5 h-8.5 rounded-full items-center justify-center text-slate-700 hover:bg-slate-100 transition-colors"
+              title="Search"
             >
-              Collections
+              <Search className="w-4 h-4" />
             </Link>
-            <Link
-              href="/wishlist"
-              className={`transition-colors py-1 ${
-                pathname === "/wishlist"
-                  ? "font-semibold"
-                  : isDarkNav
-                  ? "text-slate-300 hover:text-white"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-              style={pathname === "/wishlist" ? { color: matchingThemeDef.palette.primary } : {}}
-            >
-              Wishlist
-            </Link>
+
+            {/* Track Order Icon */}
             <Link
               href="/track"
-              className={`transition-colors py-1 ${
-                pathname === "/track"
-                  ? "font-semibold"
-                  : isDarkNav
-                  ? "text-slate-300 hover:text-white"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-              style={pathname === "/track" ? { color: matchingThemeDef.palette.primary } : {}}
+              className="hidden sm:flex relative w-8.5 h-8.5 rounded-full items-center justify-center text-slate-700 hover:text-[#DEB660] hover:bg-slate-50 transition-colors"
+              title="Track Order"
             >
-              Track Order
+              <Truck className="w-4 h-4" />
             </Link>
-            <Link
-              href="/about"
-              className={`transition-colors py-1 ${
-                pathname === "/about"
-                  ? "font-semibold"
-                  : isDarkNav
-                  ? "text-slate-300 hover:text-white"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-              style={pathname === "/about" ? { color: matchingThemeDef.palette.primary } : {}}
-            >
-              About
-            </Link>
-          </nav>
 
-          {/* Action Icons (Minimal, Touch-Optimized & Perfectly Fitted for iPhone 15) */}
-          <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-            {/* Wishlist Link — on mobile, easily accessible via bottom navigation bar */}
+            {/* Wishlist Icon */}
             <Link
               href="/wishlist"
-              className={`hidden sm:flex relative w-9 h-9 rounded-full items-center justify-center transition-colors ${
-                isDarkNav
-                  ? "hover:bg-white/10 text-slate-200"
-                  : "hover:bg-slate-100 text-slate-700"
-              }`}
-              title="My Wishlist"
-              aria-label="Wishlist"
+              className="relative w-8.5 h-8.5 rounded-full flex items-center justify-center text-slate-700 hover:text-[#DEB660] hover:bg-slate-50 transition-colors"
+              title="Wishlist"
             >
               <Heart className={`w-4 h-4 ${wishlistCount > 0 ? "fill-rose-500 text-rose-500" : ""}`} />
               {wishlistCount > 0 && (
@@ -274,29 +223,7 @@ export function StoreNav({ theme }: { theme?: any }) {
               )}
             </Link>
 
-            {/* Cart Link with Badge */}
-            <Link
-              href="/cart"
-              className={`relative w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-colors ${
-                isDarkNav
-                  ? "hover:bg-white/10 text-slate-200"
-                  : "hover:bg-slate-100 text-slate-700"
-              }`}
-              title="Cart"
-              aria-label="Shopping Cart"
-            >
-              <ShoppingBag className="w-4 h-4" />
-              {itemCount > 0 && (
-                <span
-                  className="absolute -top-0.5 -right-0.5 min-w-[15px] h-3.5 px-0.5 rounded-full text-white text-[8px] font-bold flex items-center justify-center shadow-xs"
-                  style={{ backgroundColor: matchingThemeDef.palette.accent }}
-                >
-                  {itemCount}
-                </span>
-              )}
-            </Link>
-
-            {/* Account Dropdown — on mobile, accessible via bottom navigation bar */}
+            {/* Account Dropdown */}
             <div className="hidden sm:block relative" ref={dropdownRef}>
               <button
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
@@ -319,59 +246,29 @@ export function StoreNav({ theme }: { theme?: any }) {
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-200/80 p-2 space-y-1 z-50 text-xs animate-in fade-in zoom-in-95 duration-150">
                   {customer ? (
                     <>
-                      <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
-                        <p className="font-extrabold text-slate-900 truncate">{customer.name}</p>
-                        <p className="text-[10px] text-slate-400 font-mono truncate">{customer.email}</p>
-                        {customer.isGuest && (
-                          <span className="inline-block mt-1 px-1.5 py-0.5 bg-amber-50 border border-amber-200 text-amber-700 text-[9px] font-black uppercase rounded">
-                            Guest Shopper
-                          </span>
-                        )}
+                      <div className="px-3 py-2 border-b border-slate-100">
+                        <strong className="block text-slate-900 truncate">{customer.name}</strong>
+                        <span className="text-[11px] text-slate-500 truncate block">{customer.email}</span>
                       </div>
-
-                      {!customer.isGuest && (
-                        <Link
-                          href="/account"
-                          onClick={() => setUserDropdownOpen(false)}
-                          className="flex items-center gap-2 p-2 hover:bg-slate-50 rounded-lg text-slate-700 font-semibold transition"
-                        >
-                          <Package className="w-3.5 h-3.5 text-blue-600" />
-                          <span>My Orders & Profile</span>
-                        </Link>
-                      )}
-
                       <Link
-                        href="/wishlist"
+                        href="/account"
                         onClick={() => setUserDropdownOpen(false)}
-                        className="flex items-center justify-between p-2 hover:bg-slate-50 rounded-lg text-slate-700 font-semibold transition"
+                        className="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg font-medium text-slate-700 transition"
                       >
-                        <div className="flex items-center gap-2">
-                          <Heart className="w-3.5 h-3.5 text-rose-500" />
-                          <span>Saved Wishlist</span>
-                        </div>
-                        {wishlistCount > 0 && (
-                          <span className="text-[10px] font-bold px-1.5 py-0.2 bg-rose-50 text-rose-600 rounded-full">
-                            {wishlistCount}
-                          </span>
-                        )}
+                        <User className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Order History & Account</span>
                       </Link>
-
-                      {customer.isGuest ? (
-                        <Link
-                          href="/login"
-                          onClick={() => setUserDropdownOpen(false)}
-                          className="flex items-center gap-2 p-2 hover:bg-blue-50 text-blue-600 rounded-lg font-bold transition"
-                        >
-                          <UserPlus className="w-3.5 h-3.5" />
-                          <span>Create Full Account</span>
-                        </Link>
-                      ) : null}
-
-                      <div className="border-t border-slate-100 my-1" />
-
+                      <Link
+                        href="/track"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg font-medium text-slate-700 transition"
+                      >
+                        <Package className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Track My Consignment</span>
+                      </Link>
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-2 p-2 hover:bg-rose-50 text-rose-600 rounded-lg font-semibold transition text-left"
+                        className="w-full flex items-center gap-2 p-2 hover:bg-red-50 text-red-600 rounded-lg font-medium transition text-left"
                       >
                         <LogOut className="w-3.5 h-3.5" />
                         <span>Sign Out</span>
@@ -379,31 +276,23 @@ export function StoreNav({ theme }: { theme?: any }) {
                     </>
                   ) : (
                     <>
-                      <div className="p-2 border-b border-slate-100">
-                        <p className="font-bold text-slate-800">Welcome</p>
-                        <p className="text-[10px] text-slate-400">Access orders, wishlist & discounts</p>
-                      </div>
-
                       <Link
                         href="/login"
                         onClick={() => setUserDropdownOpen(false)}
-                        className="flex items-center gap-2 p-2 hover:bg-slate-50 text-slate-800 font-bold rounded-lg transition"
+                        className="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg font-medium text-slate-700 transition"
                       >
-                        <User className="w-3.5 h-3.5 text-blue-600" />
+                        <User className="w-3.5 h-3.5 text-slate-500" />
                         <span>Sign In</span>
                       </Link>
-
                       <Link
-                        href="/login?tab=register"
+                        href="/login?mode=register"
                         onClick={() => setUserDropdownOpen(false)}
-                        className="flex items-center gap-2 p-2 hover:bg-slate-50 text-slate-700 font-semibold rounded-lg transition"
+                        className="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg font-medium text-slate-700 transition"
                       >
                         <UserPlus className="w-3.5 h-3.5 text-blue-600" />
                         <span>Create Account</span>
                       </Link>
-
                       <div className="border-t border-slate-100 my-1" />
-
                       <button
                         onClick={handleInstantGuestLogin}
                         className="w-full flex items-center justify-between p-2 bg-stone-100 hover:bg-stone-200 text-stone-900 rounded-lg font-bold transition text-left"
@@ -420,6 +309,21 @@ export function StoreNav({ theme }: { theme?: any }) {
               )}
             </div>
 
+            {/* Cart Link with Solid Black Circular Badge (Vedhika Style) */}
+            <Link
+              href="/cart"
+              className="relative w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-slate-800 hover:text-[#DEB660] hover:bg-slate-50 transition-colors"
+              title="Cart"
+              aria-label="Shopping Cart"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              {itemCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-black text-white text-[9px] font-bold flex items-center justify-center shadow-xs">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
+
             {/* Mobile Menu Hamburger Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -431,6 +335,20 @@ export function StoreNav({ theme }: { theme?: any }) {
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
+        </div>
+
+        {/* ROW 2: Desktop Centered Single-Row Navigation Menu (Vedhika Style) */}
+        <div className="hidden md:block border-t border-[#EDEDED] py-2.5 bg-white">
+          <nav className="max-w-7xl mx-auto px-4 flex items-center justify-center gap-7 lg:gap-9 text-[12px] font-medium tracking-[0.16em] uppercase font-sans text-[#222222]">
+            <Link href="/" className="hover:text-[#DEB660] transition-colors py-0.5">Home</Link>
+            <Link href="/shop?category=sarees" className="hover:text-[#DEB660] transition-colors py-0.5">Sarees</Link>
+            <Link href="/shop?category=kurtis" className="hover:text-[#DEB660] transition-colors py-0.5">Kurtis</Link>
+            <Link href="/shop?category=aithrithi-lite" className="hover:text-[#DEB660] transition-colors py-0.5">Aithrithi Lite</Link>
+            <Link href="/shop?category=kanjivaram" className="hover:text-[#DEB660] transition-colors py-0.5">Kanjivaram</Link>
+            <Link href="/shop" className="hover:text-[#DEB660] transition-colors py-0.5">Collections</Link>
+            <Link href="/about" className="hover:text-[#DEB660] transition-colors py-0.5">About Us</Link>
+            <Link href="/contact" className="hover:text-[#DEB660] transition-colors py-0.5">Stores & Contact</Link>
+          </nav>
         </div>
 
         {/* Mobile Slide-Down Sheet Navigation */}

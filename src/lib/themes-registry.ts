@@ -206,7 +206,149 @@ export const AVRO_THEMES: AvroThemeDefinition[] = [
     ],
   },
 
-  // 1. NOVA LOFT — Conscious Street Couture & Artisanal Cotton (Inspired by novaloft.in)
+  // 1. VEDHIKA DESIGNER COUTURE — High Fashion Kerala Boutique (Inspired by vedhika.in)
+  {
+    id: "vedhika-boutique",
+    code: "VEDHIKA_BOUTIQUE",
+    name: "Vedhika Boutique",
+    industry: "High Fashion Boutique & Designer Sarees",
+    referenceUrl: "https://vedhika.in",
+    referenceDisplay: "vedhika.in",
+    tagline: "Kerala's Premier Designer Fashion Boutique",
+    description: "Inspired by vedhika.in (Shopify Kalles 2.0). Classic editorial haute couture aesthetic with clean dual-row centered branding, 2:3 tall portrait sharp product cards, double-framed category tiles, warm mustard gold accents, press recognition strip, and an antique gold signature footer bar.",
+    isIncludedInFree: true,
+    palette: {
+      primary: "#222222",        // Pure Charcoal Black
+      accent: "#DEB660",         // Vedhika Signature Warm Gold
+      background: "#FFFFFF",     // Crisp Pure White
+      cardBg: "#FFFFFF",         // Studio White
+      text: "#222222",           // Deep Editorial Black
+      textMuted: "#666666",      // Muted Charcoal
+      border: "#EDEDED",         // Subtle Hairline Divider
+      badgeBg: "#D9383A",        // Vedhika Sold Out Crimson
+      badgeText: "#FFFFFF",      // Pure White Text
+      headerBg: "#FFFFFF",       // White Header
+      footerBg: "#F5F5F7",       // Soft Gray Footer
+      accentGlow: "rgba(222, 182, 96, 0.12)",
+    },
+    typography: {
+      fontFamily: "'Poppins', 'Jost', 'Cormorant Garamond', sans-serif",
+      headingClass: "font-serif tracking-normal font-medium",
+      bodyClass: "font-sans",
+      buttonRadius: "rounded-none",
+      badgeRadius: "rounded-none",
+    },
+    hero: {
+      badge: "AITHRITHI · BY DEVIKA · KERALA'S DESIGNER COUTURE",
+      headline: "Celebrate All Day, Every Day with",
+      headlineHighlight: "Timeless Grace",
+      subheadline: "Handcrafted luxury sarees, designer kurtis, and contemporary festive ensembles tailored with master perfection.",
+      ctaPrimary: "Shop Now",
+      ctaSecondary: "View Collections",
+      imageUrl: "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/aithrithi-hero.jpg",
+      style: "editorial-split",
+    },
+    announcementBar: {
+      text: "✦ Free Express Shipping Across India · Handcrafted Designer Silhouettes · Kerala's Premier Fashion House ✦",
+      bg: "#222222",
+      textColor: "#FFFFFF",
+    },
+    trustBadges: [
+      {
+        title: "Designer Exclusives",
+        subtitle: "Original bespoke couture by master craftspeople",
+        icon: "award",
+      },
+      {
+        title: "Pure Handloom Luxury",
+        subtitle: "Finest silk, linen, organza & handcrafted weaves",
+        icon: "heart",
+      },
+      {
+        title: "Priority Express Shipping",
+        subtitle: "Safe doorstep delivery with carrier tracking",
+        icon: "truck",
+      },
+      {
+        title: "Hassle-Free Exchange",
+        subtitle: "Simple doorstep returns & style concierge",
+        icon: "refresh",
+      },
+    ],
+    sampleCategories: [
+      {
+        name: "Sarees",
+        slug: "sarees",
+        imageUrl: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80",
+        itemCount: "Exquisite Handloom",
+      },
+      {
+        name: "Kurtis",
+        slug: "kurtis",
+        imageUrl: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=80",
+        itemCount: "Designer Tunics",
+      },
+      {
+        name: "Aithrithi Lite",
+        slug: "aithrithi-lite",
+        imageUrl: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=600&q=80",
+        itemCount: "Daily Luxury",
+      },
+      {
+        name: "Kanjivaram",
+        slug: "kanjivaram",
+        imageUrl: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=600&q=80",
+        itemCount: "Artisanal Weaves",
+      },
+      {
+        name: "Festive Brides",
+        slug: "festive-brides",
+        imageUrl: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?auto=format&fit=crop&w=600&q=80",
+        itemCount: "Wedding Couture",
+      },
+    ],
+    sampleProducts: [
+      {
+        title: "Pure Kanjivaram Silk Saree With Hand Cutwork",
+        slug: "pure-kanjivaram-silk-saree-hand-cutwork",
+        price: 58600,
+        compareAtPrice: 65000,
+        badge: "EXCLUSIVE",
+        category: "Sarees",
+        rating: 5,
+        imageUrl: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80",
+      },
+      {
+        title: "Artisanal Chanderi Designer Kurti Ensemble",
+        slug: "artisanal-chanderi-designer-kurti",
+        price: 8900,
+        compareAtPrice: 10500,
+        badge: "BESTSELLER",
+        category: "Kurtis",
+        rating: 5,
+        imageUrl: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80",
+      },
+      {
+        title: "Handloom Tussar Silk Saree in Antique Gold",
+        slug: "handloom-tussar-silk-saree-antique-gold",
+        price: 24500,
+        category: "Sarees",
+        rating: 5,
+        imageUrl: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=800&q=80",
+      },
+      {
+        title: "Organza Festive Kurti with Zari Embroidered Accents",
+        slug: "organza-festive-kurti-zari",
+        price: 6400,
+        badge: "NEW",
+        category: "Aithrithi Lite",
+        rating: 5,
+        imageUrl: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=800&q=80",
+      },
+    ],
+  },
+
+  // 2. NOVA LOFT — Conscious Street Couture & Artisanal Cotton (Inspired by novaloft.in)
   {
     id: "couture-nova-loft",
     code: "COUTURE_NOVA_LOFT",
@@ -1252,7 +1394,7 @@ export function resolveStoreTheme(
   themeSetting?: any
 ): AvroThemeDefinition {
   const all = getAllThemes(themeSetting);
-  const target = String(idOrCode || themeSetting?.activeTheme || "AVRO_SIGNATURE").trim();
+  const target = String(idOrCode || themeSetting?.activeTheme || "VEDHIKA_BOUTIQUE").trim();
 
   const found = all.find(
     (t) =>
@@ -1263,7 +1405,11 @@ export function resolveStoreTheme(
       (target.toUpperCase() === "TALIM_DEFAULT" && t.code === "AVRO_SIGNATURE")
   );
 
-  return found || AVRO_THEMES[0]; // Fallback to Aithrithi Royale Maroon
+  return (
+    found ||
+    all.find((t) => t.code === "VEDHIKA_BOUTIQUE") ||
+    AVRO_THEMES[0]
+  );
 }
 
 export function createDefaultCustomTheme(

@@ -66,7 +66,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
   }
 
   // Find theme definition matching query param OR db setting (supports both presets and custom merchant themes)
-  const activeCode = themeParam || dbTheme?.activeTheme || "AVRO_SIGNATURE";
+  const activeCode = themeParam || dbTheme?.activeTheme || "VEDHIKA_BOUTIQUE";
   const themeDef: AvroThemeDefinition = resolveStoreTheme(activeCode, dbTheme);
 
   // Check if DB customizer has overrides
@@ -487,60 +487,36 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       )}
 
       {/* =====================================================
-          3. CATEGORY SHOWCASE — hover lift + zoom
+          3. CATEGORY SHOWCASE — Vedhika Product Categories (Double-Framed Tiles)
           ===================================================== */}
-      <section id="categories" className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-4 sm:space-y-6 mt-10 sm:mt-16">
-        <div className="avro-slide-up flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-3">
-          <div>
-            <span
-              className="text-[10px] sm:text-[11px] font-serif font-medium tracking-[0.18em] uppercase block mb-1"
-              style={{ color: themeDef.palette.accent }}
-            >
-              Curated Collections
-            </span>
-            <h2
-              className={`text-2xl sm:text-3xl font-serif font-medium tracking-tight ${themeDef.typography.headingClass}`}
-              style={{ color: themeDef.palette.text }}
-            >
-              Shop by Category
-            </h2>
-          </div>
-          <Link
-            href="/shop"
-            className="avro-link-underline text-xs font-serif font-medium tracking-[0.12em] uppercase flex items-center gap-1 self-start sm:self-auto"
-            style={{ color: themeDef.palette.accent }}
-          >
-            Browse All Categories <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+      <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 mt-12 sm:mt-18">
+        <div className="text-center space-y-1">
+          <h2 className="text-2xl sm:text-3xl font-serif font-medium tracking-tight text-[#222222]">
+            Product Categories
+          </h2>
+          <p className="text-xs text-stone-500 font-sans">
+            Explore handcrafted silhouettes curated for everyday grace and grand celebrations.
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 avro-stagger-grid">
-          {categoriesToDisplay.map((category) => (
+        {/* 5-Column Grid with Inset Double Frame (Vedhika Style) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5 sm:gap-5 pt-2">
+          {categoriesToDisplay.slice(0, 5).map((category) => (
             <Link
               key={category.slug}
               href={`/shop?category=${encodeURIComponent(category.slug)}`}
-              className="avro-3d-card avro-slide-up group overflow-hidden border shadow-xs relative flex flex-col justify-end aspect-square"
-              style={{
-                borderColor: themeDef.palette.border,
-                borderRadius: cardBorderRadius,
-              }}
+              className="group flex flex-col items-center"
             >
-              <img
-                src={category.imageUrl}
-                alt={category.name}
-                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-600"
-              />
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent group-hover:from-black/90 transition-all duration-300" />
-
-              <div className="relative z-10 p-3 sm:p-5 text-white">
-                <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-slate-300 block">
-                  {category.itemCount}
-                </span>
-                <h3 className="font-serif font-medium text-sm sm:text-base tracking-wide leading-snug group-hover:text-white transition-colors truncate">
-                  {category.name}
-                </h3>
+              <div className="w-full aspect-square border border-[#DCDCDC] rounded-2xl p-1.5 sm:p-2 bg-white shadow-2xs group-hover:border-[#DEB660] group-hover:shadow-md transition-all duration-300 flex items-center justify-center overflow-hidden">
+                <img
+                  src={category.imageUrl}
+                  alt={category.name}
+                  className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-500"
+                />
               </div>
+              <span className="mt-2.5 text-sm sm:text-base font-sans font-medium text-[#222222] group-hover:text-[#DEB660] transition-colors text-center truncate w-full">
+                {category.name}
+              </span>
             </Link>
           ))}
         </div>
@@ -556,7 +532,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
               <Link
                 key={ad.id}
                 href={ad.link || "/shop"}
-                className="group relative overflow-hidden rounded-2xl sm:rounded-3xl min-h-[220px] sm:min-h-[280px] flex items-end p-6 sm:p-8 border border-black/5 shadow-md transition-all duration-300 hover:shadow-xl active:scale-[0.99]"
+                className="group relative overflow-hidden rounded-none min-h-[220px] sm:min-h-[280px] flex items-end p-6 sm:p-8 border border-black/5 shadow-xs transition-all duration-300 hover:shadow-lg active:scale-[0.99]"
               >
                 <img
                   src={ad.imageUrl}
@@ -566,7 +542,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10 group-hover:from-black/90 transition-all duration-300" />
 
                 <div className="relative z-10 space-y-1.5 sm:space-y-2 text-white max-w-md">
-                  <span className="px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-serif font-bold uppercase tracking-[0.16em] bg-white/20 text-[#FAF7F5] backdrop-blur-sm border border-white/20 inline-block">
+                  <span className="px-2.5 py-0.5 rounded-none text-[9px] sm:text-[10px] font-sans font-bold uppercase tracking-[0.16em] bg-[#DEB660] text-black inline-block">
                     {ad.position === "HERO_BANNER" ? "FEATURED CAMPAIGN" : "SPECIAL EDIT"}
                   </span>
                   <h3 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-white line-clamp-1 drop-shadow-sm">
@@ -578,7 +554,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                     </p>
                   )}
                   <div className="pt-2">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-serif font-bold uppercase tracking-wider text-white group-hover:underline">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-sans font-bold uppercase tracking-wider text-white group-hover:underline">
                       <span>Explore Collection</span>
                       <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
                     </span>
@@ -591,34 +567,19 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       )}
 
       {/* =====================================================
-          4. FEATURED PRODUCTS — theme curated or database
+          4. FEATURED PRODUCTS (New Arrivals / Curated Bestsellers)
           ===================================================== */}
-      <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-4 sm:space-y-6 mt-10 sm:mt-16">
-        <div className="avro-slide-up flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-3">
-          <div>
-            <span
-              className="text-[10px] sm:text-[11px] font-serif font-medium tracking-[0.18em] uppercase block mb-1"
-              style={{ color: themeDef.palette.accent }}
-            >
-              Signature Collection · Handcrafted
-            </span>
-            <h2
-              className={`text-2xl sm:text-3xl font-serif font-medium tracking-tight ${themeDef.typography.headingClass}`}
-              style={{ color: themeDef.palette.text }}
-            >
-              Curated Bestsellers
-            </h2>
-          </div>
-          <Link
-            href="/shop"
-            className="avro-link-underline text-xs font-serif font-medium tracking-[0.12em] uppercase flex items-center gap-1"
-            style={{ color: themeDef.palette.accent }}
-          >
-            View Complete Catalog <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 mt-12 sm:mt-18">
+        <div className="text-center space-y-1">
+          <h2 className="text-2xl sm:text-3xl font-serif font-medium tracking-tight text-[#222222]">
+            New Arrivals
+          </h2>
+          <p className="text-xs text-stone-500 font-sans">
+            Handpicked designer creations fresh from Kerala's master looms.
+          </p>
         </div>
 
-        {/* Product Cards Grid — 2 columns on mobile, 4 on desktop (Live Synced with Admin Featured status) */}
+        {/* Product Cards Grid — 2 columns on mobile, 4 on desktop (Sharp 2:3 Vedhika Cards) */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 avro-stagger-grid">
           {featuredProductsToDisplay.length > 0 ? (
             featuredProductsToDisplay.map((p: any) => (
@@ -633,104 +594,40 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
               return (
                 <div
                   key={p.slug}
-                  className="avro-3d-card avro-slide-up group overflow-hidden shadow-xs flex flex-col border"
-                  style={{
-                    backgroundColor: themeDef.palette.cardBg,
-                    borderColor: themeDef.palette.border,
-                    borderRadius: cardBorderRadius,
-                  }}
+                  className="group overflow-hidden shadow-2xs flex flex-col border border-[#EDEDED] bg-white rounded-none"
                 >
-                  {/* Product image */}
-                  <div className="relative aspect-square overflow-hidden bg-slate-100">
+                  <div className="relative aspect-[2/3] overflow-hidden bg-slate-100">
                     <img
                       src={p.imageUrl}
                       alt={p.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-
-                    {/* Badges */}
-                    <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
+                    <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
                       {p.badge && (
-                        <span
-                          className="px-2 py-0.5 text-[9.5px] font-serif font-medium tracking-[0.14em] uppercase text-white shadow-sm"
-                          style={{
-                            backgroundColor: themeDef.palette.primary,
-                            borderRadius: themeDef.typography.badgeRadius === "rounded-none" ? "0px" : "6px",
-                          }}
-                        >
+                        <span className="px-2 py-0.5 text-[9px] font-sans font-bold tracking-[0.14em] uppercase text-black bg-[#DEB660] rounded-none">
                           {p.badge}
                         </span>
                       )}
-                      {hasDiscount && (
-                        <span className="px-2 py-0.5 text-[9.5px] font-serif font-medium tracking-[0.14em] uppercase bg-[#58111A] text-white shadow-sm"
-                          style={{ borderRadius: "6px" }}>
-                          {discountPct}% OFF
-                        </span>
-                      )}
                     </div>
-
-                    {/* Wishlist placeholder */}
-                    <button
-                      className="absolute top-3 right-3 p-2 rounded-xl bg-white/90 backdrop-blur-sm text-slate-400 hover:text-rose-500 hover:bg-white shadow-sm transition-all opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 duration-200"
-                      title="Save to wishlist"
-                    >
-                      <Heart className="w-4 h-4" />
-                    </button>
                   </div>
-
-                  {/* Info */}
-                  <div className="p-3 sm:p-4 space-y-1.5 sm:space-y-2 flex-grow flex flex-col justify-between">
+                  <div className="p-3 sm:p-4 space-y-1.5 flex-grow flex flex-col justify-between">
                     <div>
-                      <span
-                        className="text-[9.5px] sm:text-[10px] font-serif font-medium tracking-[0.16em] uppercase block mb-0.5 sm:mb-1"
-                        style={{ color: themeDef.palette.textMuted }}
-                      >
+                      <span className="text-[10px] font-sans font-medium tracking-[0.16em] uppercase text-[#888888] block mb-0.5">
                         {p.category}
                       </span>
-                      <h3
-                        className="font-serif font-medium text-xs sm:text-sm line-clamp-2 leading-snug"
-                        style={{ color: themeDef.palette.text }}
-                      >
+                      <h3 className="font-sans font-medium text-xs sm:text-[13px] uppercase tracking-[0.03em] line-clamp-2 text-[#222222]">
                         {p.title}
                       </h3>
-
-                      {/* Star rating */}
-                      <div className="flex items-center gap-1 mt-1">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-2.5 h-2.5 ${i < Math.floor(p.rating) ? "fill-amber-400 text-amber-400" : "text-slate-300"}`}
-                          />
-                        ))}
-                        <span className="text-[10px] ml-0.5 font-sans" style={{ color: textMutedColor }}>{p.rating}</span>
-                      </div>
                     </div>
-
-                    <div className="pt-2 flex items-center justify-between">
-                      <div>
-                        <span
-                          className="text-xs sm:text-sm font-semibold font-sans tracking-tight"
-                          style={{ color: themeDef.palette.text }}
-                        >
-                          ₹{p.price.toLocaleString("en-IN")}
-                        </span>
-                        {hasDiscount && (
-                          <span className="text-[10px] sm:text-[11px] text-slate-400 line-through ml-1.5 font-sans">
-                            ₹{p.compareAtPrice?.toLocaleString("en-IN")}
-                          </span>
-                        )}
-                      </div>
-
+                    <div className="pt-2 flex items-center justify-between border-t border-[#F0F0F0]">
+                      <span className="text-xs sm:text-sm font-semibold text-[#222222] font-sans">
+                        Rs. {p.price.toLocaleString("en-IN")}.00
+                      </span>
                       <Link
-                        href="/shop"
-                        className="avro-btn p-1.5 sm:p-2 rounded-xl transition-all flex items-center justify-center text-white"
-                        style={{
-                          backgroundColor: themeDef.palette.primary,
-                          borderRadius: themeDef.typography.buttonRadius === "rounded-none" ? "0px" : "10px",
-                        }}
-                        title="View product"
+                        href={`/shop?category=${encodeURIComponent(p.category)}`}
+                        className="px-2.5 py-1 text-[11px] font-sans uppercase tracking-wider text-[#222222] hover:text-[#DEB660]"
                       >
-                        <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        Inspect
                       </Link>
                     </div>
                   </div>
@@ -738,6 +635,48 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
               );
             })
           )}
+        </div>
+
+        {/* Centered Sharp Rectangular View More Button (Vedhika Style) */}
+        <div className="text-center pt-4 sm:pt-6">
+          <Link
+            href="/shop"
+            className="inline-block px-10 py-3.5 border border-[#222222] text-[#222222] hover:bg-[#DEB660] hover:border-[#DEB660] hover:text-black rounded-none font-sans font-semibold text-xs uppercase tracking-[0.18em] transition-all duration-300 active:scale-95 shadow-xs"
+          >
+            View More
+          </Link>
+        </div>
+      </section>
+
+      {/* =====================================================
+          MID-PAGE EDITORIAL BANNER — "Style Within Reach" (Vedhika Style)
+          ===================================================== */}
+      <section className="w-full relative overflow-hidden min-h-[380px] sm:min-h-[480px] flex items-center justify-center my-12 sm:my-20">
+        <img
+          src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1600&q=80"
+          alt="Aithrithi Lite Editorial"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-black/45 sm:bg-black/35 pointer-events-none" />
+
+        <div className="relative z-10 max-w-3xl mx-auto px-4 text-center text-white space-y-3 sm:space-y-4">
+          <span className="text-[10px] sm:text-xs font-serif font-bold uppercase tracking-[0.24em] text-[#DEB660]">
+            AITHRITHI LITE · BESPOKE BOUTIQUE
+          </span>
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-serif font-bold tracking-tight text-white drop-shadow-md">
+            Style Within Reach
+          </h2>
+          <p className="text-xs sm:text-sm md:text-base text-slate-100 max-w-lg mx-auto font-sans leading-relaxed drop-shadow-sm">
+            Lightweight artisanal sarees, festive designer kurtas, and breezy everyday luxury handcrafted for modern royalty.
+          </p>
+          <div className="pt-2">
+            <Link
+              href="/shop"
+              className="inline-block px-8 py-3.5 bg-white text-[#222222] hover:bg-[#DEB660] hover:text-black font-sans font-bold text-xs uppercase tracking-[0.16em] transition-all rounded-none shadow-xl"
+            >
+              Shop Now
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -767,6 +706,32 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           </div>
         </section>
       )}
+
+      {/* =====================================================
+          5.5 FEATURED IN / PRESS RECOGNITION (Vedhika Style)
+          ===================================================== */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 sm:mt-18 pt-10 border-t border-[#EDEDED]">
+        <h2 className="text-xl sm:text-2xl font-serif font-medium text-center text-[#222222] tracking-tight mb-8">
+          Featured In
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 items-center justify-center gap-4 sm:gap-6 opacity-85">
+          <div className="flex items-center justify-center p-3 sm:p-4 font-serif font-bold text-slate-800 text-sm sm:text-base tracking-wider border border-slate-200/80 bg-white shadow-2xs">
+            THE HINDU
+          </div>
+          <div className="flex items-center justify-center p-3 sm:p-4 font-serif font-bold text-slate-800 text-xs sm:text-sm tracking-widest border border-slate-200/80 bg-white shadow-2xs text-center">
+            THE NEW INDIAN EXPRESS
+          </div>
+          <div className="flex items-center justify-center p-3 sm:p-4 font-sans font-black text-slate-800 text-xs sm:text-sm tracking-tight border border-slate-200/80 bg-white shadow-2xs">
+            ET RETAIL.COM
+          </div>
+          <div className="flex items-center justify-center p-3 sm:p-4 font-serif font-bold text-slate-800 text-sm sm:text-base tracking-wider border border-slate-200/80 bg-white shadow-2xs">
+            VANITHA
+          </div>
+          <div className="flex items-center justify-center p-3 sm:p-4 font-sans font-black text-slate-800 text-xs sm:text-sm tracking-widest border border-slate-200/80 bg-white shadow-2xs">
+            PELIKKEN
+          </div>
+        </div>
+      </section>
 
       {/* =====================================================
           6. CALLOUT BANNER — full-width CTA strip

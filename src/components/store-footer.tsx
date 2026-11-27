@@ -92,14 +92,14 @@ export default function StoreFooter({ theme }: { theme?: any }) {
 
   return (
     <footer
-      className="border-t pt-14 pb-10 transition-colors duration-300 font-sans"
+      className="border-t pt-14 transition-colors duration-300 font-sans"
       style={{
         backgroundColor: matchingThemeDef.palette.footerBg,
         borderColor: matchingThemeDef.palette.border,
         color: isDarkFooter ? "#CBD5E1" : "#475569",
       }}
     >
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
         {/* 1. Industry Trust Badges Strip — Ultra Minimal & Refined */}
         {showTrustBadges && trustBadges.length > 0 && (
           <div
@@ -448,22 +448,17 @@ export default function StoreFooter({ theme }: { theme?: any }) {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Bottom Copyright & Powered by AVRO Only */}
-        <div
-          className="pt-6 border-t flex flex-col sm:flex-row items-center justify-between text-xs gap-4"
-          style={{
-            borderColor: isDarkFooter ? "rgba(255,255,255,0.1)" : "#F1F5F9",
-            color: isDarkFooter ? "#94A3B8" : "#94A3B8",
-          }}
-        >
-          <p>© {currentYear} {brandName}. All rights reserved.</p>
-
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-slate-400">
-              Powered by <strong className="font-extrabold text-blue-600 tracking-wider">AVRO</strong>
-            </span>
-          </div>
+      {/* Vedhika Signature Rich Antique Gold Copyright Bar (Full Width) */}
+      <div className="w-full bg-[#C4962E] text-white py-3.5 px-4 text-center mt-10">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-sans">
+          <p className="tracking-wide">
+            Copyright © {currentYear} {brandName}. All rights reserved.
+          </p>
+          <p className="text-[11px] opacity-90">
+            Powered by <strong className="font-bold tracking-wider">AVRO Commerce</strong>
+          </p>
         </div>
       </div>
     </footer>
