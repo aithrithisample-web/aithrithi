@@ -104,7 +104,6 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
     id: ad.id,
     mediaType: "image",
     mediaUrl: ad.imageUrl,
-    badge: ad.position === "HERO_BANNER" ? "SPECIAL CAMPAIGN" : "PROMOTIONAL",
     title: ad.title,
     subtitle: ad.description,
     ctaText: "Shop Collection",

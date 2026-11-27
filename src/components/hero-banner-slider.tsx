@@ -202,12 +202,6 @@ export function HeroBannerSlider({
 
       {/* Floating Centered Content Over Background (Vedhika Style) */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 sm:px-8 py-14 sm:py-20 text-center flex flex-col items-center justify-center w-full space-y-3.5">
-        {currentSlide?.badge && (
-          <span className="text-[10px] sm:text-xs font-sans font-bold uppercase tracking-[0.2em] text-[#DEB660]">
-            {currentSlide.badge}
-          </span>
-        )}
-
         <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-sans font-medium text-white tracking-tight leading-snug drop-shadow-md max-w-2xl">
           {currentSlide?.title || fallbackTitle || "Celebrate all day, every day."}
         </h1>

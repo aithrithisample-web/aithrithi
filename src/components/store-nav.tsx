@@ -225,9 +225,6 @@ export function StoreNav({ theme }: { theme?: any }) {
                   (e.target as HTMLImageElement).src = "/aithrithi-nav-logo-maroon.png";
                 }}
               />
-              <span className="block text-[7.5px] sm:text-[9px] uppercase tracking-[0.2em] font-serif text-[#888888] mt-0.5 font-medium text-center">
-                The First Designer Fashion Store from Kerala
-              </span>
             </Link>
           </div>
 
