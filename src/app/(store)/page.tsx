@@ -79,6 +79,44 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
 
   const heroSlides: HeroBannerSlide[] = Array.isArray(customOverrides.heroSlides) ? customOverrides.heroSlides : [];
 
+  // Active Ad Banners from Admin Panel (eynretail-style dynamic ads)
+  let activeAds: any[] = [];
+  try {
+    const adsSetting = await prisma.storeSetting.findUnique({
+      where: { key: "ads_banners_json" },
+    });
+    if (adsSetting?.value) {
+      const parsedAds = JSON.parse(adsSetting.value);
+      if (Array.isArray(parsedAds)) {
+        activeAds = parsedAds.filter((ad: any) => ad.isActive !== false);
+      }
+    }
+  } catch (e) {}
+
+  // Filter hero-specific ads and mid-page promotional ads
+  const heroAds = activeAds.filter((ad: any) => ad.position === "HERO_BANNER" || !ad.position);
+  const promoAds = activeAds.filter((ad: any) => ad.position === "PROMO_MIDDLE" || ad.position === "FOOTER_SPOTLIGHT");
+
+  // Map active ads to HeroBannerSlide format
+  const mappedAdSlides: HeroBannerSlide[] = (heroAds.length > 0 ? heroAds : activeAds).map((ad: any) => ({
+    id: ad.id,
+    mediaType: "image",
+    mediaUrl: ad.imageUrl,
+    badge: ad.position === "HERO_BANNER" ? "SPECIAL CAMPAIGN" : "PROMOTIONAL",
+    title: ad.title,
+    subtitle: ad.description,
+    ctaText: "Shop Collection",
+    ctaLink: ad.link || "/shop",
+  }));
+
+  // Dynamic slides prioritize active admin ads, falling back to theme overrides
+  const effectiveHeroSlides: HeroBannerSlide[] =
+    mappedAdSlides.length > 0
+      ? mappedAdSlides
+      : heroSlides.length > 0
+      ? heroSlides
+      : [];
+
   const primaryColor = !themeParam && dbTheme?.primaryColor ? dbTheme.primaryColor : themeDef.palette.primary;
   const accentColor = !themeParam && dbTheme?.accentColor ? dbTheme.accentColor : themeDef.palette.accent;
   const backgroundColor = !themeParam && customOverrides.backgroundColor ? customOverrides.backgroundColor : themeDef.palette.background;
@@ -227,31 +265,29 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       style={{ backgroundColor: backgroundColor, color: textColor }}
     >
       {/* =====================================================
-          1. HERO SECTION — Cinematic Full Banner for Aithrithi / Split for others
+          1. HERO SECTION — Full Background Hero Ad Banner (Frame-Free & Mobile-Friendly)
           ===================================================== */}
       {themeDef.code === "AITHRITHI_MAROON" ? (
         <section
-          className="relative overflow-hidden pt-3 sm:pt-4 pb-5 sm:pb-7 border-b border-black/5 transition-colors duration-300"
+          className="relative w-full overflow-hidden border-b border-black/5 transition-colors duration-300"
           style={{ backgroundColor: backgroundColor }}
         >
-          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
-            {/* Full-width Cinematic Hero Banner with 3D Depth Frame */}
-            <div className="relative group overflow-hidden rounded-xl sm:rounded-3xl shadow-[0_20px_50px_-12px_rgba(88,17,26,0.22)] border border-[#C5A880]/30 ring-1 ring-[#C5A880]/20 bg-[#58111A] avro-3d-hero-frame">
-              <HeroBannerSlider
-                slides={heroSlides}
-                fallbackImage={heroImage || "/aithrithi-hero.jpg"}
-                fallbackTitle={themeDef.name}
-                fallbackTagline={themeDef.tagline}
-                themeDef={themeDef}
-                isDarkHero={isDarkHero}
-                primaryColor={primaryColor}
-                accentColor={accentColor}
-                buttonRadius={buttonRadius}
-              />
-            </div>
+          {/* Full-bleed Background Hero Slider without bulky frames or borders */}
+          <HeroBannerSlider
+            slides={effectiveHeroSlides}
+            fallbackImage={activeAds[0]?.imageUrl || heroImage || "/aithrithi-hero.jpg"}
+            fallbackTitle={themeDef.name}
+            fallbackTagline={themeDef.tagline}
+            themeDef={themeDef}
+            isDarkHero={isDarkHero}
+            primaryColor={primaryColor}
+            accentColor={accentColor}
+            buttonRadius={buttonRadius}
+          />
 
-            {/* Quick Category Chips — Refined Editorial 3D Strip (Live Synced with Admin Categories) */}
-            <div className="mt-3.5 sm:mt-6 flex items-center sm:justify-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar py-1 px-0.5 touch-pan-x">
+          {/* Quick Category Chips — Fluid Mobile-Friendly Strip */}
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-5">
+            <div className="flex items-center sm:justify-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar py-1 px-0.5 touch-pan-x">
               {heroQuickChips.map((item) => (
                 <Link
                   key={item.label}
@@ -509,6 +545,50 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           ))}
         </div>
       </section>
+
+      {/* =====================================================
+          3.5 DYNAMIC PROMOTIONAL ADS — Live Synced from Admin Panel (/admin/ads)
+          ===================================================== */}
+      {activeAds.length > 0 && (
+        <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-10 sm:mt-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            {(promoAds.length > 0 ? promoAds : activeAds.slice(0, 2)).map((ad: any) => (
+              <Link
+                key={ad.id}
+                href={ad.link || "/shop"}
+                className="group relative overflow-hidden rounded-2xl sm:rounded-3xl min-h-[220px] sm:min-h-[280px] flex items-end p-6 sm:p-8 border border-black/5 shadow-md transition-all duration-300 hover:shadow-xl active:scale-[0.99]"
+              >
+                <img
+                  src={ad.imageUrl}
+                  alt={ad.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10 group-hover:from-black/90 transition-all duration-300" />
+
+                <div className="relative z-10 space-y-1.5 sm:space-y-2 text-white max-w-md">
+                  <span className="px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-serif font-bold uppercase tracking-[0.16em] bg-white/20 text-[#FAF7F5] backdrop-blur-sm border border-white/20 inline-block">
+                    {ad.position === "HERO_BANNER" ? "FEATURED CAMPAIGN" : "SPECIAL EDIT"}
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-white line-clamp-1 drop-shadow-sm">
+                    {ad.title}
+                  </h3>
+                  {ad.description && (
+                    <p className="text-xs text-slate-200 line-clamp-2 leading-relaxed font-sans font-normal drop-shadow-sm">
+                      {ad.description}
+                    </p>
+                  )}
+                  <div className="pt-2">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-serif font-bold uppercase tracking-wider text-white group-hover:underline">
+                      <span>Explore Collection</span>
+                      <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* =====================================================
           4. FEATURED PRODUCTS — theme curated or database

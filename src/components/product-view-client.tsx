@@ -54,8 +54,10 @@ export function ProductViewClient({
   const currentStock = selectedVariant
     ? selectedVariant.stockQuantity
     : product.stockQuantity;
+  const isOutOfStock = Number(currentStock ?? 0) <= 0;
 
   const handleAddToCart = () => {
+    if (isOutOfStock) return;
     addToCart(
       {
         id: selectedVariant ? selectedVariant.id : product.id,
@@ -75,6 +77,7 @@ export function ProductViewClient({
   };
 
   const handleBuyNow = () => {
+    if (isOutOfStock) return;
     handleAddToCart();
     router.push("/checkout");
   };
@@ -303,20 +306,23 @@ export function ProductViewClient({
 
         {/* Stock status */}
         <div className="text-xs">
-          {currentStock > 0 ? (
+          {!isOutOfStock ? (
             <span className="text-emerald-700 font-bold flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               In Stock ({currentStock} available for instant dispatch)
             </span>
           ) : (
-            <span className="text-rose-600 font-bold">Currently Out of Stock</span>
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-serif font-bold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200">
+              <span className="w-2 h-2 rounded-full bg-rose-600" />
+              Currently Out of Stock
+            </span>
           )}
         </div>
 
         {/* Quantity and Actions */}
         <div className="space-y-3 pt-2">
           <div className="flex items-center gap-3">
-            <div className="flex items-center border border-slate-300 rounded-xl bg-white overflow-hidden">
+            <div className={`flex items-center border border-slate-300 rounded-xl bg-white overflow-hidden ${isOutOfStock ? "opacity-40 pointer-events-none" : ""}`}>
               <button
                 type="button"
                 onClick={() => setQty(Math.max(1, qty - 1))}
@@ -338,15 +344,27 @@ export function ProductViewClient({
 
             <button
               type="button"
+              disabled={isOutOfStock}
               onClick={handleAddToCart}
               className={`flex-1 py-3 px-6 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md ${
-                added
+                isOutOfStock
+                  ? "bg-slate-200 text-slate-400 cursor-not-allowed border border-slate-300"
+                  : added
                   ? "bg-emerald-600 text-white"
-                  : "bg-[#0A192F] hover:bg-[#1E293B] text-white"
+                  : "bg-[#0A192F] hover:bg-[#1E293B] text-white cursor-pointer"
               }`}
             >
-              {added ? <Check className="w-4 h-4" /> : <ShoppingBag className="w-4 h-4" />}
-              {added ? "Added to Cart" : "Add to Cart"}
+              {isOutOfStock ? (
+                <span>Out of Stock</span>
+              ) : added ? (
+                <>
+                  <Check className="w-4 h-4" /> Added to Cart
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="w-4 h-4" /> Add to Cart
+                </>
+              )}
             </button>
 
             <button
@@ -365,10 +383,15 @@ export function ProductViewClient({
 
           <button
             type="button"
+            disabled={isOutOfStock}
             onClick={handleBuyNow}
-            className="w-full py-3 rounded-xl bg-[var(--color-primary,#58111A)] hover:opacity-90 text-white font-serif font-bold text-xs uppercase tracking-widest transition-all shadow-md active:scale-98"
+            className={`w-full py-3 rounded-xl font-serif font-bold text-xs uppercase tracking-widest transition-all shadow-md ${
+              isOutOfStock
+                ? "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed"
+                : "bg-[var(--color-primary,#58111A)] hover:opacity-90 text-white active:scale-98 cursor-pointer"
+            }`}
           >
-            Buy Now with 1-Click
+            {isOutOfStock ? "Product Currently Unavailable" : "Buy Now with 1-Click"}
           </button>
         </div>
 

@@ -314,7 +314,6 @@ export default function StoreAdminLayout({
       items: [
         { label: "Media Library", href: "/admin/media", icon: UploadCloud },
         { label: "Navigation Menus", href: "/admin/content/menus", icon: MenuIcon },
-        { label: "Blog Posts", href: "/admin/content/blog", icon: BookOpen },
         { label: "Metaobjects", href: "/admin/content/metaobjects", icon: Database },
         { label: "Themes & Editor", href: "/admin/themes", icon: Palette, featureKey: "themeCustomization" },
         { label: "Pages & Preferences", href: "/admin/pages", icon: FileText, featureKey: "customPages" },
