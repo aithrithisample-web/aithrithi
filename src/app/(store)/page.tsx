@@ -368,13 +368,13 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           </p>
         </div>
 
-        {/* 5-Column Grid with Inset Double Frame (Vedhika Style) */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5 sm:gap-5 pt-2">
+        {/* 5-Column Grid with Inset Double Frame (Fluid Mobile Swipe Carousel + Desktop 5-Col Grid) */}
+        <div className="flex overflow-x-auto no-scrollbar gap-3 pb-2 px-1 snap-x touch-pan-x sm:grid sm:grid-cols-5 sm:gap-5 pt-2">
           {categoriesToDisplay.slice(0, 5).map((category) => (
             <Link
               key={category.slug}
               href={`/shop?category=${encodeURIComponent(category.slug)}`}
-              className="group flex flex-col items-center"
+              className="group flex flex-col items-center w-[130px] sm:w-full flex-shrink-0 snap-center"
             >
               <div className="w-full aspect-square border border-[#DCDCDC] rounded-2xl p-1.5 sm:p-2 bg-white shadow-2xs group-hover:border-[#DEB660] group-hover:shadow-md transition-all duration-300 flex items-center justify-center overflow-hidden">
                 <img
@@ -383,7 +383,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
                   className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <span className="mt-2.5 text-sm sm:text-base font-sans font-medium text-[#222222] group-hover:text-[#DEB660] transition-colors text-center truncate w-full">
+              <span className="mt-2.5 text-xs sm:text-base font-sans font-medium text-[#222222] group-hover:text-[#DEB660] transition-colors text-center truncate w-full">
                 {category.name}
               </span>
             </Link>
@@ -533,7 +533,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5">
+        <div className="flex overflow-x-auto no-scrollbar snap-x snap-mandatory gap-3 pb-3 sm:grid sm:grid-cols-2 md:grid-cols-4 sm:gap-5">
           {[
             {
               title: "Tussar Drape in Motion",
@@ -563,7 +563,7 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
             <Link
               key={i}
               href={story.link}
-              className="group relative aspect-[9/16] overflow-hidden rounded-none bg-slate-900 shadow-xs border border-[#EDEDED] flex flex-col justify-end p-3.5 sm:p-4 text-white"
+              className="group relative aspect-[9/16] w-[200px] sm:w-auto shrink-0 snap-start overflow-hidden rounded-none bg-slate-900 shadow-xs border border-[#EDEDED] flex flex-col justify-end p-3.5 sm:p-4 text-white"
             >
               <img
                 src={story.image}

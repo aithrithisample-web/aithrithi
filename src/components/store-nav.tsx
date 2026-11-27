@@ -16,6 +16,8 @@ import {
   Compass,
   Search,
   Truck,
+  MessageCircle,
+  Instagram,
 } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 import { useWishlist } from "@/context/wishlist-context";
@@ -45,6 +47,15 @@ export function StoreNav({ theme }: { theme?: any }) {
 
   const previewParam = searchParams?.get("theme") || searchParams?.get("previewTheme");
   const matchingThemeDef = resolveStoreTheme(previewParam || theme?.activeTheme, theme);
+
+  let customOverrides: any = {};
+  try {
+    if (theme?.socialLinksJson) {
+      customOverrides = typeof theme.socialLinksJson === "string" ? JSON.parse(theme.socialLinksJson) : theme.socialLinksJson;
+    }
+  } catch {
+    customOverrides = {};
+  }
 
   // Preserve store brand name without overriding on theme switch
   const brandName = theme?.brandName || "AVRO Store";
@@ -340,151 +351,156 @@ export function StoreNav({ theme }: { theme?: any }) {
           </nav>
         </div>
 
-        {/* Mobile Slide-Down Sheet Navigation */}
+        {/* Luxury Mobile Off-Canvas Drawer Navigation (Vedhika Shopify Style) */}
         {mobileMenuOpen && (
-          <div
-            className="md:hidden border-t transition-all duration-300 p-4 space-y-4 animate-in slide-in-from-top-2 shadow-2xl"
-            style={{
-              backgroundColor: isDarkNav ? "#0F172A" : "#FFFFFF",
-              borderColor: isDarkNav ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.06)",
-              color: isDarkNav ? "#F1F5F9" : "#0F172A",
-            }}
-          >
-            {/* Quick Search Jump for Mobile */}
-            <Link
-              href="/shop"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2.5 p-2.5 rounded-xl border text-xs font-medium transition"
-              style={{
-                backgroundColor: isDarkNav ? "rgba(255,255,255,0.06)" : "#F8FAFC",
-                borderColor: isDarkNav ? "rgba(255,255,255,0.12)" : "#E2E8F0",
-                color: isDarkNav ? "#CBD5E1" : "#64748B",
-              }}
-            >
-              <Compass className="w-4 h-4 opacity-60" />
-              <span className="text-[12px]">Explore all collections & products...</span>
-            </Link>
-
-            {/* Navigation Links for Mobile */}
-            <div className="space-y-1 text-sm font-semibold divide-y divide-black/5 dark:divide-white/5">
-              <Link
-                href="/"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center justify-between min-h-[44px] py-2 px-2 rounded-lg transition-colors ${
-                  pathname === "/" ? "font-bold text-blue-600" : "opacity-85 hover:opacity-100"
-                }`}
-                style={pathname === "/" ? { color: matchingThemeDef.palette.accent } : {}}
-              >
-                <span>Home</span>
-                {pathname === "/" && <span className="w-1.5 h-1.5 rounded-full bg-current" />}
-              </Link>
-
-              <Link
-                href="/shop"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center justify-between min-h-[44px] py-2 px-2 rounded-lg transition-colors ${
-                  pathname === "/shop" ? "font-bold" : "opacity-85 hover:opacity-100"
-                }`}
-                style={pathname === "/shop" ? { color: matchingThemeDef.palette.accent } : {}}
-              >
-                <span>Shop All Collections</span>
-                {pathname === "/shop" && <span className="w-1.5 h-1.5 rounded-full bg-current" />}
-              </Link>
-
-              <Link
-                href="/wishlist"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-between min-h-[44px] py-2 px-2 rounded-lg opacity-85 hover:opacity-100 transition-colors"
-              >
-                <div className="flex items-center gap-2">
-                  <Heart className={`w-4 h-4 ${wishlistCount > 0 ? "fill-rose-500 text-rose-500" : ""}`} />
-                  <span>My Wishlist</span>
-                </div>
-                {wishlistCount > 0 && (
-                  <span className="px-2 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-bold">
-                    {wishlistCount}
-                  </span>
-                )}
-              </Link>
-
-              <Link
-                href="/track"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center justify-between min-h-[44px] py-2 px-2 rounded-lg transition-colors ${
-                  pathname === "/track" ? "font-bold" : "opacity-85 hover:opacity-100"
-                }`}
-                style={pathname === "/track" ? { color: matchingThemeDef.palette.accent } : {}}
-              >
-                <span>Track Orders</span>
-              </Link>
-
-              <Link
-                href="/about"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center justify-between min-h-[44px] py-2 px-2 rounded-lg transition-colors ${
-                  pathname === "/about" ? "font-bold" : "opacity-85 hover:opacity-100"
-                }`}
-                style={pathname === "/about" ? { color: matchingThemeDef.palette.accent } : {}}
-              >
-                <span>About Store</span>
-              </Link>
-            </div>
-
-            {/* Mobile Auth Bottom Section */}
+          <div className="fixed inset-0 z-50 md:hidden">
+            {/* Backdrop Overlay */}
             <div
-              className="pt-3 border-t space-y-2.5"
-              style={{ borderColor: isDarkNav ? "rgba(255,255,255,0.08)" : "#E2E8F0" }}
-            >
-              {customer ? (
-                <div
-                  className="p-3 rounded-2xl border space-y-2"
-                  style={{
-                    backgroundColor: isDarkNav ? "rgba(255,255,255,0.04)" : "#F8FAFC",
-                    borderColor: isDarkNav ? "rgba(255,255,255,0.08)" : "#E2E8F0",
-                  }}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="min-w-0">
-                      <p className="font-bold text-xs truncate">{customer.name}</p>
-                      <p className="text-[10px] opacity-60 font-mono truncate">{customer.email}</p>
-                    </div>
-                    <button
-                      onClick={handleLogout}
-                      className="text-xs text-rose-500 font-semibold hover:underline ml-2"
-                    >
-                      Sign Out
-                    </button>
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-300"
+              aria-hidden="true"
+            />
+
+            {/* Off-Canvas Slide Drawer from Left */}
+            <div className="fixed top-0 left-0 bottom-0 w-[85vw] max-w-[320px] bg-white text-[#222222] shadow-2xl z-50 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-left duration-300 font-sans">
+              {/* Drawer Top Header */}
+              <div>
+                <div className="p-4 border-b border-[#F0F0F0] flex items-center justify-between bg-[#FAF7F5]">
+                  <div className="flex flex-col">
+                    <span className="font-extrabold text-sm tracking-tight text-[#222222]">
+                      {brandName || "Aithrithi.in"}
+                    </span>
+                    <span className="text-[8.5px] uppercase tracking-[0.2em] font-serif text-[#C5A880]">
+                      Kerala's Designer Couture
+                    </span>
                   </div>
-                  {!customer.isGuest && (
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-8 h-8 rounded-full bg-white border border-[#E5E5E5] flex items-center justify-center text-[#222222] hover:bg-[#DEB660] hover:text-black transition-colors"
+                    aria-label="Close menu"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* Search Bar in Mobile Menu */}
+                <div className="p-3.5 border-b border-[#F0F0F0]">
+                  <Link
+                    href="/shop"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-none border border-[#EDEDED] bg-[#F9F9F9] text-xs text-slate-500 hover:border-[#DEB660] transition-colors"
+                  >
+                    <Search className="w-3.5 h-3.5 text-slate-400" />
+                    <span className="text-[11px] font-sans">Search sarees, kurtis, silks...</span>
+                  </Link>
+                </div>
+
+                {/* Primary Boutique Navigation Menu */}
+                <div className="py-2 px-3 space-y-0.5 text-xs font-semibold uppercase tracking-[0.12em] font-sans">
+                  {[
+                    { label: "Home", href: "/", badge: null },
+                    { label: "Sarees", href: "/shop?category=sarees", badge: "Silks" },
+                    { label: "Kurtis", href: "/shop?category=kurtis", badge: "Festive" },
+                    { label: "Aithrithi Lite", href: "/shop?category=aithrithi-lite", badge: "Luxe" },
+                    { label: "Kanjivaram", href: "/shop?category=kanjivaram", badge: "Bridal" },
+                    { label: "Collections", href: "/shop", badge: null },
+                    { label: "About Us", href: "/about", badge: null },
+                    { label: "Stores & Contact", href: "/contact", badge: null },
+                  ].map((item) => (
                     <Link
-                      href="/account"
+                      key={item.label}
+                      href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block text-center py-2.5 rounded-xl text-xs font-bold text-white shadow-xs"
-                      style={{ backgroundColor: matchingThemeDef.palette.accent }}
+                      className={`flex items-center justify-between py-2.5 px-3 rounded-none transition-colors border-b border-[#F7F7F7] ${
+                        pathname === item.href
+                          ? "text-[#DEB660] font-bold bg-[#FAF7F5]"
+                          : "text-[#222222] hover:text-[#DEB660] hover:bg-[#FAF7F5]"
+                      }`}
                     >
-                      Manage Orders & Profile
+                      <span>{item.label}</span>
+                      {item.badge && (
+                        <span className="text-[8.5px] font-bold px-1.5 py-0.2 bg-[#DEB660]/20 text-[#222222] rounded-none">
+                          {item.badge}
+                        </span>
+                      )}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Drawer Bottom Section: Account, Tracking, Social */}
+              <div className="p-4 border-t border-[#F0F0F0] bg-[#FAF7F5] space-y-3">
+                <div className="space-y-1 text-xs">
+                  <Link
+                    href="/track"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2 py-1.5 text-slate-700 hover:text-[#DEB660] transition-colors"
+                  >
+                    <Truck className="w-3.5 h-3.5 text-[#DEB660]" />
+                    <span>Track My Order</span>
+                  </Link>
+                  <Link
+                    href="/wishlist"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-between py-1.5 text-slate-700 hover:text-[#DEB660] transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Heart className="w-3.5 h-3.5 text-rose-500" />
+                      <span>Saved Wishlist</span>
+                    </div>
+                    {wishlistCount > 0 && (
+                      <span className="px-1.5 py-0.2 text-[9px] font-bold bg-rose-500 text-white rounded-full">
+                        {wishlistCount}
+                      </span>
+                    )}
+                  </Link>
+                </div>
+
+                {/* Direct WhatsApp & Instagram Buttons in Drawer */}
+                <div className="grid grid-cols-2 gap-2 pt-1">
+                  <a
+                    href={`https://wa.me/${(customOverrides.whatsappNumber || theme?.supportPhone || "+919496590984").replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hello Aithrithi! I would like to inquire about your collections.")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-2 rounded-none bg-[#25D366] text-white font-sans font-bold text-[10px] uppercase tracking-wider flex items-center justify-center gap-1 shadow-xs"
+                  >
+                    <MessageCircle className="w-3 h-3" />
+                    <span>WhatsApp</span>
+                  </a>
+                  <a
+                    href={customOverrides.instagramUrl || "https://instagram.com/aithrithi.in"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-2 rounded-none bg-gradient-to-r from-rose-600 to-purple-600 text-white font-sans font-bold text-[10px] uppercase tracking-wider flex items-center justify-center gap-1 shadow-xs"
+                  >
+                    <Instagram className="w-3 h-3" />
+                    <span>Instagram</span>
+                  </a>
+                </div>
+
+                {/* Sign In / Account status */}
+                <div className="pt-2 border-t border-[#E5E5E5]">
+                  {customer ? (
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-semibold text-slate-800 truncate">{customer.name}</span>
+                      <button
+                        onClick={handleLogout}
+                        className="text-[11px] font-bold text-rose-600 hover:underline"
+                      >
+                        Sign Out
+                      </button>
+                    </div>
+                  ) : (
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block text-center py-2 bg-[#222222] text-white font-sans font-bold text-[11px] uppercase tracking-wider rounded-none hover:bg-[#DEB660] hover:text-black transition-colors"
+                    >
+                      Sign In / Register
                     </Link>
                   )}
                 </div>
-              ) : (
-                <div className="grid grid-cols-2 gap-2">
-                  <Link
-                    href="/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-center py-2.5 px-3 text-white rounded-xl text-xs font-bold shadow-xs transition"
-                    style={{ backgroundColor: matchingThemeDef.palette.primary }}
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/login?tab=register"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-center py-2.5 px-3 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold transition"
-                  >
-                    Register
-                  </Link>
-                </div>
-              )}
+              </div>
             </div>
           </div>
         )}
@@ -506,15 +522,14 @@ export function StoreNav({ theme }: { theme?: any }) {
             href="/"
             className={`flex flex-col items-center justify-center min-w-[56px] py-1 transition-colors ${
               pathname === "/"
-                ? "text-blue-600 font-bold"
+                ? "text-[#DEB660] font-bold"
                 : isDarkNav
                 ? "text-slate-400 hover:text-white"
-                : "text-slate-500 hover:text-slate-900"
+                : "text-slate-600 hover:text-black"
             }`}
-            style={pathname === "/" ? { color: matchingThemeDef.palette.accent } : {}}
           >
             <Home className="w-4.5 h-4.5" />
-            <span className="text-[10px] mt-0.5">Home</span>
+            <span className="text-[10px] mt-0.5 font-sans">Home</span>
           </Link>
 
           {/* Shop */}
@@ -522,15 +537,14 @@ export function StoreNav({ theme }: { theme?: any }) {
             href="/shop"
             className={`flex flex-col items-center justify-center min-w-[56px] py-1 transition-colors ${
               pathname === "/shop"
-                ? "text-blue-600 font-bold"
+                ? "text-[#DEB660] font-bold"
                 : isDarkNav
                 ? "text-slate-400 hover:text-white"
-                : "text-slate-500 hover:text-slate-900"
+                : "text-slate-600 hover:text-black"
             }`}
-            style={pathname === "/shop" ? { color: matchingThemeDef.palette.accent } : {}}
           >
             <Compass className="w-4.5 h-4.5" />
-            <span className="text-[10px] mt-0.5">Shop</span>
+            <span className="text-[10px] mt-0.5 font-sans">Collections</span>
           </Link>
 
           {/* Wishlist */}
@@ -541,7 +555,7 @@ export function StoreNav({ theme }: { theme?: any }) {
                 ? "text-rose-600 font-bold"
                 : isDarkNav
                 ? "text-slate-400 hover:text-white"
-                : "text-slate-500 hover:text-slate-900"
+                : "text-slate-600 hover:text-black"
             }`}
           >
             <div className="relative">
@@ -552,7 +566,7 @@ export function StoreNav({ theme }: { theme?: any }) {
                 </span>
               )}
             </div>
-            <span className="text-[10px] mt-0.5">Wishlist</span>
+            <span className="text-[10px] mt-0.5 font-sans">Wishlist</span>
           </Link>
 
           {/* Cart */}
@@ -560,25 +574,21 @@ export function StoreNav({ theme }: { theme?: any }) {
             href="/cart"
             className={`relative flex flex-col items-center justify-center min-w-[56px] py-1 transition-colors ${
               pathname === "/cart"
-                ? "text-blue-600 font-bold"
+                ? "text-[#DEB660] font-bold"
                 : isDarkNav
                 ? "text-slate-400 hover:text-white"
-                : "text-slate-500 hover:text-slate-900"
+                : "text-slate-600 hover:text-black"
             }`}
-            style={pathname === "/cart" ? { color: matchingThemeDef.palette.accent } : {}}
           >
             <div className="relative">
               <ShoppingBag className="w-4.5 h-4.5" />
               {itemCount > 0 && (
-                <span
-                  className="absolute -top-1 -right-2 min-w-[14px] h-3.5 px-0.5 rounded-full text-white text-[8px] font-bold flex items-center justify-center"
-                  style={{ backgroundColor: matchingThemeDef.palette.accent }}
-                >
+                <span className="absolute -top-1 -right-2 min-w-[14px] h-3.5 px-0.5 rounded-full bg-black text-white text-[8px] font-bold flex items-center justify-center shadow-xs">
                   {itemCount}
                 </span>
               )}
             </div>
-            <span className="text-[10px] mt-0.5">Cart</span>
+            <span className="text-[10px] mt-0.5 font-sans">Cart</span>
           </Link>
 
           {/* Account */}
@@ -586,19 +596,14 @@ export function StoreNav({ theme }: { theme?: any }) {
             href={customer ? (customer.isGuest ? "/login" : "/account") : "/login"}
             className={`flex flex-col items-center justify-center min-w-[56px] py-1 transition-colors ${
               pathname.startsWith("/account") || pathname.startsWith("/login")
-                ? "text-blue-600 font-bold"
+                ? "text-[#DEB660] font-bold"
                 : isDarkNav
                 ? "text-slate-400 hover:text-white"
-                : "text-slate-500 hover:text-slate-900"
+                : "text-slate-600 hover:text-black"
             }`}
-            style={
-              pathname.startsWith("/account") || pathname.startsWith("/login")
-                ? { color: matchingThemeDef.palette.accent }
-                : {}
-            }
           >
             <User className="w-4.5 h-4.5" />
-            <span className="text-[10px] mt-0.5">{customer ? (customer.isGuest ? "Guest" : "Account") : "Sign In"}</span>
+            <span className="text-[10px] mt-0.5 font-sans">{customer ? (customer.isGuest ? "Guest" : "Account") : "Sign In"}</span>
           </Link>
         </div>
       </nav>
