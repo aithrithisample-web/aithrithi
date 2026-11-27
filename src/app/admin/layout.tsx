@@ -54,6 +54,8 @@ import {
   Package,
   Star,
   Sparkles,
+  MapPin,
+  Image as ImageIcon,
 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { FeatureKey, PlanTier } from "@/lib/license-core";
@@ -292,12 +294,14 @@ export default function StoreAdminLayout({
         { label: "Product Reviews", href: "/admin/reviews", icon: Star, featureKey: "productReviews" },
         { label: "Combo Deals & Bundles", href: "/admin/combos", icon: PackagePlus },
         { label: "Categories", href: "/admin/categories", icon: Package },
+        { label: "HSN Codes & GST", href: "/admin/hsn-codes", icon: Receipt },
       ],
     },
     {
       group: "Marketing & Customers",
       items: [
         { label: "Discounts & Coupons", href: "/admin/coupons", icon: Tag },
+        { label: "Ads & Banners", href: "/admin/ads", icon: ImageIcon },
         { label: "Customers", href: "/admin/customers", icon: Users },
         { label: "Customer Segments", href: "/admin/customers/segments", icon: UserCheck },
         { label: "B2B Companies", href: "/admin/customers/companies", icon: Building2, featureKey: "b2bCommerce" },
@@ -337,6 +341,7 @@ export default function StoreAdminLayout({
         { label: "Payment Gateways", href: "/admin/settings/payments", icon: CreditCard },
         { label: "Checkout & Accounts", href: "/admin/settings/checkout", icon: UserCheck },
         { label: "Shipping & Delivery", href: "/admin/settings/shipping", icon: Truck },
+        { label: "Regional Shipping Charges", href: "/admin/shipping-charges", icon: MapPin },
         { label: "Taxes & GST", href: "/admin/settings/taxes", icon: Receipt },
         { label: "Central Support", href: "/admin/support", icon: LifeBuoy },
         { label: "Email Automation", href: "/admin/settings/notifications", icon: Mail },

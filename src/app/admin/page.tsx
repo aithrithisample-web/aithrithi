@@ -32,6 +32,11 @@ import {
   CheckCircle2,
   Check,
   Globe,
+  Download,
+  Database,
+  Receipt,
+  MapPin,
+  Image as ImageIcon,
 } from "lucide-react";
 
 export default function StoreDashboardPage() {
@@ -39,6 +44,28 @@ export default function StoreDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [orderSearch, setOrderSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
+  const [downloadingBackup, setDownloadingBackup] = useState(false);
+
+  const handleDownloadBackup = async () => {
+    setDownloadingBackup(true);
+    try {
+      const res = await fetch("/api/admin/backup/export");
+      if (!res.ok) throw new Error("Failed to generate backup");
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `avro-store-backup-${new Date().toISOString().split("T")[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (e: any) {
+      alert("Error exporting store backup: " + e.message);
+    } finally {
+      setDownloadingBackup(false);
+    }
+  };
 
   // Setup Checklist State
   const [setupTasks, setSetupTasks] = useState([
@@ -418,6 +445,93 @@ export default function StoreDashboardPage() {
               <span className="text-[10px] text-emerald-700">Doorstep delivery confirmed</span>
             </div>
             <PackageCheck className="w-8 h-8 text-emerald-600 opacity-40" />
+          </div>
+        </div>
+      </div>
+
+      {/* Reference eynretail.com Feature: One-Click Website Backup & Quick Tools Banner */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Backup Download Card */}
+        <div className="md:col-span-1 bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-6 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-blue-500/20 text-blue-300 border border-blue-400/30">
+                Data Sovereignty
+              </span>
+              <Database className="w-5 h-5 text-blue-400" />
+            </div>
+            <h3 className="text-base font-black tracking-tight">Download Website Backup</h3>
+            <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
+              One-click instant snapshot export of all catalog products, categories, orders, customers, and configuration.
+            </p>
+          </div>
+
+          <div className="pt-4">
+            <button
+              onClick={handleDownloadBackup}
+              disabled={downloadingBackup}
+              className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-md cursor-pointer disabled:opacity-60"
+            >
+              <Download className="w-4 h-4" />
+              <span>{downloadingBackup ? "Generating Backup..." : "Download Backup (JSON)"}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Quick Regulatory & Regional Controls Card */}
+        <div className="md:col-span-2 bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Commerce Features
+              </span>
+              <span className="text-[11px] text-slate-400 font-semibold">Synced with Reference Architecture</span>
+            </div>
+            <h3 className="text-base font-black text-slate-900">Tax, Logistics & Advertising Controls</h3>
+            <p className="text-xs text-slate-500 mt-1">
+              Direct access to statutory HSN tax mapping, state-wise shipping charges, and promotional banner management.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-4">
+            <Link
+              href="/admin/hsn-codes"
+              className="p-3 rounded-2xl bg-slate-50 hover:bg-blue-50/60 border border-slate-200 text-slate-700 hover:text-blue-700 transition flex items-center gap-2.5 group"
+            >
+              <div className="w-8 h-8 rounded-xl bg-blue-100/60 text-blue-600 flex items-center justify-center shrink-0">
+                <Receipt className="w-4 h-4" />
+              </div>
+              <div className="overflow-hidden">
+                <span className="text-xs font-bold block truncate">HSN Codes & GST</span>
+                <span className="text-[10px] text-slate-400 group-hover:text-blue-600">Tax classification &rarr;</span>
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/shipping-charges"
+              className="p-3 rounded-2xl bg-slate-50 hover:bg-emerald-50/60 border border-slate-200 text-slate-700 hover:text-emerald-700 transition flex items-center gap-2.5 group"
+            >
+              <div className="w-8 h-8 rounded-xl bg-emerald-100/60 text-emerald-600 flex items-center justify-center shrink-0">
+                <MapPin className="w-4 h-4" />
+              </div>
+              <div className="overflow-hidden">
+                <span className="text-xs font-bold block truncate">Regional Shipping</span>
+                <span className="text-[10px] text-slate-400 group-hover:text-emerald-600">State rates &rarr;</span>
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/ads"
+              className="p-3 rounded-2xl bg-slate-50 hover:bg-purple-50/60 border border-slate-200 text-slate-700 hover:text-purple-700 transition flex items-center gap-2.5 group"
+            >
+              <div className="w-8 h-8 rounded-xl bg-purple-100/60 text-purple-600 flex items-center justify-center shrink-0">
+                <ImageIcon className="w-4 h-4" />
+              </div>
+              <div className="overflow-hidden">
+                <span className="text-xs font-bold block truncate">Ads & Banners</span>
+                <span className="text-[10px] text-slate-400 group-hover:text-purple-600">Hero banners &rarr;</span>
+              </div>
+            </Link>
           </div>
         </div>
       </div>
