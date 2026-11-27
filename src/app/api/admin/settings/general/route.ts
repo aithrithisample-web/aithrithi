@@ -61,6 +61,9 @@ export async function GET() {
         whatsappNumber: socialData.whatsappNumber || themeSetting.supportPhone || "+91 94965 90984",
         whatsappMessage: socialData.whatsappMessage || "Hello Aithrithi! I would like to inquire about your handcrafted collection.",
         showWhatsAppButton: socialData.showWhatsAppButton !== false,
+        isStorefrontActive: socialData.isStorefrontActive !== false && !socialData.storefrontDisabled,
+        maintenanceHeadline: socialData.maintenanceHeadline || "We'll Be Back Shortly",
+        maintenanceMessage: socialData.maintenanceMessage || "Our online boutique is currently undergoing scheduled platform upgrades and catalog synchronization to bring you an elevated shopping experience.",
       },
     });
   } catch (err: any) {
@@ -116,6 +119,13 @@ export async function PUT(req: NextRequest) {
     if (body?.whatsappNumber !== undefined) socialObj.whatsappNumber = body.whatsappNumber;
     if (body?.whatsappMessage !== undefined) socialObj.whatsappMessage = body.whatsappMessage;
     if (body?.showWhatsAppButton !== undefined) socialObj.showWhatsAppButton = body.showWhatsAppButton;
+    if (body?.isStorefrontActive !== undefined) {
+      socialObj.isStorefrontActive = Boolean(body.isStorefrontActive);
+      socialObj.storefrontDisabled = !Boolean(body.isStorefrontActive);
+      socialObj.maintenanceMode = !Boolean(body.isStorefrontActive);
+    }
+    if (body?.maintenanceHeadline !== undefined) socialObj.maintenanceHeadline = body.maintenanceHeadline;
+    if (body?.maintenanceMessage !== undefined) socialObj.maintenanceMessage = body.maintenanceMessage;
     const finalSocialLinksJson = JSON.stringify(socialObj);
 
     const updated = await prisma.storeThemeSetting.upsert({

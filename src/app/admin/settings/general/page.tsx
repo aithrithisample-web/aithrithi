@@ -28,6 +28,9 @@ import {
   Play,
   Instagram,
   MessageCircle,
+  Power,
+  ShieldAlert,
+  AlertTriangle,
 } from "lucide-react";
 
 export default function GeneralSettingsAdminPage() {
@@ -63,6 +66,9 @@ export default function GeneralSettingsAdminPage() {
     heroCtaText: "Shop Catalog",
     heroCtaLink: "/shop",
     footerText: "© 2026 AVRO Store. Powered by AVRO.",
+    isStorefrontActive: true,
+    maintenanceHeadline: "We'll Be Back Shortly",
+    maintenanceMessage: "Our online boutique is currently undergoing scheduled platform upgrades and catalog synchronization to bring you an elevated shopping experience.",
   });
 
   const [heroSlides, setHeroSlides] = useState<any[]>([]);
@@ -103,6 +109,9 @@ export default function GeneralSettingsAdminPage() {
           heroCtaText: data.settings.heroCtaText || "Shop Catalog",
           heroCtaLink: data.settings.heroCtaLink || "/shop",
           footerText: data.settings.footerText || "© 2026 AVRO Store. Powered by AVRO.",
+          isStorefrontActive: data.settings.isStorefrontActive !== false,
+          maintenanceHeadline: data.settings.maintenanceHeadline || "We'll Be Back Shortly",
+          maintenanceMessage: data.settings.maintenanceMessage || "Our online boutique is currently undergoing scheduled platform upgrades and catalog synchronization to bring you an elevated shopping experience.",
         });
 
         if (Array.isArray(data.settings.heroSlides)) {
@@ -313,6 +322,113 @@ export default function GeneralSettingsAdminPage() {
       )}
 
       <form onSubmit={handleSave} className="space-y-8">
+        {/* SECTION 0: STOREFRONT STATUS & MAINTENANCE MODE (OPTION TO DISABLE STOREFRONT) */}
+        <div className={`rounded-3xl border p-6 md:p-8 shadow-xs space-y-6 transition-all ${
+          formData.isStorefrontActive
+            ? "bg-white border-slate-200/80"
+            : "bg-amber-50/40 border-amber-300/80 shadow-md"
+        }`}>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+            <div className="flex items-center gap-3">
+              <div className={`w-11 h-11 rounded-2xl flex items-center justify-center font-bold shadow-sm transition-colors ${
+                formData.isStorefrontActive ? "bg-emerald-50 text-emerald-600 border border-emerald-200" : "bg-amber-500 text-white"
+              }`}>
+                <Power className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-base font-extrabold text-slate-900 tracking-tight">
+                    Storefront Website Availability
+                  </h2>
+                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                    formData.isStorefrontActive
+                      ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                      : "bg-amber-100 text-amber-900 border border-amber-300 animate-pulse"
+                  }`}>
+                    {formData.isStorefrontActive ? "🟢 Active & Online" : "🟡 Disabled / Maintenance"}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Control whether the public storefront is accessible to shoppers or paused under scheduled maintenance.
+                </p>
+              </div>
+            </div>
+
+            {/* Main Toggle Button */}
+            <div className="flex items-center gap-3 self-start sm:self-auto">
+              <button
+                type="button"
+                onClick={() => setFormData((prev) => ({ ...prev, isStorefrontActive: !prev.isStorefrontActive }))}
+                className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors focus:outline-none cursor-pointer ${
+                  formData.isStorefrontActive ? "bg-emerald-600" : "bg-slate-300"
+                }`}
+                title={formData.isStorefrontActive ? "Click to Disable Storefront" : "Click to Enable Storefront"}
+              >
+                <span
+                  className={`inline-block h-6 w-6 transform rounded-full bg-white shadow-md transition-transform ${
+                    formData.isStorefrontActive ? "translate-x-9" : "translate-x-1"
+                  }`}
+                />
+              </button>
+              <span className="text-xs font-bold text-slate-700 min-w-[70px]">
+                {formData.isStorefrontActive ? "Online" : "Disabled"}
+              </span>
+            </div>
+          </div>
+
+          {/* Detailed explanation & custom maintenance message */}
+          {!formData.isStorefrontActive ? (
+            <div className="space-y-4 pt-1 animate-fade-in">
+              <div className="p-4 rounded-2xl bg-amber-100/70 border border-amber-300/80 text-amber-950 text-xs flex items-start gap-3">
+                <ShieldAlert className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <p className="font-extrabold text-amber-900">
+                    Storefront Website is Disabled (Maintenance Mode Active)
+                  </p>
+                  <p className="text-amber-800 leading-relaxed text-[11.5px]">
+                    Visitors navigating to your website will see the official <strong>Store Under Maintenance</strong> screen with the <strong>AVRO Logo</strong> and concierge contact options. Your Admin Panel remains fully accessible so you can work on products, themes, and orders.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Maintenance Headline
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.maintenanceHeadline}
+                    onChange={(e) => setFormData({ ...formData, maintenanceHeadline: e.target.value })}
+                    placeholder="We'll Be Back Shortly"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white focus:ring-2 focus:ring-blue-500 font-serif font-bold text-slate-800"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Maintenance Description
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.maintenanceMessage}
+                    onChange={(e) => setFormData({ ...formData, maintenanceMessage: e.target.value })}
+                    placeholder="Our online boutique is currently undergoing scheduled platform upgrades..."
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white focus:ring-2 focus:ring-blue-500 font-sans text-slate-700"
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-slate-600 text-xs flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>Storefront is publicly accessible and running smoothly. Turn toggle off anytime to put the store in maintenance mode.</span>
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* SECTION 1: SITE BRANDING (LOGO & FAVICON) */}
         <div className="bg-white rounded-3xl border border-slate-200/80 p-6 md:p-8 shadow-xs space-y-6">
           <div className="flex items-center gap-3 pb-4 border-b border-slate-100">

@@ -39,24 +39,33 @@ export default async function StoreLayout({
     };
   }
 
-  // If the license is expiring, expired, suspended, revoked, or under maintenance, show the luxury Maintenance Screen with AVRO logo
+  let customSocial: any = {};
+  try {
+    if (theme?.socialLinksJson) customSocial = JSON.parse(theme.socialLinksJson);
+  } catch (e) {}
+
+  // Check 1: Storefront explicitly disabled from Admin Panel
+  const isStorefrontDisabledByAdmin =
+    customSocial.storefrontDisabled === true ||
+    customSocial.isStorefrontActive === false ||
+    customSocial.maintenanceMode === true;
+
+  // Check 2: License inactive, expired, suspended, revoked, or non-active status
   const now = Date.now();
   const isPastExpiry = licenseStatus.expiresAt ? new Date(licenseStatus.expiresAt).getTime() <= now : false;
-  const isUnderMaintenance =
+  const isLicenseNotActive =
     !licenseStatus.valid ||
-    licenseStatus.status === "EXPIRED" ||
-    licenseStatus.status === "REVOKED" ||
-    licenseStatus.status === "SUSPENDED" ||
-    licenseStatus.status === "MAINTENANCE" ||
+    (licenseStatus.status !== "ACTIVE" && licenseStatus.status !== "TRIAL") ||
     isPastExpiry;
+
+  // If website is not active or disabled from admin, show luxury Maintenance Screen with AVRO logo
+  const isUnderMaintenance = isStorefrontDisabledByAdmin || isLicenseNotActive;
 
   if (isUnderMaintenance) {
     const brandName = theme?.brandName || "Aithrithi";
-    let customSocial: any = {};
-    try {
-      if (theme?.socialLinksJson) customSocial = JSON.parse(theme.socialLinksJson);
-    } catch (e) {}
     const whatsappNumber = customSocial.whatsappNumber || theme?.supportPhone;
+    const maintenanceHeadline = customSocial.maintenanceHeadline;
+    const maintenanceMessage = customSocial.maintenanceMessage;
 
     return (
       <StoreMaintenanceScreen
@@ -64,6 +73,9 @@ export default async function StoreLayout({
         supportPhone={theme?.supportPhone}
         supportEmail={theme?.supportEmail}
         whatsappNumber={whatsappNumber}
+        maintenanceHeadline={maintenanceHeadline}
+        maintenanceMessage={maintenanceMessage}
+        disabledByAdmin={isStorefrontDisabledByAdmin}
         licenseStatus={licenseStatus}
       />
     );

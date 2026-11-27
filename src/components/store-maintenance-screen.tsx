@@ -19,6 +19,9 @@ interface StoreMaintenanceScreenProps {
   supportPhone?: string;
   supportEmail?: string;
   whatsappNumber?: string;
+  maintenanceHeadline?: string;
+  maintenanceMessage?: string;
+  disabledByAdmin?: boolean;
   licenseStatus?: {
     status?: string;
     plan?: string;
@@ -34,6 +37,9 @@ export function StoreMaintenanceScreen({
   supportPhone = "+91 94965 90984",
   supportEmail = "concierge@aithrithi.in",
   whatsappNumber,
+  maintenanceHeadline,
+  maintenanceMessage,
+  disabledByAdmin,
   licenseStatus,
 }: StoreMaintenanceScreenProps) {
   const [checking, setChecking] = useState(false);
@@ -113,11 +119,12 @@ export function StoreMaintenanceScreen({
           {brandName}
         </span>
         <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white tracking-tight mb-4">
-          We&apos;ll Be Back Shortly
+          {maintenanceHeadline || "We'll Be Back Shortly"}
         </h1>
 
         <p className="text-sm sm:text-base text-slate-300 max-w-lg leading-relaxed font-sans mb-8">
-          Our online boutique is currently undergoing scheduled platform upgrades and catalog synchronization to bring you an elevated shopping experience.
+          {maintenanceMessage ||
+            "Our online boutique is currently undergoing scheduled platform upgrades and catalog synchronization to bring you an elevated shopping experience."}
         </p>
 
         {/* Interactive Action Controls */}
