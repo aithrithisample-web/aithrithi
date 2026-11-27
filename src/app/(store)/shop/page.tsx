@@ -1,17 +1,17 @@
 export const dynamic = "force-dynamic";
 
 import prisma from "@/lib/prisma";
-import { ProductCard } from "@/components/product-card";
 import Link from "next/link";
-import { Search, Filter } from "lucide-react";
 import { getStorePermissions } from "@/lib/permissions";
+import { ShopFilterLayout } from "@/components/shop-filter-layout";
 
 export default async function ShopCatalogPage({
   searchParams,
 }: {
-  searchParams: { category?: string; search?: string; sort?: string; q?: string };
+  searchParams: Promise<{ category?: string; search?: string; sort?: string; q?: string }>;
 }) {
-  const { category, search, sort, q } = searchParams || {};
+  const resolvedParams = await searchParams;
+  const { category, search, sort, q } = resolvedParams || {};
   const searchTerm = search || q;
   const permissions = await getStorePermissions();
   const allowReviews = permissions.check("productReviews").allowed;
@@ -27,9 +27,6 @@ export default async function ShopCatalogPage({
 
   // Build query
   const where: any = { status: "PUBLISHED" };
-  if (category) {
-    where.category = { slug: category };
-  }
   if (searchTerm) {
     where.OR = [
       { title: { contains: searchTerm, mode: "insensitive" } },
@@ -37,10 +34,6 @@ export default async function ShopCatalogPage({
       { sku: { contains: searchTerm, mode: "insensitive" } },
     ];
   }
-
-  let orderBy: any = { createdAt: "desc" };
-  if (sort === "price-asc") orderBy = { regularPrice: "asc" };
-  else if (sort === "price-desc") orderBy = { regularPrice: "desc" };
 
   let products: any[] = [];
   try {
@@ -57,65 +50,45 @@ export default async function ShopCatalogPage({
             }
           : false,
       },
-      orderBy,
+      orderBy: { createdAt: "desc" },
     });
   } catch (e) {
     // Database unseeded or unreachable
   }
 
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-      {/* Title & Filter bar */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200 pb-6">
-        <div>
-          <h1 className="text-3xl font-extrabold text-[#0A192F]">All Products</h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Displaying {products.length} item{products.length === 1 ? "" : "s"}
-          </p>
-        </div>
+  const activeCategoryObj = categories.find((c) => c.slug === category);
+  const pageTitle = activeCategoryObj?.name || (searchTerm ? `Search: "${searchTerm}"` : "All Collections");
 
-        {/* Categories Bar */}
-        <div className="flex overflow-x-auto pb-2 sm:pb-0 sm:flex-wrap gap-2 text-xs w-full sm:w-auto scrollbar-none">
-          <Link
-            href="/shop"
-            className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
-              !category ? "bg-[#0A192F] text-white" : "bg-white border text-slate-700 hover:bg-slate-50"
-            }`}
-          >
-            All
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-6 sm:space-y-8 font-sans">
+      {/* Breadcrumb & Header Title (Vedhika Style) */}
+      <div className="space-y-2 border-b border-[#F0F0F0] pb-6">
+        <nav className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-stone-400">
+          <Link href="/" className="hover:text-black transition-colors">
+            Home
           </Link>
-          {categories.map((c) => (
-            <Link
-              key={c.id}
-              href={`/shop?category=${c.slug}`}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
-                category === c.slug
-                  ? "bg-[#0A192F] text-white"
-                  : "bg-white border text-slate-700 hover:bg-slate-50"
-              }`}
-            >
-              {c.name}
-            </Link>
-          ))}
+          <span>/</span>
+          <span className="text-black font-semibold">
+            {pageTitle}
+          </span>
+        </nav>
+
+        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold tracking-tight text-[#222222]">
+            {pageTitle}
+          </h1>
+          <p className="text-xs text-stone-500 font-sans">
+            Handcrafted luxury couture curated with Kerala's master weavers
+          </p>
         </div>
       </div>
 
-      {/* Grid */}
-      {products.length === 0 ? (
-        <div className="text-center py-20 text-slate-400 space-y-2">
-          <p className="text-base font-bold text-slate-600">No products found in this category.</p>
-          <p className="text-xs">Try selecting a different filter or search term.</p>
-          <Link href="/shop" className="text-xs text-[#2563EB] font-bold inline-block pt-2">
-            Clear all filters
-          </Link>
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-          {products.map((p) => (
-            <ProductCard key={p.id} product={p} showReviews={allowReviews} />
-          ))}
-        </div>
-      )}
+      {/* Vedhika Style Product Filter & Grid System */}
+      <ShopFilterLayout
+        initialProducts={products}
+        categories={categories}
+        allowReviews={allowReviews}
+      />
     </div>
   );
 }
