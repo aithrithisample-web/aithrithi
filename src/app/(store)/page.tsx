@@ -723,26 +723,6 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           </div>
         </div>
       </section>
-
-      {/* =====================================================
-          FLOATING WHATSAPP CONCIERGE BUTTON (Vedhika Style — Bottom Left)
-          ===================================================== */}
-      <a
-        href={`https://wa.me/${(customOverrides.whatsappNumber || dbTheme?.supportPhone || "+919496590984").replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hello Aithrithi! I would like to inquire about your designer collections.")}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-16 sm:bottom-6 left-3 sm:left-6 z-40 flex items-center gap-2 group cursor-pointer"
-        aria-label="Chat with Aithrithi Concierge on WhatsApp"
-      >
-        <div className="relative w-11 h-11 sm:w-13 sm:h-13 bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full flex items-center justify-center shadow-xl transition-transform duration-300 group-hover:scale-105 active:scale-95">
-          <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.99.54 1.785.83 2.795.83 3.181 0 5.768-2.586 5.768-5.766 0-3.18-2.587-5.767-5.767-5.767zm7.551 5.766c0 4.167-3.39 7.557-7.551 7.557-1.309 0-2.535-.335-3.606-.921l-4.425 1.16 1.181-4.318c-.689-1.121-1.071-2.433-1.071-3.778 0-4.167 3.39-7.558 7.551-7.558 4.161 0 7.551 3.391 7.551 7.558z" />
-          </svg>
-        </div>
-        <span className="hidden sm:inline-block px-3 py-1.5 bg-white text-slate-800 text-[11px] font-sans font-semibold rounded-full shadow-lg border border-slate-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          WhatsApp Concierge
-        </span>
-      </a>
     </div>
   );
 }

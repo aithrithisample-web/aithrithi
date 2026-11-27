@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="overflow-x-hidden">
+    <html lang="en">
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/favicon.svg" />
@@ -37,7 +37,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#FAF7F5] text-[#222222] font-sans antialiased overflow-x-hidden w-full max-w-full selection:bg-[#DEB660]/20">
+      <body className="min-h-screen flex flex-col bg-[#FAF7F5] text-[#222222] font-sans antialiased w-full max-w-full selection:bg-[#DEB660]/20">
         {children}
       </body>
     </html>

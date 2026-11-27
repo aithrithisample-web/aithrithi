@@ -20,7 +20,7 @@ export function WhatsAppFloatingWidget({ theme }: { theme?: any }) {
     customOverrides.whatsappMessage ||
     "Hello Aithrithi! I would like to inquire about your handcrafted collection.";
   const tooltipText = customOverrides.whatsappTooltip || "Chat with Style Concierge";
-  const position = customOverrides.whatsappPosition || "bottom-right";
+  const position = customOverrides.whatsappPosition || "bottom-left";
 
   if (!enabled) return null;
 
@@ -36,7 +36,7 @@ export function WhatsAppFloatingWidget({ theme }: { theme?: any }) {
 
   return (
     <div
-      className={`fixed ${isLeft ? "left-4 sm:left-6" : "right-4 sm:right-6"} bottom-[84px] sm:bottom-6 z-40 flex flex-col ${
+      className={`fixed ${isLeft ? "left-3 sm:left-6" : "right-3 sm:right-6"} bottom-16 sm:bottom-6 z-40 flex flex-col ${
         isLeft ? "items-start" : "items-end"
       } pointer-events-none select-none`}
     >

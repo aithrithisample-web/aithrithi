@@ -102,6 +102,20 @@ export function StoreNav({ theme }: { theme?: any }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Lock background scrolling while mobile off-canvas drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      const origOverflow = document.body.style.overflow;
+      const origTouchAction = document.body.style.touchAction;
+      document.body.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+      return () => {
+        document.body.style.overflow = origOverflow;
+        document.body.style.touchAction = origTouchAction;
+      };
+    }
+  }, [mobileMenuOpen]);
+
   // Quick Guest Login
   const handleInstantGuestLogin = async () => {
     try {
@@ -133,9 +147,9 @@ export function StoreNav({ theme }: { theme?: any }) {
   return (
     <>
       <header
-        className="sticky top-0 z-40 transition-all duration-300 border-b backdrop-blur-md shadow-2xs"
+        className="sticky top-0 z-50 transition-all duration-300 border-b backdrop-blur-md shadow-2xs"
         style={{
-          backgroundColor: isDarkNav ? "rgba(15, 23, 42, 0.95)" : "rgba(255, 255, 255, 0.95)",
+          backgroundColor: isDarkNav ? "rgba(15, 23, 42, 0.98)" : "rgba(255, 255, 255, 0.98)",
           borderColor: isDarkNav ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.06)",
         }}
       >
