@@ -29,6 +29,9 @@ import {
   Sliders,
   DollarSign,
   Box,
+  Palette,
+  Sparkles,
+  CheckSquare,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -37,6 +40,16 @@ interface ProductImageItem {
   url: string;
   altText?: string;
   isPrimary?: boolean;
+}
+
+export interface ProductVariantItem {
+  id?: string;
+  size: string;
+  color: string;
+  colorHex?: string;
+  sku: string;
+  price: string;
+  stockQuantity: string;
 }
 
 export default function ProductsAdminPage() {
@@ -50,7 +63,7 @@ export default function ProductsAdminPage() {
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"GENERAL" | "MEDIA" | "RELATED" | "COMBOS">("GENERAL");
+  const [activeTab, setActiveTab] = useState<"GENERAL" | "MEDIA" | "VARIANTS" | "RELATED" | "COMBOS">("GENERAL");
 
   // Form State
   const [title, setTitle] = useState("");
@@ -64,6 +77,15 @@ export default function ProductsAdminPage() {
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("PUBLISHED");
   const [featured, setFeatured] = useState(false);
+
+  // Variants & Inventory State
+  const [variants, setVariants] = useState<ProductVariantItem[]>([]);
+  const [newVarSize, setNewVarSize] = useState("Free Size");
+  const [newVarColor, setNewVarColor] = useState("Vermilion Red");
+  const [newVarColorHex, setNewVarColorHex] = useState("#C21807");
+  const [newVarStock, setNewVarStock] = useState("5");
+  const [newVarPrice, setNewVarPrice] = useState("");
+  const [newVarSku, setNewVarSku] = useState("");
 
   // Media Tab State (Images & Videos from system)
   const [images, setImages] = useState<ProductImageItem[]>([]);
@@ -142,6 +164,13 @@ export default function ProductsAdminPage() {
     setComboTitle("");
     setComboDiscountPercent("15");
     setComboProductIds([]);
+    setVariants([]);
+    setNewVarSize("Free Size");
+    setNewVarColor("Vermilion Red");
+    setNewVarColorHex("#C21807");
+    setNewVarStock("5");
+    setNewVarPrice("");
+    setNewVarSku("");
     setActiveTab("GENERAL");
     setIsModalOpen(true);
   };
@@ -160,6 +189,49 @@ export default function ProductsAdminPage() {
     setDescription(prod.description || "");
     setStatus(prod.status || "PUBLISHED");
     setFeatured(Boolean(prod.featured));
+
+    // Variants (Size, Color, Stock, SKU, Price)
+    if (Array.isArray(prod.variants) && prod.variants.length > 0) {
+      setVariants(
+        prod.variants.map((v: any) => {
+          let size = "";
+          let color = "";
+          let colorHex = "#C21807";
+          if (v.attributesJson) {
+            try {
+              const attrs = JSON.parse(v.attributesJson);
+              size = attrs.size || attrs.Size || "";
+              color = attrs.color || attrs.Color || "";
+              colorHex = attrs.colorHex || "#C21807";
+            } catch {
+              // ignore
+            }
+          }
+          if (!size && !color && v.title) {
+            const parts = v.title.split("/").map((s: string) => s.trim());
+            if (parts.length >= 2) {
+              size = parts[0];
+              color = parts[1];
+            } else {
+              size = v.title;
+            }
+          }
+          return {
+            id: v.id,
+            size: size || "Standard",
+            color: color || "Default",
+            colorHex: colorHex || "#C21807",
+            sku: v.sku || "",
+            price: String(v.price ?? prod.regularPrice ?? ""),
+            stockQuantity: String(v.stockQuantity ?? 0),
+          };
+        })
+      );
+    } else {
+      setVariants([]);
+    }
+    setNewVarPrice(String(prod.regularPrice || ""));
+    setNewVarSku("");
 
     // Images
     if (Array.isArray(prod.images) && prod.images.length > 0) {
@@ -201,6 +273,65 @@ export default function ProductsAdminPage() {
 
     setActiveTab("GENERAL");
     setIsModalOpen(true);
+  };
+
+  // Variant management handlers
+  const handleAddVariant = () => {
+    if (!newVarSize && !newVarColor) {
+      showToast("error", "Please specify at least a Size or a Color for the variant.");
+      return;
+    }
+    const autoSku =
+      newVarSku.trim() ||
+      `${sku || "SKU"}-${newVarSize || "VAR"}-${newVarColor || ""}-${variants.length + 1}`
+        .replace(/[^A-Za-z0-9-]/g, "")
+        .toUpperCase();
+
+    const item: ProductVariantItem = {
+      size: newVarSize.trim(),
+      color: newVarColor.trim(),
+      colorHex: newVarColorHex || "#C21807",
+      sku: autoSku,
+      price: newVarPrice || regularPrice || "0",
+      stockQuantity: newVarStock || "0",
+    };
+
+    setVariants([...variants, item]);
+    setNewVarSku("");
+    showToast("success", `Variant "${item.size} / ${item.color}" added with ${item.stockQuantity} stock.`);
+  };
+
+  const handleRemoveVariant = (index: number) => {
+    setVariants(variants.filter((_, idx) => idx !== index));
+  };
+
+  const handleUpdateVariantStock = (index: number, stock: string) => {
+    const updated = [...variants];
+    updated[index] = { ...updated[index], stockQuantity: stock };
+    setVariants(updated);
+  };
+
+  const handleUpdateVariantPrice = (index: number, pr: string) => {
+    const updated = [...variants];
+    updated[index] = { ...updated[index], price: pr };
+    setVariants(updated);
+  };
+
+  const handleBatchGenerateSizes = (sizesToGen: string[]) => {
+    if (!newVarColor) {
+      showToast("error", "Please specify a color name for generating sizes.");
+      return;
+    }
+    const newItems: ProductVariantItem[] = sizesToGen.map((sz, idx) => ({
+      size: sz,
+      color: newVarColor,
+      colorHex: newVarColorHex || "#C21807",
+      sku: `${sku || "SKU"}-${sz}-${newVarColor}-${variants.length + idx + 1}`.replace(/[^A-Za-z0-9-]/g, "").toUpperCase(),
+      price: regularPrice || "0",
+      stockQuantity: newVarStock || "5",
+    }));
+    setVariants([...variants, ...newItems]);
+    showToast("success", `Generated ${newItems.length} size variants for "${newVarColor}"!`);
   };
 
   // Upload Images / Videos from System
@@ -295,6 +426,9 @@ export default function ProductsAdminPage() {
 
     setSubmitting(true);
 
+    const sumVariantStock = variants.reduce((acc, v) => acc + (parseInt(v.stockQuantity) || 0), 0);
+    const finalStock = variants.length > 0 ? sumVariantStock : (parseInt(stockQuantity) || 0);
+
     const payload = {
       id: editingProductId,
       title,
@@ -303,7 +437,7 @@ export default function ProductsAdminPage() {
       categoryId,
       regularPrice: parseFloat(regularPrice),
       salePrice: salePrice ? parseFloat(salePrice) : null,
-      stockQuantity: parseInt(stockQuantity) || 0,
+      stockQuantity: finalStock,
       shortDescription,
       description,
       status,
@@ -316,6 +450,7 @@ export default function ProductsAdminPage() {
       comboProductIds,
       comboDiscountPercent: parseFloat(comboDiscountPercent) || 0,
       comboTitle,
+      variants,
     };
 
     try {
@@ -493,12 +628,12 @@ export default function ProductsAdminPage() {
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs">
-          <span className="text-[11px] font-bold text-amber-600 uppercase tracking-wider block">Featured Showcase</span>
+          <span className="text-[11px] font-bold text-amber-600 uppercase tracking-wider block">New Arrivals Showcase</span>
           <span className="text-2xl font-black text-amber-950 mt-1 block flex items-center gap-1.5">
             <Star className="w-5 h-5 fill-amber-400 text-amber-500" />
             {products.filter((p) => p.featured).length}
           </span>
-          <span className="text-[10px] text-slate-500 mt-0.5 block">Live on Homepage Curated</span>
+          <span className="text-[10px] text-slate-500 mt-0.5 block">Live on Homepage New Arrivals</span>
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs">
@@ -539,8 +674,8 @@ export default function ProductsAdminPage() {
             className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
           >
             <option value="ALL">All Items</option>
-            <option value="FEATURED">⭐ Featured Only</option>
-            <option value="STANDARD">Standard (Not Featured)</option>
+            <option value="FEATURED">⭐ New Arrivals Only</option>
+            <option value="STANDARD">Standard Catalog Only</option>
           </select>
 
           <select
@@ -567,8 +702,8 @@ export default function ProductsAdminPage() {
                 <th className="py-3 px-5">Product & Media</th>
                 <th className="py-3 px-4">Category / SKU</th>
                 <th className="py-3 px-4">Price</th>
-                <th className="py-3 px-4">Stock</th>
-                <th className="py-3 px-4">Featured</th>
+                <th className="py-3 px-4">Stock & Variants</th>
+                <th className="py-3 px-4">New Arrival</th>
                 <th className="py-3 px-4">Deals & Media</th>
                 <th className="py-3 px-4">Status</th>
                 <th className="py-3 px-5 text-right">Actions</th>
@@ -627,7 +762,7 @@ export default function ProductsAdminPage() {
                         )}
                       </td>
 
-                      {/* Stock */}
+                      {/* Stock & Variants */}
                       <td className="py-3.5 px-4">
                         <span
                           className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
@@ -640,22 +775,27 @@ export default function ProductsAdminPage() {
                         >
                           {p.stockQuantity} in stock
                         </span>
+                        {p.variants?.length > 0 && (
+                          <span className="block text-[10px] text-indigo-600 font-bold mt-0.5">
+                            {p.variants.length} size/color variants
+                          </span>
+                        )}
                       </td>
 
-                      {/* Featured 1-Click Toggle */}
+                      {/* New Arrival 1-Click Toggle */}
                       <td className="py-3.5 px-4">
                         <button
                           type="button"
                           onClick={() => handleToggleFeatured(p.id, Boolean(p.featured), p.title)}
                           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-bold transition-all shadow-2xs active:scale-95 cursor-pointer ${
                             p.featured
-                              ? "bg-amber-50 text-amber-800 border border-amber-300 hover:bg-amber-100"
+                              ? "bg-amber-100/90 text-amber-900 border border-amber-300 hover:bg-amber-200"
                               : "bg-slate-50 text-slate-500 border border-slate-200 hover:bg-slate-100"
                           }`}
-                          title={p.featured ? "Click to unmark from Featured Curated Bestsellers" : "Click to mark as Featured Curated Bestseller on Homepage"}
+                          title={p.featured ? "Click to remove from New Arrivals showcase" : "Click to mark as New Arrival on Homepage"}
                         >
                           <Star className={`w-3.5 h-3.5 ${p.featured ? "fill-amber-400 text-amber-500" : "text-slate-400"}`} />
-                          <span>{p.featured ? "Featured" : "Standard"}</span>
+                          <span>{p.featured ? "⭐ New Arrival" : "Standard"}</span>
                         </button>
                       </td>
 
@@ -768,6 +908,26 @@ export default function ProductsAdminPage() {
 
               <button
                 type="button"
+                onClick={() => setActiveTab("VARIANTS")}
+                className={`py-3 border-b-2 transition flex items-center gap-2 ${
+                  activeTab === "VARIANTS"
+                    ? "border-[#2563EB] text-[#2563EB]"
+                    : "border-transparent text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                <Layers className="w-3.5 h-3.5 text-indigo-600" />
+                <span>Size, Color & Stock</span>
+                <span
+                  className={`px-1.5 py-0.5 text-[10px] font-black rounded-full ${
+                    variants.length > 0 ? "bg-indigo-100 text-indigo-700" : "bg-slate-100 text-slate-500"
+                  }`}
+                >
+                  {variants.length}
+                </span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() => setActiveTab("MEDIA")}
                 className={`py-3 border-b-2 transition flex items-center gap-2 ${
                   activeTab === "MEDIA"
@@ -865,14 +1025,31 @@ export default function ProductsAdminPage() {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="font-bold text-slate-700">Stock Quantity</label>
+                      <div className="flex items-center justify-between">
+                        <label className="font-bold text-slate-700">Stock Quantity</label>
+                        {variants.length > 0 && (
+                          <span className="text-[10px] text-indigo-700 font-bold bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200">
+                            Auto-synced from {variants.length} variants
+                          </span>
+                        )}
+                      </div>
                       <input
                         type="number"
-                        value={stockQuantity}
+                        value={variants.length > 0 ? variants.reduce((a, b) => a + (parseInt(b.stockQuantity) || 0), 0) : stockQuantity}
                         onChange={(e) => setStockQuantity(e.target.value)}
+                        disabled={variants.length > 0}
                         min="0"
-                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                        className={`w-full px-3 py-2 border rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-[#2563EB] ${
+                          variants.length > 0
+                            ? "bg-indigo-50/60 border-indigo-200 text-indigo-900 cursor-not-allowed"
+                            : "bg-slate-50 border-slate-200 text-slate-900"
+                        }`}
                       />
+                      {variants.length > 0 && (
+                        <p className="text-[10px] text-indigo-600 font-medium">
+                          Multi-variant stock active. To adjust stock per size/colour, switch to the <strong>Size, Color & Stock</strong> tab.
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -925,29 +1102,41 @@ export default function ProductsAdminPage() {
                     />
                   </div>
 
-                  <div className="flex items-center gap-6 pt-2">
-                    <label className="flex items-center gap-2 cursor-pointer">
+                  {/* Feature in New Arrivals (Curated Section) Toggle */}
+                  <div className="p-4 rounded-xl border border-amber-300 bg-amber-50/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <Star className={`w-4 h-4 ${featured ? "fill-amber-400 text-amber-500" : "text-amber-500"}`} />
+                        <span className="font-bold text-slate-900 text-xs sm:text-sm">
+                          Feature in New Arrivals Section (Homepage Showcase)
+                        </span>
+                      </div>
+                      <p className="text-[11px] sm:text-xs text-slate-600">
+                        When enabled, this product is immediately featured in the &quot;New Arrivals&quot; curated gallery on the storefront homepage and mobile app.
+                      </p>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer shrink-0">
                       <input
                         type="checkbox"
                         checked={featured}
                         onChange={(e) => setFeatured(e.target.checked)}
-                        className="rounded text-[#2563EB] focus:ring-0"
+                        className="sr-only peer"
                       />
-                      <span className="font-bold text-slate-700">Show on Featured Products Showcase</span>
+                      <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
                     </label>
+                  </div>
 
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-slate-700">Publish Status:</span>
-                      <select
-                        value={status}
-                        onChange={(e) => setStatus(e.target.value)}
-                        className="px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg font-bold text-slate-800"
-                      >
-                        <option value="PUBLISHED">Published</option>
-                        <option value="DRAFT">Draft</option>
-                        <option value="ARCHIVED">Archived</option>
-                      </select>
-                    </div>
+                  <div className="flex items-center gap-2 pt-1">
+                    <span className="font-bold text-slate-700">Publish Status:</span>
+                    <select
+                      value={status}
+                      onChange={(e) => setStatus(e.target.value)}
+                      className="px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg font-bold text-slate-800"
+                    >
+                      <option value="PUBLISHED">Published</option>
+                      <option value="DRAFT">Draft</option>
+                      <option value="ARCHIVED">Archived</option>
+                    </select>
                   </div>
                 </div>
               )}
@@ -1136,6 +1325,304 @@ export default function ProductsAdminPage() {
                       </div>
                     )}
                   </div>
+                </div>
+              )}
+
+              {/* ================= TAB: SIZE, COLOR & STOCK VARIANTS ================= */}
+              {activeTab === "VARIANTS" && (
+                <div className="space-y-6">
+                  {/* Informational Header */}
+                  <div className="bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-200 rounded-2xl p-4 flex items-start gap-3.5 shadow-2xs">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                      <Layers className="w-5 h-5" />
+                    </div>
+                    <div className="space-y-0.5">
+                      <h4 className="font-extrabold text-indigo-950 text-sm">
+                        Product Variants & Individual Stock Management
+                      </h4>
+                      <p className="text-[11px] sm:text-xs text-indigo-800/90 leading-relaxed">
+                        Configure different <strong>Sizes</strong>, <strong>Colours</strong>, and <strong>Stock Quantities</strong> for this product.
+                        Customers on the mobile app and website will be able to select their exact size and colour with live inventory checks and individual pricing.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Add Variant Box */}
+                  <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-2xs space-y-4">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <span className="font-extrabold text-slate-900 text-xs sm:text-sm flex items-center gap-2">
+                        <Plus className="w-4 h-4 text-indigo-600" />
+                        Add New Size & Colour Variant
+                      </span>
+                      <span className="text-[11px] text-slate-400 font-medium hidden sm:inline">
+                        Each variant maintains isolated inventory and SKU
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      {/* Size Input & Presets */}
+                      <div className="space-y-1.5">
+                        <label className="font-bold text-slate-700 block">Size / Dimension *</label>
+                        <input
+                          type="text"
+                          value={newVarSize}
+                          onChange={(e) => setNewVarSize(e.target.value)}
+                          placeholder="e.g. Free Size, S, M, L, XL"
+                          className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                        />
+                        <div className="flex flex-wrap gap-1 pt-1">
+                          {["Free Size", "XS", "S", "M", "L", "XL", "2XL", "3XL"].map((sz) => (
+                            <button
+                              key={sz}
+                              type="button"
+                              onClick={() => setNewVarSize(sz)}
+                              className={`px-2 py-0.5 rounded text-[10px] font-bold border transition ${
+                                newVarSize === sz
+                                  ? "bg-indigo-600 text-white border-indigo-600 shadow-2xs"
+                                  : "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200"
+                              }`}
+                            >
+                              {sz}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Color Input & Presets */}
+                      <div className="space-y-1.5">
+                        <label className="font-bold text-slate-700 block">Colour / Shade *</label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={newVarColorHex}
+                            onChange={(e) => setNewVarColorHex(e.target.value)}
+                            className="w-9 h-9 p-0.5 rounded-xl border border-slate-200 cursor-pointer bg-white shrink-0"
+                            title="Pick exact hex color"
+                          />
+                          <input
+                            type="text"
+                            value={newVarColor}
+                            onChange={(e) => setNewVarColor(e.target.value)}
+                            placeholder="e.g. Vermilion Red"
+                            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                          />
+                        </div>
+                        <div className="flex flex-wrap gap-1 pt-1 max-h-16 overflow-y-auto">
+                          {[
+                            { name: "Vermilion Red", hex: "#C21807" },
+                            { name: "Emerald Green", hex: "#046307" },
+                            { name: "Antique Gold", hex: "#DEB660" },
+                            { name: "Royal Blue", hex: "#1E3A8A" },
+                            { name: "Deep Maroon", hex: "#58111A" },
+                            { name: "Mustard Yellow", hex: "#EAB308" },
+                            { name: "Coffee Brown", hex: "#4A2E18" },
+                            { name: "Coral Orange", hex: "#F97316" },
+                            { name: "Pure White", hex: "#FFFFFF" },
+                            { name: "Jet Black", hex: "#18181B" },
+                          ].map((col) => (
+                            <button
+                              key={col.name}
+                              type="button"
+                              onClick={() => {
+                                setNewVarColor(col.name);
+                                setNewVarColorHex(col.hex);
+                              }}
+                              className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold border transition ${
+                                newVarColor === col.name
+                                  ? "bg-slate-900 text-white border-slate-900"
+                                  : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                              }`}
+                            >
+                              <span className="w-2.5 h-2.5 rounded-full border border-black/20" style={{ backgroundColor: col.hex }} />
+                              <span>{col.name}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Stock Quantity */}
+                      <div className="space-y-1.5">
+                        <label className="font-bold text-slate-700 block">Stock Count for this Variant *</label>
+                        <input
+                          type="number"
+                          value={newVarStock}
+                          onChange={(e) => setNewVarStock(e.target.value)}
+                          min="0"
+                          placeholder="e.g. 10"
+                          className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-black text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                        />
+                        <p className="text-[10px] text-slate-400">
+                          Specific units available in this size & colour.
+                        </p>
+                      </div>
+
+                      {/* Price & SKU */}
+                      <div className="space-y-1.5">
+                        <label className="font-bold text-slate-700 block">Price (₹) & Custom SKU</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={newVarPrice}
+                          onChange={(e) => setNewVarPrice(e.target.value)}
+                          placeholder={`Inherit ₹${regularPrice || "0"}`}
+                          className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 mb-1"
+                        />
+                        <input
+                          type="text"
+                          value={newVarSku}
+                          onChange={(e) => setNewVarSku(e.target.value.toUpperCase())}
+                          placeholder="Custom SKU (auto if blank)"
+                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg font-mono text-[11px] text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-[11px] font-bold text-slate-500">⚡ 1-Click Fast Generator:</span>
+                        <button
+                          type="button"
+                          onClick={() => handleBatchGenerateSizes(["S", "M", "L", "XL", "XXL"])}
+                          className="px-3 py-1.5 bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 rounded-lg font-bold text-xs transition active:scale-95 flex items-center gap-1.5"
+                        >
+                          <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                          <span>Generate Sizes S, M, L, XL, XXL for &quot;{newVarColor}&quot;</span>
+                        </button>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={handleAddVariant}
+                        className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs flex items-center gap-2 transition shadow-md active:scale-95"
+                      >
+                        <Plus className="w-4 h-4" />
+                        <span>Add Variant</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* List of Configured Variants */}
+                  <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+                    <div className="p-4 bg-slate-50/80 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="font-extrabold text-slate-900 text-xs sm:text-sm">
+                          Configured Variants ({variants.length})
+                        </span>
+                        {variants.length > 0 && (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                            Total Inventory: {variants.reduce((acc, v) => acc + (parseInt(v.stockQuantity) || 0), 0)} units
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[11px] text-slate-500 font-medium">
+                        You can edit stock count & price inline in the table below
+                      </span>
+                    </div>
+
+                    {variants.length === 0 ? (
+                      <div className="py-12 text-center space-y-2">
+                        <Box className="w-10 h-10 text-slate-300 mx-auto" />
+                        <h5 className="font-bold text-slate-700 text-xs">No product variants configured</h5>
+                        <p className="text-[11px] text-slate-400 max-w-sm mx-auto">
+                          Add sizes and colours using the form above to enable customer variant selection and separate inventory counts per size.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse text-xs">
+                          <thead>
+                            <tr className="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                              <th className="py-2.5 px-4">Size</th>
+                              <th className="py-2.5 px-4">Colour</th>
+                              <th className="py-2.5 px-4">SKU</th>
+                              <th className="py-2.5 px-4">Price (₹)</th>
+                              <th className="py-2.5 px-4">Stock Quantity</th>
+                              <th className="py-2.5 px-4 text-right">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100">
+                            {variants.map((v, idx) => (
+                              <tr key={idx} className="hover:bg-slate-50/60 transition">
+                                <td className="py-3 px-4">
+                                  <span className="inline-block px-2.5 py-1 bg-slate-900 text-white rounded-md font-bold text-xs shadow-2xs">
+                                    {v.size || "Free Size"}
+                                  </span>
+                                </td>
+                                <td className="py-3 px-4">
+                                  <div className="flex items-center gap-2">
+                                    <span
+                                      className="w-4 h-4 rounded-full border border-black/20 shrink-0 shadow-2xs"
+                                      style={{ backgroundColor: v.colorHex || "#C21807" }}
+                                    />
+                                    <span className="font-bold text-slate-800">{v.color || "Standard"}</span>
+                                  </div>
+                                </td>
+                                <td className="py-3 px-4 font-mono text-[11px] text-slate-500">
+                                  {v.sku || `${sku}-${idx + 1}`}
+                                </td>
+                                <td className="py-3 px-4">
+                                  <input
+                                    type="number"
+                                    step="0.01"
+                                    value={v.price}
+                                    onChange={(e) => handleUpdateVariantPrice(idx, e.target.value)}
+                                    placeholder={regularPrice || "0"}
+                                    className="w-24 px-2 py-1 bg-white border border-slate-200 rounded-lg font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+                                  />
+                                </td>
+                                <td className="py-3 px-4">
+                                  <div className="flex items-center gap-2">
+                                    <input
+                                      type="number"
+                                      min="0"
+                                      value={v.stockQuantity}
+                                      onChange={(e) => handleUpdateVariantStock(idx, e.target.value)}
+                                      className="w-20 px-2 py-1 bg-white border border-slate-200 rounded-lg font-black text-slate-900 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+                                    />
+                                    <span
+                                      className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                        parseInt(v.stockQuantity) > 0
+                                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                          : "bg-rose-50 text-rose-700 border border-rose-200"
+                                      }`}
+                                    >
+                                      {parseInt(v.stockQuantity) > 0 ? "In Stock" : "Sold Out"}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="py-3 px-4 text-right">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveVariant(idx)}
+                                    className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
+                                    title="Delete variant"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Summary Card */}
+                  {variants.length > 0 && (
+                    <div className="p-3.5 bg-emerald-50/80 border border-emerald-200 rounded-xl flex items-center justify-between text-xs text-emerald-900">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span>
+                          <strong>{variants.length} active variants configured.</strong> Total synchronized inventory will be <strong>{variants.reduce((acc, v) => acc + (parseInt(v.stockQuantity) || 0), 0)} units</strong>.
+                        </span>
+                      </div>
+                      <span className="text-[11px] text-emerald-700 font-semibold hidden sm:inline">
+                        Click &quot;Save Product&quot; to apply
+                      </span>
+                    </div>
+                  )}
                 </div>
               )}
 

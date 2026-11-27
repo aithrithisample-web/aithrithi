@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/cart-context";
 import { useWishlist } from "@/context/wishlist-context";
@@ -39,9 +39,91 @@ export function ProductViewClient({
   const [selectedImg, setSelectedImg] = useState<string>(initialImage);
   const [activeMediaType, setActiveMediaType] = useState<"image" | "video">("image");
 
+  // Parse structured variant attributes (Size, Colour, Hex)
+  const parsedVariants = useMemo(() => {
+    return (product.variants || []).map((v: any) => {
+      let size = "";
+      let color = "";
+      let colorHex = "";
+      if (v.attributesJson) {
+        try {
+          const attrs = JSON.parse(v.attributesJson);
+          size = attrs.size || attrs.Size || "";
+          color = attrs.color || attrs.Color || "";
+          colorHex = attrs.colorHex || "";
+        } catch {}
+      }
+      if (!size && !color && v.title) {
+        const parts = v.title.split("/").map((s: string) => s.trim());
+        if (parts.length >= 2) {
+          size = parts[0];
+          color = parts[1];
+        } else {
+          size = v.title;
+        }
+      }
+      return {
+        ...v,
+        size: size.trim(),
+        color: color.trim(),
+        colorHex: colorHex || "#58111A",
+      };
+    });
+  }, [product.variants]);
+
+  const availableSizes = useMemo(() => {
+    const list: string[] = [];
+    parsedVariants.forEach((v: any) => {
+      if (v.size && !list.includes(v.size)) list.push(v.size);
+    });
+    return list;
+  }, [parsedVariants]);
+
+  const availableColors = useMemo(() => {
+    const map = new Map<string, string>();
+    parsedVariants.forEach((v: any) => {
+      if (v.color && !map.has(v.color)) {
+        map.set(v.color, v.colorHex || "#58111A");
+      }
+    });
+    return Array.from(map.entries()).map(([name, hex]) => ({ name, hex }));
+  }, [parsedVariants]);
+
+  const [selectedSize, setSelectedSize] = useState<string>(() => {
+    return parsedVariants[0]?.size || "";
+  });
+  const [selectedColor, setSelectedColor] = useState<string>(() => {
+    return parsedVariants[0]?.color || "";
+  });
+
   const [selectedVariant, setSelectedVariant] = useState<any | null>(
     product.variants?.length > 0 ? product.variants[0] : null
   );
+
+  // Synchronize selectedVariant when selectedSize or selectedColor changes
+  useEffect(() => {
+    if (parsedVariants.length === 0) return;
+
+    let match = parsedVariants.find(
+      (v: any) =>
+        (!selectedSize || v.size === selectedSize) &&
+        (!selectedColor || v.color === selectedColor)
+    );
+
+    if (!match && selectedSize) {
+      match = parsedVariants.find((v: any) => v.size === selectedSize);
+      if (match && match.color) setSelectedColor(match.color);
+    }
+
+    if (!match && selectedColor) {
+      match = parsedVariants.find((v: any) => v.color === selectedColor);
+      if (match && match.size) setSelectedSize(match.size);
+    }
+
+    if (match) {
+      setSelectedVariant(match);
+    }
+  }, [selectedSize, selectedColor, parsedVariants]);
 
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
@@ -278,10 +360,79 @@ export function ProductViewClient({
           <p className="text-xs text-slate-600 leading-relaxed">{product.shortDescription}</p>
         )}
 
-        {/* Variants Selector */}
-        {product.variants?.length > 0 && (
+        {/* Size Selector */}
+        {availableSizes.length > 0 && (
           <div className="space-y-2">
-            <label className="block text-xs font-bold text-slate-800">Choose Option / Variant:</label>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                Select Size: <span className="font-extrabold text-[#222222]">{selectedSize || "Select a size"}</span>
+              </span>
+              <span className="text-[11px] text-stone-500 font-sans">Standard Boutique Fit</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {availableSizes.map((sz) => {
+                const isSelected = selectedSize === sz;
+                const matchingVariants = parsedVariants.filter((v: any) => v.size === sz);
+                const totalStockForSize = matchingVariants.reduce((sum: number, v: any) => sum + (Number(v.stockQuantity) || 0), 0);
+                const isSizeSoldOut = totalStockForSize <= 0;
+
+                return (
+                  <button
+                    key={sz}
+                    type="button"
+                    onClick={() => setSelectedSize(sz)}
+                    className={`min-w-[46px] px-3.5 py-2 text-xs font-sans font-bold uppercase tracking-wider rounded-none border transition-all ${
+                      isSelected
+                        ? "bg-black text-white border-black shadow-xs ring-1 ring-black"
+                        : isSizeSoldOut
+                        ? "bg-stone-50 text-stone-400 border-stone-200 line-through opacity-70"
+                        : "bg-white text-stone-800 border-stone-300 hover:border-black"
+                    }`}
+                  >
+                    {sz}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Colour Selector */}
+        {availableColors.length > 0 && (
+          <div className="space-y-2 pt-1">
+            <span className="text-xs font-bold text-slate-900 uppercase tracking-wider block">
+              Select Colour: <span className="font-extrabold text-[#222222]">{selectedColor || "Select a colour"}</span>
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {availableColors.map((col) => {
+                const isSelected = selectedColor === col.name;
+                return (
+                  <button
+                    key={col.name}
+                    type="button"
+                    onClick={() => setSelectedColor(col.name)}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-none border text-xs font-sans font-semibold transition-all ${
+                      isSelected
+                        ? "border-black bg-stone-50 text-black shadow-xs ring-1 ring-black"
+                        : "border-stone-300 bg-white text-stone-700 hover:border-stone-400"
+                    }`}
+                  >
+                    <span
+                      className="w-3.5 h-3.5 rounded-full border border-black/20 shrink-0"
+                      style={{ backgroundColor: col.hex }}
+                    />
+                    <span>{col.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Fallback Generic Variant Selector if no structured size/color */}
+        {availableSizes.length === 0 && availableColors.length === 0 && product.variants?.length > 0 && (
+          <div className="space-y-2">
+            <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">Choose Option / Variant:</label>
             <div className="flex flex-wrap gap-2">
               {product.variants.map((v: any) => {
                 const isSelected = selectedVariant?.id === v.id;
@@ -290,10 +441,10 @@ export function ProductViewClient({
                     key={v.id}
                     type="button"
                     onClick={() => setSelectedVariant(v)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
+                    className={`px-3 py-1.5 rounded-none text-xs font-semibold border transition-all ${
                       isSelected
-                        ? "bg-[#0A192F] text-white border-[#0A192F] shadow-sm"
-                        : "bg-white text-slate-700 border-slate-300 hover:border-slate-400"
+                        ? "bg-black text-white border-black shadow-sm"
+                        : "bg-white text-slate-700 border-stone-300 hover:border-black"
                     }`}
                   >
                     {v.title}
@@ -305,16 +456,19 @@ export function ProductViewClient({
         )}
 
         {/* Stock status */}
-        <div className="text-xs">
+        <div className="text-xs pt-0.5">
           {!isOutOfStock ? (
             <span className="text-emerald-700 font-bold flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              In Stock ({currentStock} available for instant dispatch)
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              <span>
+                In Stock ({currentStock} available
+                {selectedSize || selectedColor ? ` for ${[selectedSize, selectedColor].filter(Boolean).join(" / ")}` : ""} — ready for dispatch)
+              </span>
             </span>
           ) : (
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-serif font-bold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200">
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-none text-xs font-sans font-bold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200">
               <span className="w-2 h-2 rounded-full bg-rose-600" />
-              Currently Out of Stock
+              Currently Out of Stock {selectedSize || selectedColor ? `in ${[selectedSize, selectedColor].filter(Boolean).join(" / ")}` : ""}
             </span>
           )}
         </div>

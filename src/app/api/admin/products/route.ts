@@ -181,6 +181,11 @@ export async function POST(req: NextRequest) {
       ? JSON.stringify(comboProductIds)
       : comboProductIds || null;
 
+    // Calculate aggregated stock quantity if variants are supplied
+    const parsedVariants = Array.isArray(variants) ? variants : [];
+    const totalVariantStock = parsedVariants.reduce((sum: number, v: any) => sum + (parseInt(v.stockQuantity) || 0), 0);
+    const finalStockQuantity = parsedVariants.length > 0 ? totalVariantStock : (parseInt(stockQuantity) || 0);
+
     const product = await prisma.product.create({
       data: {
         title: title.trim(),
@@ -190,7 +195,7 @@ export async function POST(req: NextRequest) {
         regularPrice: parseFloat(regularPrice),
         salePrice: salePrice ? parseFloat(salePrice) : null,
         sku: generatedSku,
-        stockQuantity: parseInt(stockQuantity) || 0,
+        stockQuantity: finalStockQuantity,
         categoryId: categoryId || null,
         status: "PUBLISHED",
         featured: Boolean(featured),
@@ -203,15 +208,32 @@ export async function POST(req: NextRequest) {
         comboTitle: comboTitle ? comboTitle.trim() : null,
         images: imageCreateList.length > 0 ? { create: imageCreateList } : undefined,
         variants:
-          variants.length > 0
+          parsedVariants.length > 0
             ? {
-                create: variants.map((v: any, idx: number) => ({
-                  title: v.title,
-                  sku: v.sku || `${generatedSku}-VAR${idx + 1}`,
-                  price: parseFloat(v.price || regularPrice),
-                  stockQuantity: parseInt(v.stockQuantity || stockQuantity || 0),
-                  attributesJson: JSON.stringify(v.attributes || {}),
-                })),
+                create: parsedVariants.map((v: any, idx: number) => {
+                  const size = (v.size || v.attributes?.size || "").trim();
+                  const color = (v.color || v.attributes?.color || "").trim();
+                  const colorHex = (v.colorHex || v.attributes?.colorHex || "").trim();
+                  const autoTitle =
+                    v.title ||
+                    (size && color ? `${size} / ${color}` : size ? `Size: ${size}` : color ? `Color: ${color}` : `Variant ${idx + 1}`);
+                  const autoSku =
+                    v.sku && v.sku.trim()
+                      ? v.sku.trim().toUpperCase()
+                      : `${generatedSku}-${size || "VAR"}-${color || idx + 1}`.replace(/[^A-Za-z0-9-]/g, "").toUpperCase();
+                  return {
+                    title: autoTitle,
+                    sku: autoSku,
+                    price: parseFloat(v.price || regularPrice),
+                    stockQuantity: parseInt(v.stockQuantity || 0),
+                    attributesJson: JSON.stringify({
+                      size,
+                      color,
+                      colorHex,
+                      ...(v.attributes || {}),
+                    }),
+                  };
+                }),
               }
             : undefined,
       },
@@ -259,9 +281,15 @@ export async function PUT(req: NextRequest) {
       comboProductIds,
       comboDiscountPercent,
       comboTitle,
+      variants,
     } = body;
 
     if (!id) return NextResponse.json({ success: false, error: "Product ID required." }, { status: 400 });
+
+    const existingProduct = await prisma.product.findUnique({
+      where: { id },
+      select: { sku: true, regularPrice: true },
+    });
 
     const updateData: any = {};
     if (title !== undefined) updateData.title = title.trim();
@@ -309,10 +337,47 @@ export async function PUT(req: NextRequest) {
       }
     }
 
+    // Handle full variants replacement if provided
+    if (variants !== undefined && Array.isArray(variants)) {
+      await prisma.productVariant.deleteMany({ where: { productId: id } });
+      if (variants.length > 0) {
+        const baseSku = existingProduct?.sku || "SKU";
+        const effectivePrice = regularPrice !== undefined ? parseFloat(regularPrice) : (existingProduct?.regularPrice || 0);
+        const variantCreateList = variants.map((v: any, idx: number) => {
+          const size = (v.size || v.attributes?.size || "").trim();
+          const color = (v.color || v.attributes?.color || "").trim();
+          const colorHex = (v.colorHex || v.attributes?.colorHex || "").trim();
+          const autoTitle =
+            v.title ||
+            (size && color ? `${size} / ${color}` : size ? `Size: ${size}` : color ? `Color: ${color}` : `Variant ${idx + 1}`);
+          const autoSku =
+            v.sku && v.sku.trim()
+              ? v.sku.trim().toUpperCase()
+              : `${baseSku}-${size || "VAR"}-${color || (idx + 1)}-${Date.now().toString().slice(-4)}`.replace(/[^A-Za-z0-9-]/g, "").toUpperCase();
+          return {
+            productId: id,
+            title: autoTitle,
+            sku: autoSku,
+            price: parseFloat(v.price || effectivePrice),
+            stockQuantity: parseInt(v.stockQuantity || 0),
+            attributesJson: JSON.stringify({
+              size,
+              color,
+              colorHex,
+              ...(v.attributes || {}),
+            }),
+          };
+        });
+        await prisma.productVariant.createMany({ data: variantCreateList });
+        // Automatically synchronize total product stock with variants
+        updateData.stockQuantity = variants.reduce((acc: number, v: any) => acc + (parseInt(v.stockQuantity) || 0), 0);
+      }
+    }
+
     const product = await prisma.product.update({
       where: { id },
       data: updateData,
-      include: { images: true, category: true },
+      include: { images: true, category: true, variants: true },
     });
 
     return NextResponse.json({ success: true, product, message: `Product "${product.title}" updated successfully.` });
