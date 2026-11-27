@@ -28,7 +28,7 @@ export function ThemePreviewDock({ initialThemeCode }: { initialThemeCode?: stri
     return null;
   }
 
-  const activeThemeCode = currentParam || initialThemeCode || "AITHRITHI_MAROON";
+  const activeThemeCode = currentParam || initialThemeCode || "VEDHIKA_BOUTIQUE";
   const activeTheme = resolveStoreTheme(activeThemeCode);
 
   const handleSelectTheme = (themeId: string) => {

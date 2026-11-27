@@ -42,13 +42,14 @@ import {
   ArrowDown,
   Instagram,
   MessageCircle,
+  Search,
 } from "lucide-react";
 import { AVRO_THEMES, AvroThemeDefinition, resolveStoreTheme, getAllThemes } from "@/lib/themes-registry";
 import { LockedFeatureBanner } from "@/components/admin/LockedFeatureBanner";
 import { UpgradePlanModal } from "@/components/admin/UpgradePlanModal";
 import { PlanTier } from "@/lib/license-core";
 
-const BASIC_ALLOWED_THEMES = ["AITHRITHI_MAROON", "COUTURE_NOVA_LOFT", "AVRO_SIGNATURE", "FASHION_NOIR", "TALIM_DEFAULT"];
+const BASIC_ALLOWED_THEMES = ["VEDHIKA_BOUTIQUE", "AITHRITHI_MAROON", "COUTURE_NOVA_LOFT", "AVRO_SIGNATURE", "FASHION_NOIR", "TALIM_DEFAULT"];
 
 export default function ThemesAdminPage() {
   const [permissions, setPermissions] = useState<{
@@ -141,6 +142,7 @@ export default function ThemesAdminPage() {
   ];
 
   const fontOptions = [
+    { label: "Vedhika Signature (Poppins & Jost)", value: "'Poppins', 'Jost', sans-serif" },
     { label: "Aithrithi Minimal Luxury (Cormorant Garamond & Jakarta Sans)", value: "'Plus Jakarta Sans', 'Cormorant Garamond', sans-serif" },
     { label: "Cormorant & Jakarta (Aithrithi Luxury Editorial)", value: "'Cormorant Garamond', 'Plus Jakarta Sans', serif" },
     { label: "Inter (Modern Minimal)", value: "Inter, -apple-system, sans-serif" },
@@ -152,6 +154,9 @@ export default function ThemesAdminPage() {
   ];
 
   const heroImagePresets = [
+    { label: "Vedhika Saree Couture (High Fashion)", url: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85" },
+    { label: "Vedhika Festive Kurti", url: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85" },
+    { label: "Aithrithi Lite Editorial", url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=85" },
     { label: "Aithrithi Festive Maroon", url: "https://aydgnokektxslpaukbou.supabase.co/storage/v1/object/public/store-assets/aithrithi-hero.jpg" },
     { label: "General Retail", url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=85" },
     { label: "Fashion Lookbook", url: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=85" },
@@ -861,7 +866,9 @@ export default function ThemesAdminPage() {
         t.code === themeConfig?.activeTheme ||
         t.id === themeConfig?.activeTheme ||
         (themeConfig?.activeTheme === "TALIM_DEFAULT" && t.code === "AVRO_SIGNATURE")
-    ) || AVRO_THEMES[12];
+    ) ||
+    allThemesList.find((t) => t.code === "VEDHIKA_BOUTIQUE") ||
+    AVRO_THEMES[0];
 
   const previewWidthClass =
     viewportMode === "mobile"
@@ -2379,144 +2386,137 @@ export default function ThemesAdminPage() {
                   </div>
                 )}
 
-                {/* 2. Preview Header / Nav */}
+                {/* 2. Preview Header / Nav (Vedhika Dual-Row Centered Header) */}
                 <div
-                  className="px-4 py-3 border-b flex items-center justify-between"
+                  className="border-b"
                   style={{
-                    backgroundColor: customOverrides.cardBg,
+                    backgroundColor: customOverrides.cardBg || "#FFFFFF",
                     borderColor: "rgba(0,0,0,0.06)",
                   }}
                 >
-                  <div className="flex items-center gap-2">
-                    <div className="bg-white p-0.5 rounded border border-slate-200">
-                      <img src="/avro-logo.png" alt="AVROCART" className="h-5 w-auto object-contain" />
+                  {/* Top Row: Search, Centered Logo + Tagline, Utility Icons */}
+                  <div className="px-4 py-2.5 flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-slate-500 text-[10px] uppercase tracking-wider font-medium">
+                      <Search className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Search</span>
                     </div>
-                    <span className="font-black text-xs" style={{ color: customOverrides.textColor }}>
-                      {themeConfig.brandName}
-                    </span>
+
+                    <div className="text-center flex flex-col items-center">
+                      <span className="font-extrabold text-sm sm:text-base tracking-tight" style={{ color: customOverrides.textColor }}>
+                        {themeConfig.brandName || "Aithrithi.in"}
+                      </span>
+                      <span className="text-[8px] uppercase tracking-[0.2em] font-serif text-[#C5A880]">
+                        The First Designer Fashion Store from Kerala
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-slate-700">
+                      <div className="relative">
+                        <Heart className="w-3.5 h-3.5" />
+                        <span className="absolute -top-1 -right-1.5 w-3 h-3 bg-rose-500 text-white rounded-full text-[7px] flex items-center justify-center font-bold">1</span>
+                      </div>
+                      <div className="relative">
+                        <ShoppingBag className="w-3.5 h-3.5" />
+                        <span className="absolute -top-1 -right-1.5 w-3 h-3 bg-black text-white rounded-full text-[7px] flex items-center justify-center font-bold">2</span>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="hidden sm:flex items-center gap-3 text-[11px] font-medium text-slate-500">
-                    <span className="text-blue-600 font-bold">Home</span>
-                    <span>Catalog</span>
-                    <span>Track Order</span>
-                    <span>About</span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="p-1.5 rounded-lg flex items-center gap-1 text-[11px] font-bold text-white"
-                      style={{ backgroundColor: themeConfig.primaryColor }}
-                    >
-                      <ShoppingBag className="w-3.5 h-3.5" />
-                      <span className="text-[10px]">2</span>
-                    </div>
+                  {/* Second Row: Centered Navigation Menu */}
+                  <div className="hidden sm:flex items-center justify-center gap-4 py-1.5 border-t border-[#EDEDED] text-[9.5px] uppercase font-bold tracking-[0.14em] text-[#222222]">
+                    <span className="text-[#DEB660]">Home</span>
+                    <span>Sarees</span>
+                    <span>Kurtis</span>
+                    <span>Aithrithi Lite</span>
+                    <span>Kanjivaram</span>
+                    <span>Collections</span>
                   </div>
                 </div>
 
-                {/* 3. Preview Hero Section */}
+                {/* 3. Preview Hero Section (Vedhika Widescreen Boutique Slider) */}
                 <div
-                  className="p-6 border-b flex flex-col md:flex-row items-center gap-6"
+                  className="relative overflow-hidden min-h-[260px] sm:min-h-[340px] flex items-center select-none"
                   style={{
                     backgroundColor: customOverrides.cardBg,
                     borderColor: "rgba(0,0,0,0.06)",
                   }}
                 >
-                  <div className="flex-1 space-y-3">
+                  <img
+                    src={
+                      Array.isArray(customOverrides.heroSlides) && customOverrides.heroSlides.length > 0
+                        ? customOverrides.heroSlides[0].mediaUrl
+                        : themeConfig.bannerImageUrl || activeThemeObj.hero.imageUrl
+                    }
+                    alt="Hero Preview"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/20" />
+
+                  <div className="relative z-10 p-6 sm:p-10 max-w-lg space-y-2.5 text-white">
                     <div
-                      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[8.5px] font-bold uppercase tracking-[0.18em]"
                       style={{
-                        backgroundColor: "rgba(37,99,235,0.1)",
-                        color: themeConfig.accentColor,
-                        borderRadius: customOverrides.badgeRadius === "rounded-full" ? "9999px" : "4px",
+                        backgroundColor: "rgba(222,182,96,0.25)",
+                        color: "#DEB660",
+                        borderRadius: customOverrides.badgeRadius === "rounded-full" ? "9999px" : "0px",
                       }}
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-current" />
-                      {customOverrides.heroBadge}
+                      <Sparkles className="w-2.5 h-2.5" />
+                      <span>{customOverrides.heroBadge || "AITHRITHI BOUTIQUE"}</span>
                     </div>
 
-                    <h2
-                      className="text-2xl sm:text-3xl font-black leading-tight tracking-tight"
-                      style={{ color: customOverrides.textColor }}
-                    >
-                      {themeConfig.bannerHeadline}{" "}
-                      {customOverrides.headlineHighlight && (
-                        <span className="italic font-serif" style={{ color: themeConfig.accentColor }}>
-                          {customOverrides.headlineHighlight}
-                        </span>
-                      )}
+                    <h2 className="text-xl sm:text-3xl font-serif font-bold leading-tight tracking-tight text-white drop-shadow-sm">
+                      {themeConfig.bannerHeadline || "The Art of Kerala Designer Couture"}
                     </h2>
 
-                    <p className="text-[11px] leading-relaxed line-clamp-2" style={{ color: customOverrides.textMuted }}>
-                      {themeConfig.bannerSubheadline}
+                    <p className="text-[10px] sm:text-[11px] text-slate-200 line-clamp-2 leading-relaxed font-sans drop-shadow-xs">
+                      {themeConfig.bannerSubheadline || "Handcrafted pure tussar silks, artisanal sarees, and festive designer kurtis."}
                     </p>
 
-                    <div className="flex flex-wrap gap-2 pt-1">
+                    <div className="pt-2 flex items-center gap-2">
                       <button
                         type="button"
-                        className="px-4 py-2 text-white font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5 shadow-sm"
+                        className="px-5 py-2 font-bold text-[10px] sm:text-[11px] uppercase tracking-[0.16em] bg-white text-[#222222] hover:bg-[#DEB660] hover:text-black transition-all shadow-md active:scale-95"
                         style={{
-                          backgroundColor: themeConfig.primaryColor,
-                          borderRadius:
-                            customOverrides.buttonRadius === "rounded-full"
-                              ? "9999px"
-                              : customOverrides.buttonRadius === "rounded-none"
-                              ? "0px"
-                              : "8px",
+                          borderRadius: customOverrides.buttonRadius === "rounded-full" ? "9999px" : "0px",
                         }}
                       >
-                        <span>{customOverrides.ctaPrimary}</span>
-                        <ArrowRight className="w-3 h-3" />
-                      </button>
-                      <button
-                        type="button"
-                        className="px-4 py-2 border font-bold text-[11px] uppercase tracking-wider"
-                        style={{
-                          borderColor: "rgba(0,0,0,0.15)",
-                          color: customOverrides.textColor,
-                          borderRadius:
-                            customOverrides.buttonRadius === "rounded-full"
-                              ? "9999px"
-                              : customOverrides.buttonRadius === "rounded-none"
-                              ? "0px"
-                              : "8px",
-                        }}
-                      >
-                        {customOverrides.ctaSecondary}
+                        {customOverrides.ctaPrimary || "SHOP NOW"}
                       </button>
                     </div>
                   </div>
 
-                  <div className="w-full md:w-48 aspect-square rounded-xl overflow-hidden shadow-md flex-shrink-0 border border-black/5 relative">
-                    {Array.isArray(customOverrides.heroSlides) && customOverrides.heroSlides.length > 0 ? (
-                      customOverrides.heroSlides[0].mediaType === "video" ? (
-                        <video
-                          src={customOverrides.heroSlides[0].mediaUrl}
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <img
-                          src={customOverrides.heroSlides[0].mediaUrl}
-                          alt="Hero Preview"
-                          className="w-full h-full object-cover"
-                        />
-                      )
-                    ) : (
-                      <img
-                        src={themeConfig.bannerImageUrl || activeThemeObj.hero.imageUrl}
-                        alt="Hero Preview"
-                        className="w-full h-full object-cover"
-                      />
-                    )}
-                    {Array.isArray(customOverrides.heroSlides) && customOverrides.heroSlides.length > 0 && (
-                      <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded text-[8px] font-bold bg-black/70 text-white">
-                        {customOverrides.heroSlides.length} Slide(s)
-                      </span>
-                    )}
+                  {/* Square Controls Preview */}
+                  <div className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 bg-black/40 border border-white/20 text-white flex items-center justify-center text-xs">
+                    &lt;
+                  </div>
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 bg-black/40 border border-white/20 text-white flex items-center justify-center text-xs">
+                    &gt;
+                  </div>
+                </div>
+
+                {/* 3.5 Preview Product Categories (Vedhika 5 Double-Framed Rounded Tiles) */}
+                <div className="p-4 sm:p-5 border-b border-[#F0F0F0] bg-white">
+                  <h4 className="text-xs font-serif font-bold text-center text-[#222222] tracking-tight mb-3">
+                    Product Categories
+                  </h4>
+                  <div className="grid grid-cols-5 gap-2">
+                    {[
+                      { name: "Sarees", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80" },
+                      { name: "Kurtis", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=400&q=80" },
+                      { name: "Aithrithi Lite", img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80" },
+                      { name: "Kanjivaram", img: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=400&q=80" },
+                      { name: "Festive Couture", img: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80" },
+                    ].map((cat, ci) => (
+                      <div key={ci} className="flex flex-col items-center">
+                        <div className="w-full aspect-square border border-[#DCDCDC] rounded-xl p-1 bg-white shadow-2xs overflow-hidden">
+                          <img src={cat.img} alt={cat.name} className="w-full h-full object-cover rounded-lg" />
+                        </div>
+                        <span className="text-[9px] font-sans font-medium text-[#222222] mt-1 text-center truncate w-full">
+                          {cat.name}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
@@ -2530,8 +2530,8 @@ export default function ThemesAdminPage() {
                         <div
                           className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
                           style={{
-                            backgroundColor: "rgba(88, 17, 26, 0.08)",
-                            color: themeConfig?.primaryColor || "#58111A",
+                            backgroundColor: "rgba(222, 182, 96, 0.15)",
+                            color: "#DEB660",
                           }}
                         >
                           {tb.icon === "truck" ? (
@@ -2561,50 +2561,70 @@ export default function ThemesAdminPage() {
                   </div>
                 )}
 
-                {/* 5. Preview Product Cards */}
-                <div className="p-5 space-y-3">
+                {/* 5. Preview Product Cards (Vedhika 2:3 Tall Portrait Cards) */}
+                <div className="p-4 sm:p-5 space-y-3 bg-[#FAF7F5]">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                      Sample Product Grid
+                    <h4 className="text-xs font-serif font-bold text-[#222222] tracking-tight">
+                      New Arrivals (Sample 2:3 Grid)
                     </h4>
-                    <span className="text-[10px] text-blue-600 font-bold">View All 4 items</span>
+                    <span className="text-[10px] text-[#DEB660] font-bold uppercase tracking-wider">View All</span>
                   </div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     {[
-                      { title: "ANC Studio Headphones", price: "₹4,999", img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80" },
-                      { title: "Minimalist Graphic Tee", price: "₹1,499", img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80" },
-                      { title: "Matte Desk Mat & Cable", price: "₹999", img: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=400&q=80" },
-                      { title: "Thermal Insulated Cup", price: "₹899", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=400&q=80" },
+                      { title: "Crimson Tussar Silk Saree", price: "Rs. 8,450.00", badge: "SOLD OUT", badgeBg: "#D9383A", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80" },
+                      { title: "Mustard Embroidered Anarkali", price: "Rs. 5,200.00", badge: "15% OFF", badgeBg: "#DEB660", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=400&q=80" },
+                      { title: "Aithrithi Lite Mulmul Saree", price: "Rs. 3,450.00", badge: "POPULAR", badgeBg: "#222222", img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80" },
+                      { title: "Gold Kanjivaram Bridal Saree", price: "Rs. 18,900.00", badge: "NEW", badgeBg: "#DEB660", img: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=400&q=80" },
                     ].map((p, i) => (
                       <div
                         key={i}
-                        className="rounded-lg border p-2 flex flex-col justify-between shadow-2xs"
-                        style={{ backgroundColor: customOverrides.cardBg, borderColor: "rgba(0,0,0,0.08)" }}
+                        className="rounded-none border border-[#EDEDED] p-2 flex flex-col justify-between shadow-2xs bg-white"
                       >
-                        <div className="aspect-square rounded-md overflow-hidden bg-slate-100 mb-2">
+                        <div className="aspect-[2/3] rounded-none overflow-hidden bg-slate-100 mb-2 relative">
                           <img src={p.img} alt={p.title} className="w-full h-full object-cover" />
-                        </div>
-                        <p className="text-[10px] font-bold truncate leading-tight">{p.title}</p>
-                        <div className="flex items-center justify-between mt-1">
-                          <span className="text-[11px] font-extrabold text-blue-600">{p.price}</span>
-                          <button
-                            type="button"
-                            className="px-2 py-0.5 rounded text-[9px] font-bold text-white"
-                            style={{ backgroundColor: themeConfig.primaryColor }}
+                          <span
+                            className="absolute top-1.5 left-1.5 px-1.5 py-0.2 rounded-none text-[8px] font-sans font-bold uppercase tracking-wider text-white"
+                            style={{ backgroundColor: p.badgeBg }}
                           >
-                            Add
-                          </button>
+                            {p.badge}
+                          </span>
+                        </div>
+                        <p className="text-[10px] font-sans font-medium uppercase tracking-[0.03em] truncate leading-tight text-[#222222]">{p.title}</p>
+                        <div className="flex items-center justify-between mt-1 pt-1 border-t border-[#F0F0F0]">
+                          <span className="text-[10px] font-semibold text-[#222222] font-sans">{p.price}</span>
+                          <span className="text-[8px] uppercase font-bold text-[#DEB660]">View</span>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* 6. Preview Footer */}
-                <div className="p-4 bg-slate-900 text-slate-400 text-[10px] text-center border-t border-slate-800 space-y-1 mt-auto">
-                  <p>{themeConfig.footerText || "© 2026 AVRO Store. Powered by AVRO."}</p>
-                  <p className="text-[9px] text-slate-500">Powered by AVRO</p>
+                {/* 6. Preview Footer (Vedhika Signature Light Gray + Rich Gold Bar) */}
+                <div className="bg-[#F5F5F7] border-t border-[#E5E5E5] text-[#222222] text-[10px] mt-auto">
+                  <div className="p-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-left">
+                    <div>
+                      <strong className="block text-[10px] uppercase font-bold tracking-wider mb-1">Aithrithi Atelier</strong>
+                      <p className="text-[9px] text-slate-500">The First Designer Fashion Store from Kerala · By Devika</p>
+                    </div>
+                    <div>
+                      <strong className="block text-[10px] uppercase font-bold tracking-wider mb-1">Collections</strong>
+                      <p className="text-[9px] text-slate-500">Sarees · Kurtis · Aithrithi Lite</p>
+                    </div>
+                    <div>
+                      <strong className="block text-[10px] uppercase font-bold tracking-wider mb-1">Customer Care</strong>
+                      <p className="text-[9px] text-slate-500">Track Order · WhatsApp Concierge</p>
+                    </div>
+                    <div>
+                      <strong className="block text-[10px] uppercase font-bold tracking-wider mb-1">Legal</strong>
+                      <p className="text-[9px] text-slate-500">Privacy Policy · Terms · Refunds</p>
+                    </div>
+                  </div>
+                  {/* Signature Antique Gold Bar */}
+                  <div className="bg-[#C4962E] text-white py-2 px-3 text-center text-[9px] font-sans flex items-center justify-between">
+                    <span>Copyright © 2026 {themeConfig.brandName || "Aithrithi.in"}. All rights reserved.</span>
+                    <span className="opacity-90">Powered by AVRO Commerce</span>
+                  </div>
                 </div>
               </div>
             </div>
