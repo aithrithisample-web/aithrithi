@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import {
   ShoppingBag,
+  ShoppingCart,
   Heart,
   User,
   UserPlus,
@@ -11,6 +12,7 @@ import {
   Menu,
   X,
   ChevronDown,
+  ChevronUp,
   Package,
   Home,
   Compass,
@@ -194,36 +196,36 @@ export function StoreNav({ theme }: { theme?: any }) {
                   (e.target as HTMLImageElement).src = "/aithrithi-nav-logo-maroon.png";
                 }}
               />
-              <span className="hidden sm:block text-[9px] uppercase tracking-[0.24em] font-serif text-[#C5A880] mt-0.5 font-medium">
+              <span className="block text-[7.5px] sm:text-[9px] uppercase tracking-[0.2em] font-serif text-[#888888] mt-0.5 font-medium text-center">
                 The First Designer Fashion Store from Kerala
               </span>
             </Link>
           </div>
 
-          {/* Right-Aligned Utility Icons (Search on mobile, Track, Wishlist, Account, Cart) */}
-          <div className="flex items-center justify-end gap-1 sm:gap-2.5 flex-1">
-            {/* Mobile Search Button */}
+          {/* Right-Aligned Utility Icons (Search, Track, Wishlist, Account, Cart) — Vedhika 3-Icon Row on Mobile */}
+          <div className="flex items-center justify-end gap-0.5 sm:gap-2.5 flex-1">
+            {/* Search Button */}
             <Link
               href="/shop"
-              className="flex md:hidden w-8.5 h-8.5 rounded-full items-center justify-center text-slate-700 hover:bg-slate-100 transition-colors"
+              className="w-8.5 h-8.5 rounded-full flex items-center justify-center text-slate-800 hover:text-[#DEB660] hover:bg-slate-50 transition-colors"
               title="Search"
             >
-              <Search className="w-4 h-4" />
+              <Search className="w-4.5 h-4.5" />
             </Link>
 
-            {/* Track Order Icon */}
+            {/* Track Order Icon (Visible on Mobile & Desktop — Vedhika Style) */}
             <Link
               href="/track"
-              className="hidden sm:flex relative w-8.5 h-8.5 rounded-full items-center justify-center text-slate-700 hover:text-[#DEB660] hover:bg-slate-50 transition-colors"
+              className="relative w-8.5 h-8.5 rounded-full flex items-center justify-center text-slate-800 hover:text-[#DEB660] hover:bg-slate-50 transition-colors"
               title="Track Order"
             >
-              <Truck className="w-4 h-4" />
+              <Truck className="w-4.5 h-4.5" />
             </Link>
 
-            {/* Wishlist Icon */}
+            {/* Wishlist Icon (Desktop only — on mobile accessible via Drawer & Bottom Nav) */}
             <Link
               href="/wishlist"
-              className="relative w-8.5 h-8.5 rounded-full flex items-center justify-center text-slate-700 hover:text-[#DEB660] hover:bg-slate-50 transition-colors"
+              className="hidden sm:flex relative w-8.5 h-8.5 rounded-full items-center justify-center text-slate-700 hover:text-[#DEB660] hover:bg-slate-50 transition-colors"
               title="Wishlist"
             >
               <Heart className={`w-4 h-4 ${wishlistCount > 0 ? "fill-rose-500 text-rose-500" : ""}`} />
@@ -506,107 +508,74 @@ export function StoreNav({ theme }: { theme?: any }) {
         )}
       </header>
 
-      {/* NATIVE MOBILE BOTTOM NAVIGATION BAR FOR IPHONE 15 & ANDROID */}
+      {/* NATIVE MOBILE BOTTOM NAVIGATION BAR (Vedhika 3-Item Style: Home, Cart, Account) */}
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 backdrop-blur-xl border-t shadow-2xl transition-all"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200 shadow-2xl transition-all"
         style={{
-          backgroundColor: isDarkNav ? "rgba(15, 23, 42, 0.96)" : "rgba(255, 255, 255, 0.96)",
-          borderColor: isDarkNav ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)",
-          paddingBottom: "max(0.65rem, env(safe-area-inset-bottom))",
+          paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))",
         }}
         aria-label="Mobile Bottom Navigation"
       >
-        <div className="flex items-center justify-around h-13 max-w-md mx-auto px-2">
-          {/* Home */}
+        <div className="grid grid-cols-3 h-14 max-w-md mx-auto px-2">
+          {/* 1. Home */}
           <Link
             href="/"
-            className={`flex flex-col items-center justify-center min-w-[56px] py-1 transition-colors ${
+            className={`flex flex-col items-center justify-center py-1 transition-colors ${
               pathname === "/"
-                ? "text-[#DEB660] font-bold"
-                : isDarkNav
-                ? "text-slate-400 hover:text-white"
-                : "text-slate-600 hover:text-black"
+                ? "text-black font-semibold"
+                : "text-slate-700 hover:text-black"
             }`}
           >
-            <Home className="w-4.5 h-4.5" />
-            <span className="text-[10px] mt-0.5 font-sans">Home</span>
+            <Home className="w-5 h-5 stroke-[1.75]" />
+            <span className="text-[11px] mt-0.5 font-sans">Home</span>
           </Link>
 
-          {/* Shop */}
-          <Link
-            href="/shop"
-            className={`flex flex-col items-center justify-center min-w-[56px] py-1 transition-colors ${
-              pathname === "/shop"
-                ? "text-[#DEB660] font-bold"
-                : isDarkNav
-                ? "text-slate-400 hover:text-white"
-                : "text-slate-600 hover:text-black"
-            }`}
-          >
-            <Compass className="w-4.5 h-4.5" />
-            <span className="text-[10px] mt-0.5 font-sans">Collections</span>
-          </Link>
-
-          {/* Wishlist */}
-          <Link
-            href="/wishlist"
-            className={`relative flex flex-col items-center justify-center min-w-[56px] py-1 transition-colors ${
-              pathname === "/wishlist"
-                ? "text-rose-600 font-bold"
-                : isDarkNav
-                ? "text-slate-400 hover:text-white"
-                : "text-slate-600 hover:text-black"
-            }`}
-          >
-            <div className="relative">
-              <Heart className={`w-4.5 h-4.5 ${wishlistCount > 0 ? "fill-rose-500 text-rose-500" : ""}`} />
-              {wishlistCount > 0 && (
-                <span className="absolute -top-1 -right-2 min-w-[14px] h-3.5 px-0.5 rounded-full bg-rose-500 text-white text-[8px] font-bold flex items-center justify-center">
-                  {wishlistCount}
-                </span>
-              )}
-            </div>
-            <span className="text-[10px] mt-0.5 font-sans">Wishlist</span>
-          </Link>
-
-          {/* Cart */}
+          {/* 2. Cart (with solid black circular badge) */}
           <Link
             href="/cart"
-            className={`relative flex flex-col items-center justify-center min-w-[56px] py-1 transition-colors ${
+            className={`relative flex flex-col items-center justify-center py-1 transition-colors ${
               pathname === "/cart"
-                ? "text-[#DEB660] font-bold"
-                : isDarkNav
-                ? "text-slate-400 hover:text-white"
-                : "text-slate-600 hover:text-black"
+                ? "text-black font-semibold"
+                : "text-slate-700 hover:text-black"
             }`}
           >
             <div className="relative">
-              <ShoppingBag className="w-4.5 h-4.5" />
-              {itemCount > 0 && (
-                <span className="absolute -top-1 -right-2 min-w-[14px] h-3.5 px-0.5 rounded-full bg-black text-white text-[8px] font-bold flex items-center justify-center shadow-xs">
-                  {itemCount}
-                </span>
-              )}
+              <ShoppingCart className="w-5 h-5 stroke-[1.75]" />
+              <span className="absolute -top-1.5 -right-3 min-w-[16px] h-4 px-1 rounded-full bg-black text-white text-[9px] font-bold flex items-center justify-center shadow-xs">
+                {itemCount}
+              </span>
             </div>
-            <span className="text-[10px] mt-0.5 font-sans">Cart</span>
+            <span className="text-[11px] mt-0.5 font-sans">Cart</span>
           </Link>
 
-          {/* Account */}
+          {/* 3. Account */}
           <Link
             href={customer ? (customer.isGuest ? "/login" : "/account") : "/login"}
-            className={`flex flex-col items-center justify-center min-w-[56px] py-1 transition-colors ${
+            className={`flex flex-col items-center justify-center py-1 transition-colors ${
               pathname.startsWith("/account") || pathname.startsWith("/login")
-                ? "text-[#DEB660] font-bold"
-                : isDarkNav
-                ? "text-slate-400 hover:text-white"
-                : "text-slate-600 hover:text-black"
+                ? "text-black font-semibold"
+                : "text-slate-700 hover:text-black"
             }`}
           >
-            <User className="w-4.5 h-4.5" />
-            <span className="text-[10px] mt-0.5 font-sans">{customer ? (customer.isGuest ? "Guest" : "Account") : "Sign In"}</span>
+            <User className="w-5 h-5 stroke-[1.75]" />
+            <span className="text-[11px] mt-0.5 font-sans">Account</span>
           </Link>
         </div>
       </nav>
+
+      {/* FLOATING SCROLL-TO-TOP BUTTON (Vedhika Style — Bottom Right Square Box) */}
+      <button
+        type="button"
+        onClick={() => {
+          if (typeof window !== "undefined") {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+        }}
+        className="fixed bottom-16 sm:bottom-6 right-3 sm:right-6 z-30 w-9 h-9 sm:w-10 sm:h-10 bg-white border border-slate-300 text-slate-800 flex items-center justify-center shadow-md hover:bg-slate-50 transition-all rounded-none cursor-pointer"
+        aria-label="Scroll to top"
+      >
+        <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-slate-800" />
+      </button>
     </>
   );
 }

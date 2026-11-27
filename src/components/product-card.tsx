@@ -57,7 +57,7 @@ export function ProductCard({
   };
 
   return (
-    <div className="group rounded-none bg-white border border-[#EDEDED] hover:border-[#DEB660]/70 transition-all duration-300 flex flex-col justify-between relative shadow-2xs hover:shadow-md">
+    <div className="group rounded-none bg-white transition-all duration-300 flex flex-col justify-start relative">
       {/* Product Image — Vedhika Tall 2:3 Portrait Aspect Ratio */}
       <Link href={`/product/${product.slug}`} className="block relative aspect-[2/3] bg-[#F7F7F7] overflow-hidden">
         <img
@@ -80,9 +80,6 @@ export function ProductCard({
             className="w-full h-full object-cover absolute inset-0 opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
           />
         )}
-
-        {/* Gradient shimmer on hover */}
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
 
         {/* Badges — Sharp Rectangular (Vedhika Kalles Style) */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
@@ -112,34 +109,17 @@ export function ProductCard({
           <button
             type="button"
             onClick={handleWishlistToggle}
-            className="p-2 rounded-none bg-white/95 backdrop-blur-sm shadow-xs transition-all duration-200
+            className="p-1.5 sm:p-2 rounded-none bg-white/95 backdrop-blur-sm shadow-xs transition-all duration-200
                        opacity-100 sm:opacity-0 sm:group-hover:opacity-100 scale-100 sm:scale-95 sm:group-hover:scale-100
                        hover:bg-white text-slate-700 hover:text-[#DEB660] active:scale-90"
             title={isSaved ? "Remove from wishlist" : "Save to wishlist"}
           >
             <Heart className={`w-3.5 h-3.5 transition-colors ${isSaved ? "fill-rose-600 text-rose-600" : "text-slate-600 hover:text-[#DEB660]"}`} />
           </button>
-
-          <Link
-            href={`/product/${product.slug}`}
-            onClick={(e) => e.stopPropagation()}
-            className="p-2 rounded-none bg-white/95 backdrop-blur-sm shadow-xs text-slate-600 hover:text-[#DEB660]
-                       opacity-0 sm:group-hover:opacity-100 scale-95 sm:group-hover:scale-100 transition-all duration-200 delay-75"
-            title="View product"
-          >
-            <Eye className="w-3.5 h-3.5" />
-          </Link>
         </div>
 
-        {/* Low stock badge */}
-        {product.stockQuantity <= 5 && product.stockQuantity > 0 && (
-          <span className="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded-none text-[9px] font-sans font-bold tracking-[0.12em] uppercase bg-[#DEB660] text-black shadow-xs">
-            ONLY {product.stockQuantity} LEFT
-          </span>
-        )}
-
-        {/* Quick add overlay — slides up from bottom on hover */}
-        <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-20 p-2.5">
+        {/* Desktop Quick add overlay — slides up from bottom on hover */}
+        <div className="hidden sm:block absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-20 p-2.5">
           {isOutOfStock ? (
             <button
               type="button"
@@ -172,79 +152,22 @@ export function ProductCard({
         </div>
       </Link>
 
-      {/* Product Info */}
-      <div className="p-3.5 space-y-2 flex-grow flex flex-col justify-between">
-        <div>
-          {product.category && (
-            <span className="text-[10px] font-sans font-medium uppercase tracking-[0.16em] text-[#999999] block mb-1">
-              {product.category.name}
+      {/* Product Info (Vedhika Clean Minimalist Typography) */}
+      <div className="pt-2 sm:pt-3 space-y-1 flex-grow flex flex-col justify-start text-left">
+        <Link href={`/product/${product.slug}`}>
+          <h3 className="font-sans font-medium text-[11px] sm:text-[13px] uppercase tracking-[0.03em] text-[#222222] hover:text-[#DEB660] transition-colors line-clamp-4 leading-[1.35]">
+            {product.title}
+          </h3>
+        </Link>
+
+        <div className="pt-0.5 flex items-baseline gap-2">
+          <span className="text-xs sm:text-sm font-medium text-[#222222] font-sans">
+            Rs. {effectivePrice.toLocaleString("en-IN")}.00
+          </span>
+          {hasDiscount && (
+            <span className="text-[11px] text-slate-400 line-through font-sans">
+              Rs. {product.regularPrice.toLocaleString("en-IN")}.00
             </span>
-          )}
-          <Link href={`/product/${product.slug}`}>
-            <h3 className="font-sans font-medium text-xs sm:text-[13px] uppercase tracking-[0.03em] text-[#222222] hover:text-[#DEB660] transition-colors line-clamp-2 leading-snug">
-              {product.title}
-            </h3>
-          </Link>
-
-          {/* Stars & Rating Summary */}
-          {showReviews && (() => {
-            const reviewsCount = product.reviews?.length || 0;
-            const computedRating =
-              reviewsCount > 0
-                ? product.reviews.reduce((s: number, r: any) => s + r.rating, 0) / reviewsCount
-                : product.rating || 5.0;
-            return (
-              <div className="flex items-center gap-1 mt-1.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-2.5 h-2.5 ${
-                      i < Math.floor(computedRating)
-                        ? "fill-amber-400 text-amber-400"
-                        : "text-slate-200"
-                    }`}
-                  />
-                ))}
-                <span className="text-[10px] text-slate-500 font-semibold ml-1">
-                  {Number(computedRating).toFixed(1)}
-                  {reviewsCount > 0 && (
-                    <span className="text-slate-400 font-normal"> ({reviewsCount})</span>
-                  )}
-                </span>
-              </div>
-            );
-          })()}
-        </div>
-
-        <div className="pt-2 flex items-center justify-between border-t border-[#F0F0F0]">
-          <div>
-            <span className="text-xs sm:text-sm font-semibold text-[#222222] font-sans tracking-tight">
-              Rs. {effectivePrice.toLocaleString("en-IN")}.00
-            </span>
-            {hasDiscount && (
-              <span className="text-[11px] text-slate-400 line-through ml-2 font-sans">
-                Rs. {product.regularPrice.toLocaleString("en-IN")}.00
-              </span>
-            )}
-          </div>
-
-          {/* 1-Tap Add to Cart button */}
-          {isOutOfStock ? (
-            <span className="text-[9.5px] font-sans font-bold uppercase tracking-wider text-[#D9383A]">Sold Out</span>
-          ) : (
-            <button
-              type="button"
-              onClick={handleQuickAdd}
-              className={`flex p-2 rounded-none transition-all items-center justify-center cursor-pointer ${
-                added
-                  ? "bg-emerald-600 text-white"
-                  : "bg-slate-100 hover:bg-[#DEB660] text-slate-800 hover:text-white"
-              }`}
-              title="Quick add to cart"
-              aria-label="Add to cart"
-            >
-              {added ? <Check className="w-3.5 h-3.5" /> : <ShoppingBag className="w-3.5 h-3.5" />}
-            </button>
           )}
         </div>
       </div>

@@ -108,7 +108,7 @@ export function HeroBannerSlider({
   // 1. Single Fallback Hero Banner (No Slides)
   if (totalSlides === 0) {
     return (
-      <div className="relative w-full overflow-hidden min-h-[400px] sm:min-h-[480px] md:min-h-[540px] lg:min-h-[620px] flex items-center justify-center select-none">
+      <div className="relative w-full overflow-hidden min-h-[460px] sm:min-h-[520px] md:min-h-[580px] lg:min-h-[640px] flex items-center justify-center select-none">
         {/* Background Ad Image - Full bleed, no frame */}
         <img
           src={fallbackImage}
@@ -119,39 +119,37 @@ export function HeroBannerSlider({
           className="absolute inset-0 w-full h-full object-cover object-center scale-[1.01]"
         />
 
-        {/* Cinematic Gradient Vignette Overlay for Readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/30 sm:bg-gradient-to-r sm:from-black/85 sm:via-black/50 sm:to-black/25 pointer-events-none" />
+        {/* Subtle Vignette Overlay for Readability (Vedhika Mobile Style) */}
+        <div className="absolute inset-0 bg-black/40 sm:bg-black/35 pointer-events-none" />
 
-        {/* Content Container - Mobile-Friendly Layout */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 text-center sm:text-left flex flex-col items-center sm:items-start justify-center w-full">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[10.5px] sm:text-xs font-serif font-bold uppercase tracking-[0.2em] bg-white/15 text-[#FAF7F5] backdrop-blur-md border border-white/25 shadow-sm mb-3 sm:mb-4">
-            <Sparkles className="w-3 h-3 text-[#C5A880]" />
-            <span>AITHRITHI COUTURE · BY DEVIKA</span>
-          </div>
-
-          {/* Headline */}
-          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-bold text-white tracking-wide leading-[1.15] drop-shadow-md max-w-2xl">
-            {fallbackTitle || "Timeless Elegance & Handcrafted Luxury"}
+        {/* Content Container — Centered Luxury Boutique Layout */}
+        <div className="relative z-10 max-w-4xl mx-auto px-6 sm:px-8 py-14 sm:py-20 text-center flex flex-col items-center justify-center w-full space-y-3.5">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-sans font-medium text-white tracking-tight leading-snug drop-shadow-md max-w-2xl">
+            {fallbackTitle || "Celebrate all day, every day."}
           </h1>
 
-          {/* Subtitle */}
-          <p className="mt-3 sm:mt-4 text-xs sm:text-sm md:text-base text-slate-200 max-w-lg font-sans font-normal leading-relaxed drop-shadow-sm">
-            {fallbackTagline || "Discover handcrafted luxury sarees, designer kurtis, and festive ensembles made with master craftsmanship."}
-          </p>
+          {fallbackTagline && (
+            <p className="text-xs sm:text-sm text-slate-100 max-w-md font-sans font-normal leading-relaxed drop-shadow-sm">
+              {fallbackTagline}
+            </p>
+          )}
 
-          {/* Action Button */}
-          <div className="mt-6 sm:mt-8 flex items-center gap-3">
+          <div className="pt-2">
             <Link
               href="/shop"
-              className={`inline-flex items-center gap-2 px-7 py-3 sm:px-9 sm:py-3.5 text-xs sm:text-sm font-sans font-bold uppercase tracking-[0.16em] bg-white text-[#222222] hover:bg-[#DEB660] hover:text-black shadow-2xl transition-all duration-300 active:scale-95 group/btn ${
-                buttonRadius === "rounded-none" ? "rounded-none" : "rounded-full"
-              }`}
+              className="inline-block px-7 py-2.5 sm:px-8 sm:py-3 text-[11px] sm:text-xs font-sans font-bold uppercase tracking-[0.18em] bg-white text-black hover:bg-[#DEB660] transition-colors rounded-none shadow-md"
             >
-              <span>Explore Collection</span>
-              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+              SHOP NOW
             </Link>
           </div>
+        </div>
+
+        {/* Edge Arrow Boxes (Vedhika Style) */}
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-10 sm:w-10 sm:h-12 bg-white text-black border border-slate-200/90 shadow-md flex items-center justify-center z-20 pointer-events-none opacity-90">
+          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
+        </div>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-10 sm:w-10 sm:h-12 bg-white text-black border border-slate-200/90 shadow-md flex items-center justify-center z-20 pointer-events-none opacity-90">
+          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
         </div>
       </div>
     );
@@ -166,7 +164,7 @@ export function HeroBannerSlider({
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="relative w-full overflow-hidden min-h-[400px] sm:min-h-[480px] md:min-h-[540px] lg:min-h-[620px] flex items-center select-none touch-pan-y"
+      className="relative w-full overflow-hidden min-h-[460px] sm:min-h-[520px] md:min-h-[580px] lg:min-h-[640px] flex items-center select-none touch-pan-y"
     >
       {/* Background Slides Container */}
       <div
@@ -196,65 +194,52 @@ export function HeroBannerSlider({
               />
             )}
 
-            {/* Seamless Vignette Overlay - No Frames */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/35 sm:bg-gradient-to-r sm:from-black/85 sm:via-black/55 sm:to-black/25 pointer-events-none" />
+            {/* Seamless Vignette Overlay */}
+            <div className="absolute inset-0 bg-black/40 sm:bg-black/35 pointer-events-none" />
           </div>
         ))}
       </div>
 
-      {/* Floating Content Over Background */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 text-center sm:text-left flex flex-col items-center sm:items-start justify-center w-full">
-        {/* Ad Campaign Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[10.5px] sm:text-xs font-serif font-bold uppercase tracking-[0.2em] bg-white/15 text-[#FAF7F5] backdrop-blur-md border border-white/25 shadow-sm mb-3 sm:mb-4">
-          <Tag className="w-3 h-3 text-[#C5A880]" />
-          <span>{currentSlide?.badge || "SPECIAL OFFER"}</span>
-          {currentSlide?.mediaType === "video" && (
-            <span className="ml-1 px-1.5 py-0.5 rounded text-[9px] bg-rose-600 text-white font-mono">
-              LIVE
-            </span>
-          )}
-        </div>
+      {/* Floating Centered Content Over Background (Vedhika Style) */}
+      <div className="relative z-10 max-w-4xl mx-auto px-6 sm:px-8 py-14 sm:py-20 text-center flex flex-col items-center justify-center w-full space-y-3.5">
+        {currentSlide?.badge && (
+          <span className="text-[10px] sm:text-xs font-sans font-bold uppercase tracking-[0.2em] text-[#DEB660]">
+            {currentSlide.badge}
+          </span>
+        )}
 
-        {/* Title */}
-        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-bold text-white tracking-wide leading-[1.15] drop-shadow-md max-w-2xl">
-          {currentSlide?.title || fallbackTitle}
+        <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-sans font-medium text-white tracking-tight leading-snug drop-shadow-md max-w-2xl">
+          {currentSlide?.title || fallbackTitle || "Celebrate all day, every day."}
         </h1>
 
-        {/* Description */}
         {currentSlide?.subtitle && (
-          <p className="mt-3 sm:mt-4 text-xs sm:text-sm md:text-base text-slate-200 max-w-lg font-sans font-normal leading-relaxed drop-shadow-sm">
+          <p className="text-xs sm:text-sm text-slate-100 max-w-md font-sans font-normal leading-relaxed drop-shadow-sm">
             {currentSlide.subtitle}
           </p>
         )}
 
-        {/* Call to Action Button */}
-        <div className="mt-6 sm:mt-8 flex items-center gap-3">
+        <div className="pt-2">
           <Link
             href={currentSlide?.ctaLink || "/shop"}
-            className={`inline-flex items-center gap-2 px-7 py-3 sm:px-9 sm:py-3.5 text-xs sm:text-sm font-sans font-bold uppercase tracking-[0.16em] bg-white text-[#222222] hover:bg-[#DEB660] hover:text-black shadow-2xl transition-all duration-300 active:scale-95 group/btn ${
-              buttonRadius === "rounded-none" ? "rounded-none" : "rounded-full"
-            }`}
+            className="inline-block px-7 py-2.5 sm:px-8 sm:py-3 text-[11px] sm:text-xs font-sans font-bold uppercase tracking-[0.18em] bg-white text-black hover:bg-[#DEB660] transition-colors rounded-none shadow-md"
           >
-            <span>{currentSlide?.ctaText || "Shop Collection"}</span>
-            <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+            {currentSlide?.ctaText || "SHOP NOW"}
           </Link>
         </div>
       </div>
 
       {/* Slide Navigation Pagination Dots at Bottom */}
       {totalSlides > 1 && (
-        <div className="absolute bottom-5 left-0 right-0 flex items-center justify-center gap-2 z-20 pointer-events-auto">
+        <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center gap-1.5 z-20 pointer-events-auto">
           {activeSlides.map((_, dotIdx) => (
             <button
               key={dotIdx}
               type="button"
               onClick={() => setCurrentIndex(dotIdx)}
-              className={`h-1.5 sm:h-2 transition-all duration-300 cursor-pointer ${
-                buttonRadius === "rounded-none" ? "rounded-none" : "rounded-full"
-              } ${
+              className={`h-1 transition-all duration-300 cursor-pointer rounded-none ${
                 currentIndex === dotIdx
-                  ? "w-6 sm:w-8 bg-[#DEB660] shadow-md"
-                  : "w-2 bg-white/50 hover:bg-white/80"
+                  ? "w-6 bg-[#DEB660] shadow-xs"
+                  : "w-2 bg-white/60 hover:bg-white"
               }`}
               aria-label={`Go to slide ${dotIdx + 1}`}
             />
@@ -262,28 +247,24 @@ export function HeroBannerSlider({
         </div>
       )}
 
-      {/* Left / Right Arrow Controls (Vedhika Square Controls) */}
+      {/* Left / Right White Square Arrow Controls Flush with Edges (Vedhika Style) */}
       {totalSlides > 1 && (
         <>
           <button
             type="button"
             onClick={handlePrev}
-            className={`absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 bg-black/40 hover:bg-[#DEB660] hover:text-black hover:border-[#DEB660] text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 sm:group-hover:opacity-100 z-20 backdrop-blur-md border border-white/20 cursor-pointer shadow-lg active:scale-95 ${
-              buttonRadius === "rounded-none" ? "rounded-none" : "rounded-full"
-            }`}
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-10 sm:w-10 sm:h-12 bg-white text-black border border-slate-200/90 shadow-md flex items-center justify-center z-20 cursor-pointer active:scale-95 transition-all hover:bg-slate-50"
             aria-label="Previous slide"
           >
-            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
           </button>
           <button
             type="button"
             onClick={handleNext}
-            className={`absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 bg-black/40 hover:bg-[#DEB660] hover:text-black hover:border-[#DEB660] text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 sm:group-hover:opacity-100 z-20 backdrop-blur-md border border-white/20 cursor-pointer shadow-lg active:scale-95 ${
-              buttonRadius === "rounded-none" ? "rounded-none" : "rounded-full"
-            }`}
+            className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-10 sm:w-10 sm:h-12 bg-white text-black border border-slate-200/90 shadow-md flex items-center justify-center z-20 cursor-pointer active:scale-95 transition-all hover:bg-slate-50"
             aria-label="Next slide"
           >
-            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
           </button>
         </>
       )}

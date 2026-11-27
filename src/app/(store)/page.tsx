@@ -15,6 +15,8 @@ import {
   TrendingUp,
   Sparkles,
   Lock,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { AVRO_THEMES, AvroThemeDefinition, resolveStoreTheme } from "@/lib/themes-registry";
 import { ProductCard } from "@/components/product-card";
@@ -436,11 +438,11 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       )}
 
       {/* =====================================================
-          4. FEATURED PRODUCTS (New Arrivals / Curated Bestsellers)
+          4. FEATURED PRODUCTS (New Arrivals / Curated Bestsellers — Vedhika Style)
           ===================================================== */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 mt-12 sm:mt-18">
         <div className="text-center space-y-1">
-          <h2 className="text-2xl sm:text-3xl font-serif font-medium tracking-tight text-[#222222]">
+          <h2 className="text-2xl sm:text-3xl font-sans font-bold tracking-tight text-[#222222]">
             New Arrivals
           </h2>
           <p className="text-xs text-stone-500 font-sans">
@@ -448,69 +450,72 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           </p>
         </div>
 
-        {/* Product Cards Grid — 2 columns on mobile, 4 on desktop (Sharp 2:3 Vedhika Cards) */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 avro-stagger-grid">
-          {featuredProductsToDisplay.length > 0 ? (
-            featuredProductsToDisplay.map((p: any) => (
-              <ProductCard key={p.id} product={p} showReviews={allowReviews} />
-            ))
-          ) : (
-            themeDef.sampleProducts.map((p) => {
-              const hasDiscount = p.compareAtPrice && p.compareAtPrice > p.price;
-              const discountPct = hasDiscount
-                ? Math.round(((p.compareAtPrice! - p.price) / p.compareAtPrice!) * 100)
-                : 0;
-              return (
-                <div
-                  key={p.slug}
-                  className="group overflow-hidden shadow-2xs flex flex-col border border-[#EDEDED] bg-white rounded-none"
-                >
-                  <div className="relative aspect-[2/3] overflow-hidden bg-slate-100">
-                    <img
-                      src={p.imageUrl}
-                      alt={p.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
+        {/* Product Carousel / Grid — Exactly 2 items side-by-side on mobile, 4 on desktop */}
+        <div className="relative group/carousel">
+          <div className="flex overflow-x-auto no-scrollbar snap-x snap-mandatory gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
+            {featuredProductsToDisplay.length > 0 ? (
+              featuredProductsToDisplay.map((p: any) => (
+                <div key={p.id} className="w-[calc(50vw-22px)] sm:w-auto shrink-0 snap-start">
+                  <ProductCard product={p} showReviews={false} />
+                </div>
+              ))
+            ) : (
+              themeDef.sampleProducts.map((p) => {
+                const hasDiscount = p.compareAtPrice && p.compareAtPrice > p.price;
+                return (
+                  <div
+                    key={p.slug}
+                    className="w-[calc(50vw-22px)] sm:w-auto shrink-0 snap-start group rounded-none bg-white transition-all duration-300 flex flex-col justify-start relative"
+                  >
+                    <div className="relative aspect-[2/3] overflow-hidden bg-slate-100">
+                      <img
+                        src={p.imageUrl}
+                        alt={p.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
                       {p.badge && (
-                        <span className="px-2 py-0.5 text-[9px] font-sans font-bold tracking-[0.14em] uppercase text-black bg-[#DEB660] rounded-none">
-                          {p.badge}
-                        </span>
+                        <div className="absolute top-2.5 left-2.5 z-10">
+                          <span className="px-2 py-0.5 text-[9px] font-sans font-bold tracking-[0.14em] uppercase text-black bg-[#DEB660] rounded-none">
+                            {p.badge}
+                          </span>
+                        </div>
                       )}
                     </div>
-                  </div>
-                  <div className="p-3 sm:p-4 space-y-1.5 flex-grow flex flex-col justify-between">
-                    <div>
-                      <span className="text-[10px] font-sans font-medium tracking-[0.16em] uppercase text-[#888888] block mb-0.5">
-                        {p.category}
-                      </span>
-                      <h3 className="font-sans font-medium text-xs sm:text-[13px] uppercase tracking-[0.03em] line-clamp-2 text-[#222222]">
+                    <div className="pt-2 sm:pt-3 space-y-1 flex-grow flex flex-col justify-start text-left">
+                      <h3 className="font-sans font-medium text-[11px] sm:text-[13px] uppercase tracking-[0.03em] line-clamp-4 leading-[1.35] text-[#222222]">
                         {p.title}
                       </h3>
-                    </div>
-                    <div className="pt-2 flex items-center justify-between border-t border-[#F0F0F0]">
-                      <span className="text-xs sm:text-sm font-semibold text-[#222222] font-sans">
-                        Rs. {p.price.toLocaleString("en-IN")}.00
-                      </span>
-                      <Link
-                        href={`/shop?category=${encodeURIComponent(p.category)}`}
-                        className="px-2.5 py-1 text-[11px] font-sans uppercase tracking-wider text-[#222222] hover:text-[#DEB660]"
-                      >
-                        Inspect
-                      </Link>
+                      <div className="pt-0.5 flex items-baseline gap-2">
+                        <span className="text-xs sm:text-sm font-medium text-[#222222] font-sans">
+                          Rs. {p.price.toLocaleString("en-IN")}.00
+                        </span>
+                        {hasDiscount && (
+                          <span className="text-[11px] text-slate-400 line-through font-sans">
+                            Rs. {p.compareAtPrice!.toLocaleString("en-IN")}.00
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })
-          )}
+                );
+              })
+            )}
+          </div>
+
+          {/* Left / Right Carousel Navigation Arrows (Vedhika Style) */}
+          <div className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 w-9 h-11 bg-white text-black border border-slate-200/90 shadow-md items-center justify-center pointer-events-none opacity-90">
+            <ChevronLeft className="w-4 h-4 text-black" />
+          </div>
+          <div className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 w-9 h-11 bg-white text-black border border-slate-200/90 shadow-md items-center justify-center pointer-events-none opacity-90">
+            <ChevronRight className="w-4 h-4 text-black" />
+          </div>
         </div>
 
-        {/* Centered Sharp Rectangular View More Button (Vedhika Style) */}
+        {/* Centered Sharp Rectangular View More Button (Vedhika Style — Screenshot 1) */}
         <div className="text-center pt-4 sm:pt-6">
           <Link
             href="/shop"
-            className="inline-block px-10 py-3.5 border border-[#222222] text-[#222222] hover:bg-[#DEB660] hover:border-[#DEB660] hover:text-black rounded-none font-sans font-semibold text-xs uppercase tracking-[0.18em] transition-all duration-300 active:scale-95 shadow-xs"
+            className="inline-block px-12 py-3 border border-black bg-white text-black hover:bg-black hover:text-white rounded-none font-sans font-bold text-xs uppercase tracking-[0.16em] transition-all duration-300 active:scale-95 shadow-xs"
           >
             View More
           </Link>
@@ -518,19 +523,16 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       </section>
 
       {/* =====================================================
-          4.5 WATCH & SHOP · DRAPES OF ROYALTY (Vedhika Feature)
+          4.5 WATCH & SHOP · DRAPES OF ROYALTY (Vedhika Feature — Screenshot 1)
           ===================================================== */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20">
-        <div className="text-center space-y-1 mb-8">
-          <span className="text-[10px] sm:text-xs font-sans font-bold uppercase tracking-[0.2em] text-[#DEB660]">
-            BOUTIQUE STYLING STORIES
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-serif font-medium tracking-tight text-[#222222]">
+        <div className="text-center space-y-2 mb-6">
+          <h2 className="text-2xl sm:text-3xl font-sans font-bold tracking-tight text-[#222222]">
             Watch and Shop
           </h2>
-          <p className="text-xs text-stone-500 font-sans">
-            Explore drapes in motion, artisanal details, and festive styling reels by Devika.
-          </p>
+          <h3 className="text-xl sm:text-2xl font-sans font-bold tracking-tight text-[#222222]">
+            Kanjivaram Sarees
+          </h3>
         </div>
 
         <div className="flex overflow-x-auto no-scrollbar snap-x snap-mandatory gap-3 pb-3 sm:grid sm:grid-cols-2 md:grid-cols-4 sm:gap-5">
@@ -723,24 +725,23 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       </section>
 
       {/* =====================================================
-          FLOATING WHATSAPP CONCIERGE BUTTON (Synced with Admin WhatsApp)
+          FLOATING WHATSAPP CONCIERGE BUTTON (Vedhika Style — Bottom Left)
           ===================================================== */}
       <a
         href={`https://wa.me/${(customOverrides.whatsappNumber || dbTheme?.supportPhone || "+919496590984").replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hello Aithrithi! I would like to inquire about your designer collections.")}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-40 flex items-center gap-2 group cursor-pointer"
+        className="fixed bottom-16 sm:bottom-6 left-3 sm:left-6 z-40 flex items-center gap-2 group cursor-pointer"
         aria-label="Chat with Aithrithi Concierge on WhatsApp"
       >
-        <span className="hidden sm:inline-block px-3 py-1.5 bg-white text-slate-800 text-[11px] font-sans font-semibold rounded-full shadow-lg border border-slate-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          WhatsApp Concierge
-        </span>
-        <div className="relative w-12 h-12 sm:w-14 sm:h-14 bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full flex items-center justify-center shadow-2xl transition-transform duration-300 group-hover:scale-110 active:scale-95">
-          <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-35 animate-ping pointer-events-none" />
-          <svg className="w-6 h-6 sm:w-7 sm:h-7 fill-current" viewBox="0 0 24 24">
+        <div className="relative w-11 h-11 sm:w-13 sm:h-13 bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full flex items-center justify-center shadow-xl transition-transform duration-300 group-hover:scale-105 active:scale-95">
+          <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
             <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.99.54 1.785.83 2.795.83 3.181 0 5.768-2.586 5.768-5.766 0-3.18-2.587-5.767-5.767-5.767zm7.551 5.766c0 4.167-3.39 7.557-7.551 7.557-1.309 0-2.535-.335-3.606-.921l-4.425 1.16 1.181-4.318c-.689-1.121-1.071-2.433-1.071-3.778 0-4.167 3.39-7.558 7.551-7.558 4.161 0 7.551 3.391 7.551 7.558z" />
           </svg>
         </div>
+        <span className="hidden sm:inline-block px-3 py-1.5 bg-white text-slate-800 text-[11px] font-sans font-semibold rounded-full shadow-lg border border-slate-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          WhatsApp Concierge
+        </span>
       </a>
     </div>
   );
