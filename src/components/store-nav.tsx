@@ -46,6 +46,8 @@ export function StoreNav({ theme }: { theme?: any }) {
   const [customer, setCustomer] = useState<CustomerUser | null>(null);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+  const [headerHeight, setHeaderHeight] = useState(0);
 
   const previewParam = searchParams?.get("theme") || searchParams?.get("previewTheme");
   const matchingThemeDef = resolveStoreTheme(previewParam || theme?.activeTheme, theme);
@@ -116,6 +118,18 @@ export function StoreNav({ theme }: { theme?: any }) {
     }
   }, [mobileMenuOpen]);
 
+  // Measure fixed header height dynamically
+  useEffect(() => {
+    const updateHeaderHeight = () => {
+      if (headerRef.current) {
+        setHeaderHeight(headerRef.current.offsetHeight);
+      }
+    };
+    updateHeaderHeight();
+    window.addEventListener("resize", updateHeaderHeight);
+    return () => window.removeEventListener("resize", updateHeaderHeight);
+  }, [showAnnouncement, brandName]);
+
   // Quick Guest Login
   const handleInstantGuestLogin = async () => {
     try {
@@ -147,7 +161,8 @@ export function StoreNav({ theme }: { theme?: any }) {
   return (
     <>
       <header
-        className="sticky top-0 z-50 transition-all duration-300 border-b backdrop-blur-md shadow-2xs"
+        ref={headerRef}
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b backdrop-blur-md shadow-2xs"
         style={{
           backgroundColor: isDarkNav ? "rgba(15, 23, 42, 0.98)" : "rgba(255, 255, 255, 0.98)",
           borderColor: isDarkNav ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.06)",
@@ -369,7 +384,7 @@ export function StoreNav({ theme }: { theme?: any }) {
 
         {/* Luxury Mobile Off-Canvas Drawer Navigation (Vedhika Shopify Style) */}
         {mobileMenuOpen && (
-          <div className="fixed inset-0 z-50 md:hidden">
+          <div className="fixed inset-0 z-[60] md:hidden">
             {/* Backdrop Overlay */}
             <div
               onClick={() => setMobileMenuOpen(false)}
@@ -521,6 +536,13 @@ export function StoreNav({ theme }: { theme?: any }) {
           </div>
         )}
       </header>
+
+      {/* Locked Navigation Viewport Spacer (Prevents Fixed Header Overlap) */}
+      <div
+        style={{ height: headerHeight ? `${headerHeight}px` : undefined }}
+        className={!headerHeight ? (showAnnouncement ? "h-[76px] sm:h-[95px] md:h-[105px]" : "h-[50px] sm:h-[65px] md:h-[75px]") : undefined}
+        aria-hidden="true"
+      />
 
       {/* NATIVE MOBILE BOTTOM NAVIGATION BAR (Vedhika 3-Item Style: Home, Cart, Account) */}
       <nav

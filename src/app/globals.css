@@ -291,14 +291,12 @@ html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
-  overflow-x: hidden;
   max-width: 100%;
   width: 100%;
 }
 
 body {
   -webkit-overflow-scrolling: touch;
-  overflow-x: hidden;
   max-width: 100%;
   width: 100%;
 }
