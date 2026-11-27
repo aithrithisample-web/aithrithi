@@ -105,10 +105,10 @@ export function HeroBannerSlider({
     setTouchStartX(null);
   };
 
-  // 1. Single Fallback Hero Banner (No Slides)
+  // 1. Single Fallback Hero Banner (No Slides) — Full Screen Viewport Height
   if (totalSlides === 0) {
     return (
-      <div className="relative w-full overflow-hidden min-h-[460px] sm:min-h-[520px] md:min-h-[580px] lg:min-h-[640px] flex items-center justify-center select-none">
+      <div className="relative w-full overflow-hidden h-[calc(100svh-54px)] sm:h-[calc(100dvh-68px)] min-h-[560px] lg:min-h-[700px] flex items-center justify-center select-none">
         {/* Background Ad Image - Full bleed, no frame */}
         <img
           src={fallbackImage}
@@ -164,7 +164,7 @@ export function HeroBannerSlider({
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="relative w-full overflow-hidden min-h-[460px] sm:min-h-[520px] md:min-h-[580px] lg:min-h-[640px] flex items-center select-none touch-pan-y"
+      className="relative w-full overflow-hidden h-[calc(100svh-54px)] sm:h-[calc(100dvh-68px)] min-h-[560px] lg:min-h-[700px] flex items-center select-none touch-pan-y"
     >
       {/* Background Slides Container */}
       <div
