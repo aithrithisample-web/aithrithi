@@ -2,462 +2,232 @@
 
 import Link from "next/link";
 import {
-  ShieldCheck,
-  Truck,
-  RotateCcw,
-  Award,
-  Heart,
-  Check,
-  MapPin,
   Mail,
   Phone,
-  Clock,
-  Sparkles,
-  Lock,
   Instagram,
+  Facebook,
+  Twitter,
   MessageCircle,
-  ExternalLink,
 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { AVRO_THEMES, resolveStoreTheme } from "@/lib/themes-registry";
-
-function renderTrustIcon(icon: string) {
-  switch (icon) {
-    case "truck":
-      return <Truck className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
-    case "shield":
-      return <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
-    case "award":
-      return <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
-    case "refresh":
-      return <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
-    case "heart":
-      return <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
-    case "sparkles":
-      return <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
-    case "lock":
-      return <Lock className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
-    case "check":
-    default:
-      return <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />;
-  }
-}
 
 export default function StoreFooter({ theme }: { theme?: any }) {
-  const searchParams = useSearchParams();
-  const previewParam = searchParams?.get("theme") || searchParams?.get("previewTheme");
-  const matchingThemeDef = resolveStoreTheme(previewParam || theme?.activeTheme, theme);
+  const brandName = theme?.brandName || "Aithrithi";
+  const currentYear = new Date().getFullYear();
 
   let customOverrides: any = {};
   try {
     if (theme?.socialLinksJson) {
       customOverrides = JSON.parse(theme.socialLinksJson);
     }
-  } catch (e) {}
+  } catch (e) {
+    customOverrides = {};
+  }
 
-  const showTrustBadges = !previewParam && customOverrides.showTrustBadges !== undefined ? customOverrides.showTrustBadges : true;
-  const trustBadges = !previewParam && Array.isArray(customOverrides.trustBadges)
-    ? customOverrides.trustBadges
-    : matchingThemeDef.trustBadges;
-
-  const brandName = theme?.brandName || "Aithrithi";
-  const currentYear = new Date().getFullYear();
-
-  const isDarkFooter =
-    matchingThemeDef.palette.footerBg === "#000000" ||
-    matchingThemeDef.palette.footerBg === "#030712" ||
-    matchingThemeDef.palette.footerBg === "#030303" ||
-    matchingThemeDef.palette.footerBg === "#09090B" ||
-    matchingThemeDef.palette.footerBg === "#020617" ||
-    matchingThemeDef.palette.footerBg === "#0A192F" ||
-    matchingThemeDef.palette.footerBg === "#052E16" ||
-    matchingThemeDef.palette.footerBg === "#4C0519" ||
-    matchingThemeDef.palette.footerBg === "#431407" ||
-    matchingThemeDef.palette.footerBg === "#0C4A6E" ||
-    matchingThemeDef.palette.footerBg === "#291305" ||
-    matchingThemeDef.palette.footerBg === "#451A03" ||
-    matchingThemeDef.palette.footerBg === "#14532D" ||
-    matchingThemeDef.palette.footerBg === "#36080F" ||
-    matchingThemeDef.palette.footerBg === "#58111A" ||
-    matchingThemeDef.palette.footerBg === "#1C1917";
-
-  const companyAddress = theme?.companyAddress || "Commercial Avenue, Sector 62";
-  const companyCity = theme?.companyCity || "Noida";
-  const companyState = theme?.companyState || "Uttar Pradesh";
-  const companyPostalCode = theme?.companyPostalCode || "201309";
-  const companyCountry = theme?.companyCountry || "India";
-  const supportEmail = theme?.supportEmail || "info.technexttech@gmail.com";
-  const supportPhone = theme?.supportPhone || "+91 94965 90984";
-  const taxId = theme?.taxId;
+  const supportEmail = customOverrides.supportEmail || theme?.supportEmail || "info@aithrithi.in";
+  const supportPhone = customOverrides.whatsappNumber || theme?.supportPhone || "+91 94965 90984";
+  const logoUrl = theme?.logoUrl || "/aithrithi-nav-logo-maroon.png";
 
   return (
-    <footer
-      className="border-t pt-14 transition-colors duration-300 font-sans"
-      style={{
-        backgroundColor: matchingThemeDef.palette.footerBg,
-        borderColor: matchingThemeDef.palette.border,
-        color: isDarkFooter ? "#CBD5E1" : "#475569",
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
-        {/* 1. Industry Trust Badges Strip — Ultra Minimal & Refined */}
-        {showTrustBadges && trustBadges.length > 0 && (
-          <div
-            className={`grid grid-cols-2 ${
-              trustBadges.length === 1
-                ? "grid-cols-1"
-                : trustBadges.length === 2
-                ? "grid-cols-2 lg:grid-cols-2"
-                : trustBadges.length === 3
-                ? "grid-cols-2 lg:grid-cols-3"
-                : "grid-cols-2 lg:grid-cols-4"
-            } gap-3 sm:gap-6 pb-6 sm:pb-8 border-b text-xs`}
-            style={{ borderColor: isDarkFooter ? "rgba(255,255,255,0.08)" : "#E2E8F0" }}
-          >
-            {trustBadges.map((badge: any, idx: number) => (
-              <div key={idx} className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-                <div
-                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold flex-shrink-0"
-                  style={{
-                    backgroundColor: isDarkFooter ? "rgba(255,255,255,0.06)" : "rgba(88,17,26,0.05)",
-                    color: isDarkFooter ? "#F1F5F9" : matchingThemeDef.palette.primary,
-                  }}
-                >
-                  {renderTrustIcon(badge.icon)}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <strong
-                    className="block font-serif font-medium text-[11px] sm:text-xs uppercase tracking-[0.14em] truncate"
-                    style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
-                  >
-                    {badge.title}
-                  </strong>
-                  <span className={`text-[10px] sm:text-[10.5px] line-clamp-1 block leading-tight font-sans mt-0.5 ${isDarkFooter ? "text-slate-400" : "text-slate-500"}`}>
-                    {badge.subtitle}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* 2. Main 4-Column Professional Footer */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10 text-xs">
-          {/* Column 1: Company Profile & Registered Office (5 cols) */}
-          <div className="lg:col-span-5 space-y-4">
-            <Link href="/" className="inline-flex items-center gap-2.5 sm:gap-3.5 group flex-wrap sm:flex-nowrap" title={brandName}>
-              {matchingThemeDef.code === "AITHRITHI_MAROON" ? (
-                <img
-                  src="/aithrithi-nav-logo.png"
-                  alt="Aithrithi.in By Devika"
-                  className="h-10 sm:h-12 md:h-13 w-auto max-w-[180px] sm:max-w-[220px] object-contain transition-transform group-hover:scale-105"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = "/aithrithi-nav-logo.png";
-                  }}
-                />
-              ) : (
-                <>
-                  {theme?.logoUrl ? (
-                    <div className="bg-white p-1.5 sm:p-2 rounded-xl border border-slate-200/80 shadow-sm flex-shrink-0 flex items-center justify-center">
-                      <img
-                        src={theme.logoUrl}
-                        alt={brandName}
-                        className="h-8 sm:h-12 max-w-[110px] sm:max-w-[180px] w-auto object-contain"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = "none";
-                        }}
-                      />
-                    </div>
-                  ) : null}
-                  <div className="flex flex-col min-w-0">
-                    <span
-                      className="text-xl sm:text-3xl font-serif font-extrabold tracking-tight block leading-none truncate"
-                      style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
-                    >
-                      {brandName}
-                    </span>
-                  </div>
-                </>
-              )}
+    <footer id="nt_footer" className="w-full bg-white border-t border-[#EBEBEB] font-sans">
+      {/* =====================================================
+          FOOTER TOP — 4 Columns (Vedhika Boutique Shopify Style)
+          ===================================================== */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-10 sm:pb-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 text-xs">
+          {/* Column 1: Contact Us & Logo */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-[#222222] uppercase tracking-[0.12em] block sm:hidden">
+              Contact Us
+            </h3>
+            
+            <Link href="/" className="inline-block py-1" title={brandName}>
+              <img
+                src={logoUrl}
+                alt={brandName}
+                className="h-10 sm:h-12 w-auto max-w-[200px] object-contain"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/aithrithi-nav-logo-maroon.png";
+                }}
+              />
             </Link>
 
-            <p
-              className="text-xs leading-relaxed max-w-sm font-sans font-normal"
-              style={{ color: isDarkFooter ? "#94A3B8" : "#64748B" }}
-            >
-              {matchingThemeDef.code === "AITHRITHI_MAROON"
-                ? "By Devika · Luxurious handloom sarees, designer kurtis, and contemporary festive silhouettes handcrafted by master artisans with timeless perfection."
-                : "Independent premium commerce destination offering curated, verified-authentic essentials with priority doorstep delivery and easy returns."}
-            </p>
-
-            {/* Registered Company Address Card */}
-            <div
-              className="p-4 rounded-2xl border space-y-2 text-xs max-w-sm"
-              style={{
-                backgroundColor: isDarkFooter ? "rgba(255,255,255,0.04)" : "#F8FAFC",
-                borderColor: isDarkFooter ? "rgba(255,255,255,0.08)" : "#E2E8F0",
-              }}
-            >
-              <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
-                <div>
-                  <strong
-                    className="block font-bold"
-                    style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
-                  >
-                    Registered Office & Dispatch Hub
-                  </strong>
-                  <p style={{ color: isDarkFooter ? "#CBD5E1" : "#475569" }} className="leading-tight mt-0.5 font-sans">
-                    {companyAddress}, {companyCity}, {companyState} - {companyPostalCode}, {companyCountry}
-                  </p>
-                </div>
+            <div className="space-y-2 text-[#878787] text-[13px] pt-1">
+              <div className="flex items-center gap-2.5">
+                <Mail className="w-4 h-4 text-[#878787] shrink-0" />
+                <a
+                  href={`mailto:${supportEmail}`}
+                  className="hover:text-[#DEB660] transition-colors"
+                >
+                  {supportEmail}
+                </a>
               </div>
 
-              <div className="pt-2 border-t space-y-1.5 text-[11px]" style={{ borderColor: isDarkFooter ? "rgba(255,255,255,0.06)" : "#E2E8F0" }}>
-                {supportEmail && (
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-3.5 h-3.5 text-[#C5A880] flex-shrink-0" />
-                    <a
-                      href={`mailto:${supportEmail}`}
-                      className="hover:underline font-medium font-sans"
-                      style={{ color: isDarkFooter ? "#E2E8F0" : "#1E293B" }}
-                    >
-                      {supportEmail}
-                    </a>
-                  </div>
-                )}
-                {supportPhone && (
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-3.5 h-3.5 text-[#C5A880] flex-shrink-0" />
-                    <a
-                      href={`tel:${supportPhone}`}
-                      className="hover:underline font-medium font-sans"
-                      style={{ color: isDarkFooter ? "#E2E8F0" : "#1E293B" }}
-                    >
-                      {supportPhone}
-                    </a>
-                    <span className="text-[10px] text-slate-400 font-sans">· Concierge</span>
-                  </div>
-                )}
+              <div className="flex items-center gap-2.5">
+                <Phone className="w-4 h-4 text-[#878787] shrink-0" />
+                <a
+                  href={`tel:${supportPhone.replace(/[^0-9+]/g, "")}`}
+                  className="hover:text-[#DEB660] transition-colors"
+                >
+                  {supportPhone}
+                </a>
               </div>
-
-              {taxId && (
-                <div className="pt-1.5 flex items-center justify-between text-[10px]">
-                  <span className="text-slate-400">Tax Identification:</span>
-                  <span className="font-mono font-bold px-2 py-0.5 rounded bg-black/5 dark:bg-white/10">
-                    GSTIN: {taxId}
-                  </span>
-                </div>
-              )}
             </div>
 
-            {/* Direct Instagram & WhatsApp Connect Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 max-w-sm pt-1">
+            {/* Social Icons (Vedhika Style Border Icons) */}
+            <div className="flex items-center gap-2 pt-2">
+              <a
+                href={customOverrides.facebookUrl || "https://facebook.com/aithrithi"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full border border-[#D9D9D9] flex items-center justify-center text-[#222222] hover:border-[#DEB660] hover:bg-[#DEB660] hover:text-white transition-all shadow-2xs"
+                title="Follow on Facebook"
+              >
+                <Facebook className="w-3.5 h-3.5" />
+              </a>
+
+              <a
+                href={customOverrides.twitterUrl || "https://twitter.com/aithrithi"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full border border-[#D9D9D9] flex items-center justify-center text-[#222222] hover:border-[#DEB660] hover:bg-[#DEB660] hover:text-white transition-all shadow-2xs"
+                title="Follow on Twitter"
+              >
+                <Twitter className="w-3.5 h-3.5" />
+              </a>
+
               <a
                 href={customOverrides.instagramUrl || "https://instagram.com/aithrithi.in"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 px-3 py-2 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 text-white font-serif font-medium tracking-[0.1em] uppercase text-[11px] shadow-sm hover:opacity-95 transition flex items-center justify-center gap-1.5"
+                className="w-8 h-8 rounded-full border border-[#D9D9D9] flex items-center justify-center text-[#222222] hover:border-[#DEB660] hover:bg-[#DEB660] hover:text-white transition-all shadow-2xs"
+                title="Follow on Instagram"
               >
                 <Instagram className="w-3.5 h-3.5" />
-                <span>Instagram</span>
-                <ExternalLink className="w-2.5 h-2.5" />
               </a>
 
               <a
-                href={`https://wa.me/${(customOverrides.whatsappNumber || theme?.supportPhone || "+919496590984").replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hello Aithrithi! I would like to inquire about your collections.")}`}
+                href={`https://wa.me/${supportPhone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hello Aithrithi! I would like to inquire about your collections.")}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 px-3 py-2 rounded-xl bg-[#25D366] hover:bg-[#20BD5A] text-white font-serif font-medium tracking-[0.1em] uppercase text-[11px] shadow-sm transition flex items-center justify-center gap-1.5"
+                className="w-8 h-8 rounded-full border border-[#D9D9D9] flex items-center justify-center text-[#222222] hover:border-[#25D366] hover:bg-[#25D366] hover:text-white transition-all shadow-2xs"
+                title="Chat on WhatsApp"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
-                <span>WhatsApp</span>
-                <ExternalLink className="w-2.5 h-2.5" />
               </a>
             </div>
           </div>
 
-          {/* Columns 2, 3, 4: Quick Links Subgrid (2 cols on mobile, 3 cols on sm/md, 7 cols on lg) */}
-          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-6 sm:gap-8">
-            {/* Column 2: Collections & Shop */}
-            <div className="space-y-3">
-              <strong
-                className="uppercase font-serif font-semibold tracking-[0.16em] text-[11.5px] block"
-                style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
-              >
-                Collections
-              </strong>
-              <ul className="space-y-2 font-sans">
-                <li>
-                  <Link
-                    href="/shop"
-                    className={`hover:underline transition-colors ${
-                      isDarkFooter ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    All Products
-                  </Link>
-                </li>
-                {matchingThemeDef.sampleCategories.slice(0, 4).map((c) => (
-                  <li key={c.slug}>
-                    <Link
-                      href={`/shop?category=${c.slug}`}
-                      className={`hover:underline transition-colors ${
-                        isDarkFooter ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                      }`}
-                    >
-                      {c.name}
-                    </Link>
-                  </li>
-                ))}
-                <li>
-                  <Link
-                    href="/shop?sort=newest"
-                    className={`hover:underline transition-colors ${
-                      isDarkFooter ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    New Arrivals
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          {/* Column 2: Collections */}
+          <div className="space-y-3 sm:space-y-4">
+            <h3 className="text-sm font-semibold text-[#222222] uppercase tracking-[0.12em]">
+              Collections
+            </h3>
+            <ul className="space-y-2.5 text-[13px] text-[#878787]">
+              <li>
+                <Link href="/shop?category=sarees" className="hover:text-[#DEB660] transition-colors">
+                  Wedding Sarees
+                </Link>
+              </li>
+              <li>
+                <Link href="/shop?category=blouses" className="hover:text-[#DEB660] transition-colors">
+                  Blouses
+                </Link>
+              </li>
+              <li>
+                <Link href="/shop?category=kanjivaram" className="hover:text-[#DEB660] transition-colors">
+                  Aithrithi Kanjeevaram
+                </Link>
+              </li>
+              <li>
+                <Link href="/shop?category=kurtis" className="hover:text-[#DEB660] transition-colors">
+                  Kurtis
+                </Link>
+              </li>
+              <li>
+                <Link href="/shop?category=aithrithi-lite" className="hover:text-[#DEB660] transition-colors">
+                  Aithrithi Lite
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-            {/* Column 3: Customer Care & Order Services */}
-            <div className="space-y-3">
-              <strong
-                className="uppercase font-serif font-semibold tracking-[0.16em] text-[11.5px] block"
-                style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
-              >
-                Client Concierge
-              </strong>
-              <ul className="space-y-2 font-sans">
-                <li>
-                  <Link
-                    href="/account"
-                    className={`hover:underline transition-colors ${
-                      isDarkFooter ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    Track Order
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/account"
-                    className={`hover:underline transition-colors ${
-                      isDarkFooter ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    My Account & Orders
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/wishlist"
-                    className={`hover:underline transition-colors ${
-                      isDarkFooter ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    Saved Wishlist
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/shipping-policy"
-                    className={`hover:underline transition-colors ${
-                      isDarkFooter ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    Shipping & Delivery
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/return-policy"
-                    className={`hover:underline transition-colors ${
-                      isDarkFooter ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    Returns & Exchange
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/contact"
-                    className={`hover:underline transition-colors ${
-                      isDarkFooter ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    Help & Contact Support
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          {/* Column 3: Quick Links */}
+          <div className="space-y-3 sm:space-y-4">
+            <h3 className="text-sm font-semibold text-[#222222] uppercase tracking-[0.12em]">
+              Quick Links
+            </h3>
+            <ul className="space-y-2.5 text-[13px] text-[#878787]">
+              <li>
+                <Link href="/returns" className="hover:text-[#DEB660] transition-colors">
+                  Return & Exchange Request
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-[#DEB660] transition-colors">
+                  Contact Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="hover:text-[#DEB660] transition-colors">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/refund-policy" className="hover:text-[#DEB660] transition-colors">
+                  Refund Policy
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-            {/* Column 4: Compliance, Legal & Security */}
-            <div className="space-y-3 col-span-2 sm:col-span-1">
-              <strong
-                className="uppercase font-serif font-semibold tracking-[0.16em] text-[11.5px] block"
-                style={{ color: isDarkFooter ? "#FFFFFF" : "#0F172A" }}
-              >
-                Atelier Heritage
-              </strong>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="/terms"
-                    className={`hover:underline transition-colors ${
-                      isDarkFooter ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    Terms of Service
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/privacy-policy"
-                    className={`hover:underline transition-colors ${
-                      isDarkFooter ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/return-policy"
-                    className={`hover:underline transition-colors ${
-                      isDarkFooter ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    Refund Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/about"
-                    className={`hover:underline transition-colors ${
-                      isDarkFooter ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    About Our Brand
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          {/* Column 4: Customer Service */}
+          <div className="space-y-3 sm:space-y-4">
+            <h3 className="text-sm font-semibold text-[#222222] uppercase tracking-[0.12em]">
+              Customer Service
+            </h3>
+            <ul className="space-y-2.5 text-[13px] text-[#878787]">
+              <li>
+                <Link href="/track" className="hover:text-[#DEB660] transition-colors">
+                  Track Order
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-[#DEB660] transition-colors">
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li>
+                <Link href="/shipping-policy" className="hover:text-[#DEB660] transition-colors">
+                  Shipping & Delivery Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy-policy" className="hover:text-[#DEB660] transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/disclaimer" className="hover:text-[#DEB660] transition-colors">
+                  Disclaimer Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/returns" className="hover:text-[#DEB660] transition-colors">
+                  Return & Exchange Policy
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
 
-      {/* Vedhika Signature Rich Antique Gold Copyright Bar (Full Width) */}
-      <div className="w-full bg-[#C4962E] text-white py-3.5 px-4 text-center mt-10">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-sans">
-          <p className="tracking-wide">
+      {/* =====================================================
+          FOOTER BOTTOM — Solid #222222 Charcoal Bar (Vedhika Style)
+          ===================================================== */}
+      <div className="w-full bg-[#222222] text-[#FFFFFF] py-4 sm:py-5 px-4 text-center">
+        <div className="max-w-7xl mx-auto text-xs font-sans text-center">
+          <p className="tracking-wide text-white/90">
             Copyright © {currentYear} {brandName}. All rights reserved.
-          </p>
-          <p className="text-[11px] opacity-90">
-            Powered by <strong className="font-bold tracking-wider">AVRO Commerce</strong>
           </p>
         </div>
       </div>
