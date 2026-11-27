@@ -144,7 +144,9 @@ export function HeroBannerSlider({
           <div className="mt-6 sm:mt-8 flex items-center gap-3">
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 px-6 py-2.5 sm:px-8 sm:py-3.5 rounded-full text-xs sm:text-sm font-serif font-bold uppercase tracking-wider bg-white text-[#58111A] hover:bg-[#FAF7F5] shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
+              className={`inline-flex items-center gap-2 px-7 py-3 sm:px-9 sm:py-3.5 text-xs sm:text-sm font-sans font-bold uppercase tracking-[0.16em] bg-white text-[#222222] hover:bg-[#DEB660] hover:text-black shadow-2xl transition-all duration-300 active:scale-95 group/btn ${
+                buttonRadius === "rounded-none" ? "rounded-none" : "rounded-full"
+              }`}
             >
               <span>Explore Collection</span>
               <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
@@ -229,7 +231,9 @@ export function HeroBannerSlider({
         <div className="mt-6 sm:mt-8 flex items-center gap-3">
           <Link
             href={currentSlide?.ctaLink || "/shop"}
-            className="inline-flex items-center gap-2 px-6 py-2.5 sm:px-8 sm:py-3.5 rounded-full text-xs sm:text-sm font-serif font-bold uppercase tracking-wider bg-white text-[#58111A] hover:bg-[#FAF7F5] shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
+            className={`inline-flex items-center gap-2 px-7 py-3 sm:px-9 sm:py-3.5 text-xs sm:text-sm font-sans font-bold uppercase tracking-[0.16em] bg-white text-[#222222] hover:bg-[#DEB660] hover:text-black shadow-2xl transition-all duration-300 active:scale-95 group/btn ${
+              buttonRadius === "rounded-none" ? "rounded-none" : "rounded-full"
+            }`}
           >
             <span>{currentSlide?.ctaText || "Shop Collection"}</span>
             <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
@@ -245,10 +249,12 @@ export function HeroBannerSlider({
               key={dotIdx}
               type="button"
               onClick={() => setCurrentIndex(dotIdx)}
-              className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 cursor-pointer ${
+              className={`h-1.5 sm:h-2 transition-all duration-300 cursor-pointer ${
+                buttonRadius === "rounded-none" ? "rounded-none" : "rounded-full"
+              } ${
                 currentIndex === dotIdx
-                  ? "w-6 sm:w-8 bg-white shadow-md"
-                  : "w-2 bg-white/40 hover:bg-white/70"
+                  ? "w-6 sm:w-8 bg-[#DEB660] shadow-md"
+                  : "w-2 bg-white/50 hover:bg-white/80"
               }`}
               aria-label={`Go to slide ${dotIdx + 1}`}
             />
@@ -256,13 +262,15 @@ export function HeroBannerSlider({
         </div>
       )}
 
-      {/* Left / Right Arrow Controls */}
+      {/* Left / Right Arrow Controls (Vedhika Square Controls) */}
       {totalSlides > 1 && (
         <>
           <button
             type="button"
             onClick={handlePrev}
-            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/75 text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 sm:group-hover:opacity-100 z-20 backdrop-blur-md border border-white/20 cursor-pointer shadow-lg active:scale-95"
+            className={`absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 bg-black/40 hover:bg-[#DEB660] hover:text-black hover:border-[#DEB660] text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 sm:group-hover:opacity-100 z-20 backdrop-blur-md border border-white/20 cursor-pointer shadow-lg active:scale-95 ${
+              buttonRadius === "rounded-none" ? "rounded-none" : "rounded-full"
+            }`}
             aria-label="Previous slide"
           >
             <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -270,7 +278,9 @@ export function HeroBannerSlider({
           <button
             type="button"
             onClick={handleNext}
-            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/75 text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 sm:group-hover:opacity-100 z-20 backdrop-blur-md border border-white/20 cursor-pointer shadow-lg active:scale-95"
+            className={`absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 bg-black/40 hover:bg-[#DEB660] hover:text-black hover:border-[#DEB660] text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 sm:group-hover:opacity-100 z-20 backdrop-blur-md border border-white/20 cursor-pointer shadow-lg active:scale-95 ${
+              buttonRadius === "rounded-none" ? "rounded-none" : "rounded-full"
+            }`}
             aria-label="Next slide"
           >
             <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />

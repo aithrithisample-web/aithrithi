@@ -265,176 +265,45 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       style={{ backgroundColor: backgroundColor, color: textColor }}
     >
       {/* =====================================================
-          1. HERO SECTION — Full Background Hero Ad Banner (Frame-Free & Mobile-Friendly)
+          1. HERO SECTION — Full Widescreen Boutique Slider (Vedhika Style)
           ===================================================== */}
-      {themeDef.code === "AITHRITHI_MAROON" ? (
-        <section
-          className="relative w-full overflow-hidden border-b border-black/5 transition-colors duration-300"
-          style={{ backgroundColor: backgroundColor }}
-        >
-          {/* Full-bleed Background Hero Slider without bulky frames or borders */}
-          <HeroBannerSlider
-            slides={effectiveHeroSlides}
-            fallbackImage={activeAds[0]?.imageUrl || heroImage || "/aithrithi-hero.jpg"}
-            fallbackTitle={themeDef.name}
-            fallbackTagline={themeDef.tagline}
-            themeDef={themeDef}
-            isDarkHero={isDarkHero}
-            primaryColor={primaryColor}
-            accentColor={accentColor}
-            buttonRadius={buttonRadius}
-          />
+      <section
+        className="relative w-full overflow-hidden border-b border-black/5 transition-colors duration-300"
+        style={{ backgroundColor: backgroundColor }}
+      >
+        {/* Full-bleed Background Hero Slider without bulky frames or borders */}
+        <HeroBannerSlider
+          slides={effectiveHeroSlides}
+          fallbackImage={activeAds[0]?.imageUrl || heroImage || "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1920&q=85"}
+          fallbackTitle={themeDef.name}
+          fallbackTagline={themeDef.tagline}
+          themeDef={themeDef}
+          isDarkHero={isDarkHero}
+          primaryColor={primaryColor}
+          accentColor={accentColor}
+          buttonRadius={buttonRadius}
+        />
 
-          {/* Quick Category Chips — Fluid Mobile-Friendly Strip */}
-          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-5">
-            <div className="flex items-center sm:justify-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar py-1 px-0.5 touch-pan-x">
-              {heroQuickChips.map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className="px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-full text-[11px] sm:text-xs font-serif font-medium tracking-[0.14em] uppercase border shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md flex-shrink-0 whitespace-nowrap active:scale-95 hover:border-[#58111A] hover:bg-[#58111A] hover:text-white"
-                  style={{
-                    borderColor: "rgba(88, 17, 26, 0.15)",
-                    backgroundColor: cardBgColor,
-                    color: textColor,
-                  }}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
+        {/* Quick Category Chips — Fluid Mobile-Friendly Strip */}
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3.5 sm:py-5 border-t border-[#F0F0F0] bg-white">
+          <div className="flex items-center sm:justify-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar py-1 px-0.5 touch-pan-x">
+            {heroQuickChips.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="px-4 py-2 sm:px-6 sm:py-2.5 text-[11px] sm:text-xs font-sans font-medium tracking-[0.14em] uppercase border shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md flex-shrink-0 whitespace-nowrap active:scale-95 hover:border-[#DEB660] hover:bg-[#DEB660] hover:text-black rounded-none"
+                style={{
+                  borderColor: "#E5E5E5",
+                  backgroundColor: "#FFFFFF",
+                  color: "#222222",
+                }}
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
-        </section>
-      ) : (
-        <section
-          className={`relative overflow-hidden border-b transition-colors duration-300 ${
-            isDarkHero
-              ? "py-20 sm:py-28 text-white border-white/10"
-              : "py-16 sm:py-24 text-slate-900 border-black/5"
-          }`}
-          style={{ backgroundColor: isDarkHero ? cardBgColor : backgroundColor }}
-        >
-          {/* Decorative background orbs */}
-          <div
-            className="pointer-events-none absolute inset-0 overflow-hidden"
-            aria-hidden
-          >
-            <div
-              className="absolute -top-32 -left-32 w-96 h-96 rounded-full blur-3xl opacity-20 avro-float-slow"
-              style={{ background: `radial-gradient(circle, ${accentColor} 0%, transparent 70%)` }}
-            />
-            <div
-              className="absolute -bottom-24 right-0 w-72 h-72 rounded-full blur-3xl opacity-15 avro-float"
-              style={{ background: `radial-gradient(circle, ${primaryColor} 0%, transparent 70%)`, animationDelay: "2s" }}
-            />
-          </div>
-
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="grid grid-cols-1 items-center lg:grid-cols-12 gap-12">
-              {/* Left — Hero content */}
-              <div className="space-y-6 lg:col-span-7">
-                {/* Badge */}
-                <div
-                  className="avro-slide-up inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider shadow-sm"
-                  style={{
-                    backgroundColor: themeDef.palette.badgeBg,
-                    color: themeDef.palette.badgeText,
-                    borderRadius: badgeBorderRadius,
-                  }}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-current opacity-80 animate-pulse" />
-                  {heroBadge}
-                </div>
-
-                {/* Headline */}
-                <h1
-                  className={`avro-slide-up-delay-1 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight ${themeDef.typography.headingClass}`}
-                  style={{ color: isDarkHero ? "#FFFFFF" : textColor }}
-                >
-                  {headline}{" "}
-                  {headlineHighlight && (
-                    <span
-                      className="italic font-serif"
-                      style={{ color: accentColor }}
-                    >
-                      {headlineHighlight}
-                    </span>
-                  )}
-                </h1>
-
-                {/* Subheadline */}
-                <p
-                  className="avro-slide-up-delay-2 text-base sm:text-lg max-w-xl leading-relaxed"
-                  style={{ color: isDarkHero ? "#CBD5E1" : textMutedColor }}
-                >
-                  {subheadline}
-                </p>
-
-                {/* CTA Buttons */}
-                <div className="avro-slide-up-delay-3 flex flex-wrap gap-4 pt-2">
-                  <Link
-                    href={ctaPrimaryLink}
-                    className="avro-btn px-6 py-3.5 font-bold text-xs uppercase tracking-wider flex items-center gap-2 text-white"
-                    style={{
-                      backgroundColor: primaryColor,
-                      borderRadius: btnBorderRadius,
-                    }}
-                  >
-                    {ctaPrimary}
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-
-                  <Link
-                    href="#categories"
-                    className="avro-btn px-6 py-3.5 font-bold text-xs uppercase tracking-wider border transition-all"
-                    style={{
-                      borderColor: isDarkHero ? "rgba(255,255,255,0.2)" : themeDef.palette.border,
-                      backgroundColor: isDarkHero ? "rgba(255,255,255,0.05)" : "#FFFFFF",
-                      color: isDarkHero ? "#FFFFFF" : textColor,
-                      borderRadius: btnBorderRadius,
-                    }}
-                  >
-                    {ctaSecondary}
-                  </Link>
-                </div>
-
-                {/* Trust micro-strip */}
-                <div className="avro-slide-up-delay-4 flex flex-wrap gap-4 pt-1">
-                  {[
-                    { icon: <Shield className="w-3.5 h-3.5" />, text: "Secure Checkout" },
-                    { icon: <Truck className="w-3.5 h-3.5" />, text: "Fast Delivery" },
-                    { icon: <RotateCcw className="w-3.5 h-3.5" />, text: "Easy Returns" },
-                  ].map((item) => (
-                    <div
-                      key={item.text}
-                      className="flex items-center gap-1.5 text-[11px] font-semibold opacity-70"
-                      style={{ color: isDarkHero ? "#94A3B8" : textMutedColor }}
-                    >
-                      <span style={{ color: accentColor }}>{item.icon}</span>
-                      {item.text}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Right — Hero banner slider / carousel (supports images & video ads with right scroll) */}
-              <div className="avro-slide-right lg:col-span-5">
-                <HeroBannerSlider
-                  slides={heroSlides}
-                  fallbackImage={heroImage}
-                  fallbackTitle={themeDef.name}
-                  fallbackTagline={themeDef.tagline}
-                  themeDef={themeDef}
-                  isDarkHero={isDarkHero}
-                  primaryColor={primaryColor}
-                  accentColor={accentColor}
-                  buttonRadius={buttonRadius}
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* =====================================================
           2. BRAND HERITAGE & PROMISE STRIP — Ultra-Minimal & Refined
@@ -649,6 +518,82 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       </section>
 
       {/* =====================================================
+          4.5 WATCH & SHOP · DRAPES OF ROYALTY (Vedhika Feature)
+          ===================================================== */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20">
+        <div className="text-center space-y-1 mb-8">
+          <span className="text-[10px] sm:text-xs font-sans font-bold uppercase tracking-[0.2em] text-[#DEB660]">
+            BOUTIQUE STYLING STORIES
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-serif font-medium tracking-tight text-[#222222]">
+            Watch and Shop
+          </h2>
+          <p className="text-xs text-stone-500 font-sans">
+            Explore drapes in motion, artisanal details, and festive styling reels by Devika.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5">
+          {[
+            {
+              title: "Tussar Drape in Motion",
+              category: "Saree Atelier",
+              image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=85",
+              link: "/shop?category=sarees",
+            },
+            {
+              title: "Festive Anarkali Styling",
+              category: "Kurtis & Sets",
+              image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=85",
+              link: "/shop?category=kurtis",
+            },
+            {
+              title: "Bridal Zari Close-Up",
+              category: "Kanjivaram Silk",
+              image: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=600&q=85",
+              link: "/shop?category=kanjivaram",
+            },
+            {
+              title: "Aithrithi Lite Daily Luxe",
+              category: "Mulmul & Linen",
+              image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=85",
+              link: "/shop?category=aithrithi-lite",
+            },
+          ].map((story, i) => (
+            <Link
+              key={i}
+              href={story.link}
+              className="group relative aspect-[9/16] overflow-hidden rounded-none bg-slate-900 shadow-xs border border-[#EDEDED] flex flex-col justify-end p-3.5 sm:p-4 text-white"
+            >
+              <img
+                src={story.image}
+                alt={story.title}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10 group-hover:from-black/90 transition-all duration-300" />
+
+              {/* Play Badge Overlay */}
+              <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white group-hover:bg-[#DEB660] group-hover:text-black group-hover:border-[#DEB660] transition-colors">
+                <span className="text-[10px] font-bold">▶</span>
+              </div>
+
+              <div className="relative z-10 space-y-1">
+                <span className="text-[9px] font-sans font-bold uppercase tracking-[0.16em] text-[#DEB660] block">
+                  {story.category}
+                </span>
+                <h3 className="font-sans font-semibold text-xs sm:text-sm line-clamp-2 leading-tight">
+                  {story.title}
+                </h3>
+                <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-white pt-1 group-hover:text-[#DEB660] transition-colors">
+                  Shop Look →
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* =====================================================
           MID-PAGE EDITORIAL BANNER — "Style Within Reach" (Vedhika Style)
           ===================================================== */}
       <section className="w-full relative overflow-hidden min-h-[380px] sm:min-h-[480px] flex items-center justify-center my-12 sm:my-20">
@@ -763,25 +708,40 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
           <div className="flex flex-col sm:flex-row gap-3 relative z-10 flex-shrink-0">
             <Link
               href="/shop"
-              className="avro-btn px-6 py-3 rounded-xl bg-white text-slate-900 font-serif font-medium tracking-[0.14em] uppercase text-xs hover:bg-[#FAF7F5] transition-colors shadow-sm text-center"
-              style={{
-                borderRadius: btnBorderRadius,
-              }}
+              className="avro-btn px-6 py-3 rounded-none bg-white text-slate-900 font-sans font-bold tracking-[0.14em] uppercase text-xs hover:bg-[#FAF7F5] transition-colors shadow-sm text-center"
             >
-              {themeDef.code === "AITHRITHI_MAROON" ? "Explore Sarees & Kurtis" : "Browse All Products"}
+              Explore Sarees & Kurtis
             </Link>
             <Link
               href="/track"
-              className="avro-btn px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-serif font-medium tracking-[0.14em] uppercase text-xs border border-white/20 transition-colors text-center"
-              style={{
-                borderRadius: btnBorderRadius,
-              }}
+              className="avro-btn px-6 py-3 rounded-none bg-white/10 hover:bg-white/20 text-white font-sans font-bold tracking-[0.14em] uppercase text-xs border border-white/20 transition-colors text-center"
             >
               Track My Order
             </Link>
           </div>
         </div>
       </section>
+
+      {/* =====================================================
+          FLOATING WHATSAPP CONCIERGE BUTTON (Synced with Admin WhatsApp)
+          ===================================================== */}
+      <a
+        href={`https://wa.me/${(customOverrides.whatsappNumber || dbTheme?.supportPhone || "+919496590984").replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hello Aithrithi! I would like to inquire about your designer collections.")}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-40 flex items-center gap-2 group cursor-pointer"
+        aria-label="Chat with Aithrithi Concierge on WhatsApp"
+      >
+        <span className="hidden sm:inline-block px-3 py-1.5 bg-white text-slate-800 text-[11px] font-sans font-semibold rounded-full shadow-lg border border-slate-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          WhatsApp Concierge
+        </span>
+        <div className="relative w-12 h-12 sm:w-14 sm:h-14 bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full flex items-center justify-center shadow-2xl transition-transform duration-300 group-hover:scale-110 active:scale-95">
+          <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-35 animate-ping pointer-events-none" />
+          <svg className="w-6 h-6 sm:w-7 sm:h-7 fill-current" viewBox="0 0 24 24">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.99.54 1.785.83 2.795.83 3.181 0 5.768-2.586 5.768-5.766 0-3.18-2.587-5.767-5.767-5.767zm7.551 5.766c0 4.167-3.39 7.557-7.551 7.557-1.309 0-2.535-.335-3.606-.921l-4.425 1.16 1.181-4.318c-.689-1.121-1.071-2.433-1.071-3.778 0-4.167 3.39-7.558 7.551-7.558 4.161 0 7.551 3.391 7.551 7.558z" />
+          </svg>
+        </div>
+      </a>
     </div>
   );
 }

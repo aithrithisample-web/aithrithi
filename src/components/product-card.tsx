@@ -22,7 +22,8 @@ export function ProductCard({
 
   const primaryImg =
     product.images?.[0]?.url ||
-    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80";
+    "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80";
+  const secondaryImg = product.images?.[1]?.url;
 
   const effectivePrice = product.salePrice || product.regularPrice;
   const hasDiscount = product.salePrice && product.salePrice < product.regularPrice;
@@ -62,10 +63,23 @@ export function ProductCard({
         <img
           src={primaryImg}
           alt={product.title}
-          className={`w-full h-full object-cover transition-transform duration-700 ${
-            isOutOfStock ? "opacity-75 grayscale-[20%]" : "group-hover:scale-105"
+          className={`w-full h-full object-cover transition-all duration-700 ${
+            isOutOfStock
+              ? "opacity-75 grayscale-[20%]"
+              : secondaryImg
+              ? "group-hover:opacity-0"
+              : "group-hover:scale-105"
           }`}
         />
+
+        {/* Secondary Angle Image (Shopify Kalles / Vedhika Crossfade on Hover) */}
+        {secondaryImg && !isOutOfStock && (
+          <img
+            src={secondaryImg}
+            alt={`${product.title} alternate angle`}
+            className="w-full h-full object-cover absolute inset-0 opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+          />
+        )}
 
         {/* Gradient shimmer on hover */}
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />

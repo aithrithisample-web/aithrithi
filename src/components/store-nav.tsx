@@ -323,17 +323,6 @@ export function StoreNav({ theme }: { theme?: any }) {
                 </span>
               )}
             </Link>
-
-            {/* Mobile Menu Hamburger Toggle */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`md:hidden w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-colors flex-shrink-0 ${
-                isDarkNav ? "text-slate-200 hover:bg-white/10" : "text-slate-700 hover:bg-slate-100"
-              }`}
-              aria-label="Toggle Navigation Menu"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
           </div>
         </div>
 
