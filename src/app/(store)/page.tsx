@@ -654,32 +654,6 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       )}
 
       {/* =====================================================
-          5.5 FEATURED IN / PRESS RECOGNITION (Vedhika Style)
-          ===================================================== */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 sm:mt-18 pt-10 border-t border-[#EDEDED]">
-        <h2 className="text-xl sm:text-2xl font-serif font-medium text-center text-[#222222] tracking-tight mb-8">
-          Featured In
-        </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 items-center justify-center gap-4 sm:gap-6 opacity-85">
-          <div className="flex items-center justify-center p-3 sm:p-4 font-serif font-bold text-slate-800 text-sm sm:text-base tracking-wider border border-slate-200/80 bg-white shadow-2xs">
-            THE HINDU
-          </div>
-          <div className="flex items-center justify-center p-3 sm:p-4 font-serif font-bold text-slate-800 text-xs sm:text-sm tracking-widest border border-slate-200/80 bg-white shadow-2xs text-center">
-            THE NEW INDIAN EXPRESS
-          </div>
-          <div className="flex items-center justify-center p-3 sm:p-4 font-sans font-black text-slate-800 text-xs sm:text-sm tracking-tight border border-slate-200/80 bg-white shadow-2xs">
-            ET RETAIL.COM
-          </div>
-          <div className="flex items-center justify-center p-3 sm:p-4 font-serif font-bold text-slate-800 text-sm sm:text-base tracking-wider border border-slate-200/80 bg-white shadow-2xs">
-            VANITHA
-          </div>
-          <div className="flex items-center justify-center p-3 sm:p-4 font-sans font-black text-slate-800 text-xs sm:text-sm tracking-widest border border-slate-200/80 bg-white shadow-2xs">
-            PELIKKEN
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================
           6. CALLOUT BANNER — full-width CTA strip
           ===================================================== */}
       <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-10 sm:mt-16">
