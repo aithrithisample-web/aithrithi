@@ -654,24 +654,32 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
       )}
 
       {/* =====================================================
-          6. CALLOUT BANNER — full-width CTA strip
+          6. CALLOUT BANNER — full-width CTA strip (High-Contrast Vedhika Boutique Palette)
           ===================================================== */}
-      <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-10 sm:mt-16">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-10 sm:mt-16 mb-8">
         <div
-          className="rounded-2xl sm:rounded-3xl p-5 sm:p-12 text-white relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xl"
-          style={{ backgroundColor: themeDef.palette.footerBg }}
+          className="rounded-2xl sm:rounded-3xl p-6 sm:p-12 relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xl border border-[#DEB660]/30"
+          style={{
+            backgroundColor:
+              themeDef.palette.footerBg && themeDef.palette.footerBg !== "#F5F5F7" && themeDef.palette.footerBg !== "#FFFFFF"
+                ? themeDef.palette.footerBg
+                : "#222222",
+          }}
         >
-          <div className="max-w-xl space-y-3 relative z-10">
-            <span
-              className="text-[11px] font-serif font-medium tracking-[0.16em] uppercase px-3.5 py-1 rounded-full bg-white/10 inline-block font-sans"
-              style={{ color: accentColor }}
-            >
-              {themeDef.code === "AITHRITHI_MAROON" ? "Devika's Atelier · Handcrafted Elegance" : "Curated Collections · Fast Dispatch"}
+          <div className="max-w-xl space-y-3.5 relative z-10 text-left">
+            <span className="text-[11px] font-sans font-bold tracking-[0.18em] uppercase px-3.5 py-1 rounded-full bg-[#DEB660]/20 border border-[#DEB660]/50 text-[#DEB660] inline-block shadow-xs">
+              {themeDef.code === "AITHRITHI_MAROON"
+                ? "Devika's Atelier · Handcrafted Elegance"
+                : "Curated Collections · Fast Dispatch"}
             </span>
-            <h2 className={`text-2xl sm:text-3xl font-serif font-medium tracking-tight ${themeDef.typography.headingClass}`}>
-              {themeDef.code === "AITHRITHI_MAROON" ? "Woven with Devotion, Styled for Royalty" : "Engineered for Quality & Reliability"}
+
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-white leading-snug drop-shadow-sm">
+              {themeDef.code === "AITHRITHI_MAROON"
+                ? "Woven with Devotion, Styled for Royalty"
+                : "Engineered for Quality & Reliability"}
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans font-normal">
+
+            <p className="text-xs sm:text-sm text-[#F1F5F9] leading-relaxed font-sans font-normal opacity-95">
               {themeDef.code === "AITHRITHI_MAROON"
                 ? "Experience the timeless allure of authentic artisanal sarees and handcrafted designer kurtis delivered directly to your doorstep with luxury concierge unboxing."
                 : (allowReviews
@@ -680,16 +688,16 @@ export default async function StoreHomePage({ searchParams }: PageProps) {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 relative z-10 flex-shrink-0">
+          <div className="flex flex-col sm:flex-row gap-3 relative z-10 flex-shrink-0 w-full sm:w-auto">
             <Link
               href="/shop"
-              className="avro-btn px-6 py-3 rounded-none bg-white text-slate-900 font-sans font-bold tracking-[0.14em] uppercase text-xs hover:bg-[#FAF7F5] transition-colors shadow-sm text-center"
+              className="px-7 py-3.5 rounded-none bg-[#DEB660] hover:bg-[#c9a04a] text-black font-sans font-bold tracking-[0.16em] uppercase text-xs transition-all shadow-md text-center active:scale-95"
             >
-              Explore Sarees & Kurtis
+              Explore Sarees &amp; Kurtis
             </Link>
             <Link
               href="/track"
-              className="avro-btn px-6 py-3 rounded-none bg-white/10 hover:bg-white/20 text-white font-sans font-bold tracking-[0.14em] uppercase text-xs border border-white/20 transition-colors text-center"
+              className="px-6 py-3.5 rounded-none bg-white/10 hover:bg-white/20 text-white font-sans font-bold tracking-[0.16em] uppercase text-xs border border-white/50 hover:border-white transition-all text-center active:scale-95 shadow-sm"
             >
               Track My Order
             </Link>

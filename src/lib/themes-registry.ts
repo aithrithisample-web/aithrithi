@@ -228,7 +228,7 @@ export const AVRO_THEMES: AvroThemeDefinition[] = [
       badgeBg: "#D9383A",        // Vedhika Sold Out Crimson
       badgeText: "#FFFFFF",      // Pure White Text
       headerBg: "#FFFFFF",       // White Header
-      footerBg: "#F5F5F7",       // Soft Gray Footer
+      footerBg: "#222222",       // Vedhika Solid Charcoal Black
       accentGlow: "rgba(222, 182, 96, 0.12)",
     },
     typography: {
